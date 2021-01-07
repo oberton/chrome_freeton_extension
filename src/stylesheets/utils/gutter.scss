@@ -1,0 +1,11 @@
+@include utility(gtr, padding, $gutter);
+@include utility(row, margin, -$gutter);
+
+.text {
+  &-line {
+    @extend .gtr-b;
+  }
+  &-row {
+    @extend .gtr-b-2x;
+  }
+}

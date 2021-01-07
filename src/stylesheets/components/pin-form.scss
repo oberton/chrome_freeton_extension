@@ -1,0 +1,54 @@
+.pin {
+  &-container {
+    padding: 0 $gutter;
+  }
+  &-row {
+    display: block;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+    &:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+    &:last-child {
+      margin-bottom: 1em;
+      border-bottom: 0;
+    }
+  }
+  &-btn {
+    width: 33%;
+    height: 80px;
+    display: block;
+    float: left;
+    border-right: 1px solid #eee;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 80px;
+    color: #666;
+    transition-duration: 200ms ease-in;
+    cursor: pointer;
+    &:last-child {
+      border-right: none;
+    }
+    &:not(.empty) {
+      &:hover {
+        box-shadow: inset 0 0 10px #eee;
+        color: #222;
+      }
+    }
+  }
+  &-dots {
+    padding: 1em 0 3em 0;
+    text-align: center;
+    &-item {
+      display: inline-block;
+      width: 0.3em;
+      height: 0.3em;
+      background-color: #ccc;
+      border-radius: 100%;
+      margin: 0 0.3em;
+    }
+  }
+}

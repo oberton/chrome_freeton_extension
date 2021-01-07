@@ -1,0 +1,21 @@
+@mixin prop ($prop, $val, $sides){
+  @each $s in $sides {
+    #{$prop}-#{$s}: $val;
+  }
+}
+
+@mixin utility($classname, $property, $value) {
+  @for $i from 1 through length($sides) {
+    $c: nth($sides, $i);
+    $props: nth($sides-prop, $i);
+    $side: nth($sides, $i);
+    .#{$classname}-#{$side}{
+      @include prop($property, $value / 2, $props);
+      @each $step in $gutter-steps{
+        &-#{nth($step, 1)}{
+          @include prop($property, $value * nth($step, 2), $props);
+        }
+      }
+    }
+  }
+}

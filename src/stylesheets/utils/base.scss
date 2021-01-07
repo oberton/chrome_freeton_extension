@@ -1,0 +1,11 @@
+.color {
+  @each $color in $text-colors {
+    &-#{nth($color, 1)} {
+      color: nth($color, 2);
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}

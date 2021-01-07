@@ -1,0 +1,18 @@
+html {
+  width: 350px;
+  height: 400px;
+  font-size: 10px;
+  font-family: $base-font;
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+}
+
+body {
+  font-size: 1.6rem;
+  padding: 1em;
+}
+
+* {
+  outline: none!important;
+}

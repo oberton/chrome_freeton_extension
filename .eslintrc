@@ -1,0 +1,44 @@
+{
+  "extends": ["eslint-config-airbnb-base"],
+  "rules": {
+    "object-curly-newline": ["error", {
+        "ObjectExpression": {"consistent": true},
+        "ObjectPattern": { "multiline": true },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+    }],
+    "max-len": ["error", {
+      "ignoreComments": true,
+      "code": 200
+    }],
+    "no-param-reassign": ["error", {
+      "props": false
+    }],
+    "arrow-parens": off,
+    "space-before-blocks": off,
+    "keyword-spacing": off,
+    "padded-blocks": off,
+    "no-await-in-loop": off,
+    "no-restricted-syntax": off,
+    "no-underscore-dangle": off,
+    "object-shorthand": off,
+    "no-continue": off,
+    "no-multi-spaces": off,
+    "guard-for-in": off,
+    "one-var": off,
+    "one-var-declaration-per-line": off,
+    "object-curly-spacing": off,
+    "newline-after-import": off,
+    "no-trailing-spaces": off,
+    "key-spacing": off,
+    "quotes": off,
+    "prefer-destructuring": off,
+    "prefer-arrow-callback": off,
+    "func-names": off,
+    "import/no-unresolved": "off",
+  },
+  "globals": {
+    "document": "readonly",
+    "window": "readonly",
+  }
+}

@@ -1,0 +1,15 @@
+.form-control {
+  resize: none;
+  border-radius: 0;
+  border: none;
+  padding: 0.5em 0;
+  border-style: none none solid none;
+  border-width: 1px;
+  border-color: #eee;
+  width: 100%;
+  height: auto;
+}
+
+.form-control:focus {
+  border-color: #43a3e8;
+}

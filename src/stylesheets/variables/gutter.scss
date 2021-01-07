@@ -1,0 +1,29 @@
+$gutter: 3rem;
+
+$sides: (
+  "t",
+  "r",
+  "b",
+  "l",
+  "hor",
+  "ver"
+);
+
+$sides-common: (top, right, bottom, left);
+
+$sides-prop: (
+ ("top"),
+ ("right"),
+ ("bottom"),
+ ("left"),
+ ("left", "right"),
+ ("top", "bottom")
+);
+
+$gutter-steps: (
+  ("xxs", 0.1),
+  ("xs", 0.2),
+  ("sm", 0.3),
+  ("2x", 1),
+  ("3x", 1.5),
+);

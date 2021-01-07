@@ -1,0 +1,27 @@
+@each $preset in $typo-presets {
+  .#{$preset} {
+    @each $step in $typo-steps {
+      $typo-start: $typo-start + 0.15;
+      &-#{$step}{
+        font-size: $typo-start;
+      }
+    }
+  }
+  $typo-start: $typo-start + 0.75;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font {
+  &-norm {
+    font-weight: $fw-norm;
+  }
+  &-semi {
+    font-weight: $fw-semi;
+  }
+  &-bold {
+    font-weight: $fw-bold;
+  }
+}
