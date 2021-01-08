@@ -3,11 +3,13 @@ import createComponent from '../utils/createComponent';
 const wordsDefaultPlaceholder = '11 or 24 words';
 
 const template = `
-  <form id='phrase-form'>
+  <form id='phrase-form' class='fadeIn'>
     <div class='phrase-form-container'>
       <div class='text-md gtr-b-2x'>Restore Surf</div>
       <div class='color-dim gtr-b'>Sign In with password backup.</div>
-      <textarea rows='1' autofocus placeholder='Master Password' class='form-control' required id='phrase-area'></textarea>
+      <label id='area-label'>
+        <textarea rows='1' autofocus placeholder='Master Password' class='form-control' required id='phrase-area'></textarea>
+      </label>
       <div id='words-placeholder' class='text-xs gtr-b color-light'>${wordsDefaultPlaceholder}</div>
     </div>
     <button class='btn-blue font-bold full-width text-md' type='submit'>Sign In</button>
@@ -88,6 +90,11 @@ function render(app, params, callbacks) {
 
   $cmp.form = app.querySelector('#phrase-form');
   $cmp.form.addEventListener('submit', $cmp.onFormSubmit);
+
+  setTimeout(() => {
+    $cmp.textarea.focus();
+    $cmp.textarea.setSelectionRange(0, 0);
+  });
 
   $cmp.onDestroy = () => {
     $cmp.textarea.removeEventListener('keypress', $cmp.onTextareaInput);

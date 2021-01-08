@@ -1,7 +1,7 @@
 import createComponent from '../utils/createComponent';
 
 const template = `
-<div>
+<div class='fadeIn'>
   <div class='text-md gtr-b-2x'>Hello</div>
   <div bind='passphrase' class='color-dim gtr-b'></div>
 </div>

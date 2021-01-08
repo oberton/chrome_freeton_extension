@@ -7,7 +7,7 @@ const keyboard = [
 ].map(row => `<div class='pin-row'>${row.map(i => `<div class='pin-btn' action='${i}'>${i}</div>`).join('')}</div>`).join('');
 
 const template = `
-<div class='pin-form'>
+<div class='pin-form fadeIn'>
   <div class='text-md gtr-b' id='pin-title'>
     <span class="color-blue head-xs" id='pin-back' style="
       display: none;
@@ -94,7 +94,7 @@ function render(app, params, callbacks) {
 
   let goBackBtn;
 
-  if ($cmp.params.prevPin) {
+  if (typeof $cmp.callbacks.goBack === 'function') {
     goBackBtn = $cmp.element.querySelector('#pin-back');
     goBackBtn.style.display = 'inline-block';
     goBackBtn.addEventListener('click', $cmp.callbacks.goBack);

@@ -37,6 +37,10 @@ function createPin(app) {
     title: 'Create PIN',
     placeholder: 'It will only work on this device',
   }, {
+    goBack: () => {
+      pinForm.destroy();
+      renderPhraseForm(app);
+    },
     onSubmit: (pin) => {
       pinForm.destroy();
       confirmPin(app, pin);
