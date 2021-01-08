@@ -121,6 +121,6 @@ if (NODE_ENV === 'production') {
       }),
     ],
   };
-} else {
-  module.devtool = 'source-map';
+// } else {
+  // module.devtool = 'source-map';
 }

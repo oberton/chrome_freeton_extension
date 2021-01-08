@@ -1,8 +1,13 @@
+$blue-base: #0083e0;
+$red-base: #e71717;
+
 $text-colors: (
   ('dim', #666),
+  ('blue', $blue-base),
+  ('red', $red-base),
   ('light', #bbb),
 );
 
 $ui-colors: (
-  ('blue', #0083e0),
+  ('blue', $blue-base),
 );

@@ -40,5 +40,6 @@
   "globals": {
     "document": "readonly",
     "window": "readonly",
+    "chrome": "readonly",
   }
 }

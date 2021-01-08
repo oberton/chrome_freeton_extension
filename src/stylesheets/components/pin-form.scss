@@ -1,6 +1,25 @@
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-1em, 0);
+  }
+  50% {
+    transform: translate(0, 0);
+  }
+  75% {
+    transform: translate(1em, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 .pin {
   &-container {
     padding: 0 $gutter;
+    user-select: none;
   }
   &-row {
     display: block;
@@ -18,7 +37,7 @@
   }
   &-btn {
     width: 33%;
-    height: 80px;
+    height: 6.7rem;
     display: block;
     float: left;
     border-right: 1px solid #eee;
@@ -40,15 +59,29 @@
     }
   }
   &-dots {
-    padding: 1em 0 3em 0;
+    // padding: 1em 0 3em 0;
     text-align: center;
     &-item {
       display: inline-block;
-      width: 0.3em;
-      height: 0.3em;
+      width: 0.5em;
+      height: 0.5em;
       background-color: #ccc;
       border-radius: 100%;
-      margin: 0 0.3em;
+      margin: 0 0.5em;
+      transition-duration: 200ms ease-in;
+      &.active {
+        background-color: $blue-base;
+        box-shadow: 0 0 0 0.1em $blue-base;
+      }
+    }
+  }
+  &-error {
+    .pin-dots {
+      animation: shake 150ms linear;
+      .pin-dots-item {
+        background-color: $red-base;
+        box-shadow: 0 0 0 0.1em $red-base;
+      }
     }
   }
 }

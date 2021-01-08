@@ -1,4 +1,4 @@
-import * as eventBus from '../utils/eventBus';
+import createComponent from '../utils/createComponent';
 
 const wordsDefaultPlaceholder = '11 or 24 words';
 
@@ -13,8 +13,6 @@ const template = `
     <button class='btn-blue font-bold full-width text-md' type='submit'>Sign In</button>
   </form>
 `;
-
-let component;
 
 function getWordsCount(value) {
   return value.split(' ').filter(v => v).length;
@@ -32,19 +30,18 @@ function getWordsPlaceholder(value) {
 }
 
 function submitValue(value) {
-  if (!value) {
-    return;
-  }
   const wordsCount = getWordsCount(value);
+  // check 11 or 24 words
+  // validate passphrase
   if (wordsCount === 11 || wordsCount === 24) {
-    eventBus.emit('form-submit', value);
+    console.log('!cool!');
   }
-  eventBus.emit('form-submit', value);
+  this.callbacks.onSubmit(value);
 }
 
 function onTextareaInput(e) {
   const target = e.target;
-  const wordsPlaceholder = document.getElementById('words-placeholder');
+  const wordsPlaceholder = this.element.querySelector('#words-placeholder');
   const value = target.value.trim();
 
   wordsPlaceholder.innerText = getWordsPlaceholder(value);
@@ -58,7 +55,7 @@ function onTextareaInput(e) {
 
   if (e.which === 13) {
     e.preventDefault();
-    submitValue(value);
+    this.submitValue(value);
     return;
   }
 
@@ -71,32 +68,34 @@ function onTextareaInput(e) {
 function onFormSubmit(e) {
   e.preventDefault();
   const value = e.target.querySelector('#phrase-area').value;
-  submitValue(value);
+  if (!value) {
+    return;
+  }
+  this.submitValue(value);
 }
 
-function render(app) {
-  component = document.createElement('div');
-  component.innerHTML = template;
+function render(app, params, callbacks) {
 
-  app.appendChild(component);
+  const $cmp = createComponent(app, params, callbacks, template, {
+    onTextareaInput,
+    onFormSubmit,
+    submitValue,
+  });
 
-  const textarea = app.querySelector('#phrase-area');
-  textarea.addEventListener('keypress', onTextareaInput);
-  textarea.addEventListener('keyup', onTextareaInput);
+  $cmp.textarea = $cmp.element.querySelector('#phrase-area');
+  $cmp.textarea.addEventListener('keypress', $cmp.onTextareaInput);
+  $cmp.textarea.addEventListener('keyup', $cmp.onTextareaInput);
 
-  const form = app.querySelector('#phrase-form');
-  form.addEventListener('submit', onFormSubmit);
+  $cmp.form = app.querySelector('#phrase-form');
+  $cmp.form.addEventListener('submit', $cmp.onFormSubmit);
 
-  return {
-    destroy() {
-      textarea.removeEventListener('keypress', onTextareaInput);
-      textarea.removeEventListener('keyup', onTextareaInput);
-      form.removeEventListener('submit', onFormSubmit);
-
-      component.remove();
-      component = null;
-    },
+  $cmp.onDestroy = () => {
+    $cmp.textarea.removeEventListener('keypress', $cmp.onTextareaInput);
+    $cmp.textarea.removeEventListener('keyup', $cmp.onTextareaInput);
+    $cmp.form.removeEventListener('submit', $cmp.onFormSubmit);
   };
+
+  return $cmp;
 }
 
 export default render;
