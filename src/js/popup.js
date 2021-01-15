@@ -7,6 +7,7 @@ import renderPassphraseForm from './components/passphraseForm';
 import renderPinForm from './components/pinForm';
 import renderPhrase from './components/phrase';
 
+
 let passphrase;
 let logoutButton;
 
@@ -60,7 +61,12 @@ function renderPhraseForm(app) {
 
 
 function startApp() {
+  require.ensure(['./ton.js'], (require) => {
+    const client = require('./ton.js');
+    console.log(client);
+  });
   const app = document.getElementById('app');
+
   app.innerHTML = '';
 
   logoutButton = document.getElementById('logout-button');

@@ -92,6 +92,7 @@ module.exports = {
 
     new CopyWebpackPlugin({
       patterns: [
+        { from: '../node_modules/@tonclient/lib-web/tonclient.wasm', to: 'tonclient.wasm' },
         { from: './manifest.json', to: 'manifest.json'},
         { from: './images', to: 'images' },
       ],

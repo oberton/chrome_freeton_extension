@@ -35,6 +35,8 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
+    "@tonclient/core": "^1.5.2",
+    "@tonclient/lib-web": "^1.5.2",
     "crypto-js": "^4.0.0"
   }
 }
