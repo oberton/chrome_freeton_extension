@@ -1,18 +1,16 @@
 import 'stylesheets/main.scss';
-import * as storage from './utils/storage';
-
-import { encrypt, decrypt } from './utils/crypto';
-// import * as eventBus from './utils/eventBus';
-
-import renderPassphraseForm from './components/passphraseForm';
-import renderPinForm from './components/pinForm';
-import renderPhrase from './components/phrase';
 
 let passphrase;
 let logoutButton;
 
 function renderPhraseForm(app) {
-  const form = renderPassphraseForm(app, {}, {
+  const form = $cmp.passphraseForm(app, {}, {
+    onCreateWallet: async () => {
+      const { phrase } = await tonMethods.createWallet();
+      passphrase = phrase;
+      form.destroy();
+      createPin(app);
+    },
     onSubmit: (phrase) => {
       passphrase = phrase;
       form.destroy();
@@ -22,13 +20,13 @@ function renderPhraseForm(app) {
 }
 
 function createPin(app) {
-  const pinForm = renderPinForm(app, {
+  const pinForm = $cmp.pinForm(app, {
     title: 'Create PIN',
     placeholder: 'It will only work on this device',
   }, {
     goBack: () => {
       pinForm.destroy();
-      renderPhraseForm(app);
+      $cmp.phrase(app);
     },
     onSubmit: (pin) => {
       pinForm.destroy();
@@ -38,17 +36,17 @@ function createPin(app) {
 }
 
 function confirmPin(app, prevPin) {
-  const pinForm = renderPinForm(app, {
+  const pinForm = $cmp.pinForm(app, {
     title: 'Confirm PIN',
     placeholder: 'Repeat PIN from step before',
     prevPin,
   }, {
     onSubmit: (pin) => {
-      const phraseEncrypted = encrypt(passphrase, pin);
-      storage.set({phraseEncrypted}, () => {
+      const phraseEncrypted = utils.crypto.encrypt(passphrase, pin);
+      utils.storage.set({phraseEncrypted}, () => {
         logoutButton.style.display = 'inline-block';
         pinForm.destroy();
-        renderPhrase(app, {passphrase});
+        $cmp.phrase(app, {passphrase});
         passphrase = null;
       });
     },
@@ -66,7 +64,7 @@ function renderApp(app) {
   let pinForm;
 
   const logout = () => {
-    storage.remove('phraseEncrypted', () => {
+    utils.storage.remove('phraseEncrypted', () => {
       logoutButton.style.display = 'none';
       if (app && app.currentComponent && app.currentComponent.destroy) {
         app.currentComponent.destroy();
@@ -77,20 +75,20 @@ function renderApp(app) {
 
   logoutButton.addEventListener('click', logout);
 
-  storage.get(['phraseEncrypted'], (result) => {
+  utils.storage.get(['phraseEncrypted'], (result) => {
     if (result && result.phraseEncrypted) {
       logoutButton.style.display = 'inline-block';
-      pinForm = renderPinForm(app, {
+      pinForm = $cmp.pinForm(app, {
         title: 'Enter PIN',
       }, {
         onSubmit: (pin) => {
-          passphrase = decrypt(result.phraseEncrypted, pin);
+          passphrase = utils.crypto.decrypt(result.phraseEncrypted, pin);
           if (!passphrase) {
             pinForm.onError();
             return;
           }
           pinForm.destroy();
-          renderPhrase(app, {passphrase});
+          $cmp.phrase(app, {passphrase});
           passphrase = null;
         },
       });
@@ -104,10 +102,12 @@ function startApp() {
   const app = document.getElementById('app');
 
   if (NODE_ENV !== 'production') {
-    window.tonClient = tonClient;
+    window.tonClient  = tonClient;
     window.tonMethods = tonMethods;
-    window.app = app;
-    window.conf = conf;
+    window.app        = app;
+    window.conf       = conf;
+    window.$cmp       = $cmp;
+    window.utils      = utils;
   }
   renderApp(app);
 }

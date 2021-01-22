@@ -8,15 +8,21 @@ function hashString(string, steps = 9) {
   return result.join(' ');
 }
 
-export function decrypt(string, password) {
+function decrypt(string, password) {
   const passwordHash = hashString(password);
   const decrypted = CryptoJS.AES.decrypt(string, passwordHash, 256);
   return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-export function encrypt(string, password) {
+function encrypt(string, password) {
   const passwordHash = hashString(password);
 
   const encrypted = CryptoJS.AES.encrypt(string, passwordHash, 256);
   return encrypted.toString();
 }
+
+
+export default {
+  encrypt,
+  decrypt,
+};

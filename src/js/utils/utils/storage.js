@@ -1,6 +1,6 @@
 // rely on window.localStorage in developent mode if chrome not available
 
-export function get(_objKeys, callback) {
+function get(_objKeys, callback) {
 
   if (_.get(chrome, 'storage.local')) {
     chrome.storage.local.get(_objKeys, callback);
@@ -11,7 +11,7 @@ export function get(_objKeys, callback) {
     throw new Error('Storage is not defined');
   }
 
-  const objKeys = _.flatten(_objKeys);
+  const objKeys = _.flatten([_objKeys]);
   const result = {};
   _.each(objKeys, key => {
     result[key] = window.localStorage.getItem(key);
@@ -20,7 +20,7 @@ export function get(_objKeys, callback) {
   callback(result);
 }
 
-export function set(obj, callback) {
+function set(obj, callback) {
   const [key, val] = _.toPairs(obj)[0];
 
   if (_.get(chrome, 'storage.local')) {
@@ -34,7 +34,7 @@ export function set(obj, callback) {
   callback();
 }
 
-export function remove(_objKeys, callback) {
+function remove(_objKeys, callback) {
   if (_.get(chrome, 'storage.local')) {
     chrome.storage.local.remove(_objKeys, callback);
     return;
@@ -44,7 +44,7 @@ export function remove(_objKeys, callback) {
     throw new Error('Storage is not defined');
   }
 
-  const objKeys = _.flatten(_objKeys);
+  const objKeys = _.flatten([_objKeys]);
 
   _.each(objKeys, key => {
     window.localStorage.removeItem(key);
@@ -52,3 +52,9 @@ export function remove(_objKeys, callback) {
 
   callback();
 }
+
+export default {
+  get,
+  set,
+  remove,
+};

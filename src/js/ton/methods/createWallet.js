@@ -69,10 +69,12 @@ async function createWallet() {
     signer,
   };
 
-  window.pp = payloadEncodeMessage;
   const wallet = tonClient.abi.encode_message(payloadEncodeMessage);
-  return wallet;
 
+  return {
+    wallet,
+    ...phrase,
+  };
 }
 
 export default createWallet;

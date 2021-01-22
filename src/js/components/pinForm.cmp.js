@@ -1,5 +1,3 @@
-import createComponent from '../utils/createComponent';
-
 const keyboard = [
   [1, 2, 3],
   [4, 5, 6],
@@ -85,7 +83,7 @@ function onPinContainerClick(e) {
 }
 
 function render(app, params, callbacks) {
-  const $cmp = createComponent(app, params, callbacks, template, {
+  const $cmp = utils.createComponent(app, params, callbacks, template, {
     onPinContainerClick,
     onError,
   });

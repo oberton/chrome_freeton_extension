@@ -103,6 +103,8 @@ module.exports = {
       tonClient: ['js/ton/client.js', 'default'],
       tonMethods: ['js/ton/methods.js', 'default'],
       conf: ['conf.js', 'default'],
+      utils: ['js/utils/index.js', 'default'],
+      $cmp: ['js/components/index.js', 'default'],
     }),
 
     new HtmlWebpackPlugin({
@@ -144,6 +146,6 @@ if (NODE_ENV === 'production') {
       }),
     ],
   };
-// } else {
-  // module.devtool = 'source-map';
+} else {
+  module.devtool = 'source-map';
 }

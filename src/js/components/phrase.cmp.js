@@ -1,5 +1,3 @@
-import createComponent from '../utils/createComponent';
-
 const template = `
 <div class='fadeIn'>
   <div class='text-md gtr-b-2x'>Hello</div>
@@ -8,7 +6,7 @@ const template = `
 `;
 
 function render(app, params) {
-  return createComponent(app, params, null, template);
+  return utils.createComponent(app, params, null, template);
 }
 
 export default render;

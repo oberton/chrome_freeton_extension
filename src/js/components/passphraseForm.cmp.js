@@ -1,6 +1,3 @@
-import createComponent from '../utils/createComponent';
-import createWallet from '../ton/methods/createWallet';
-
 const wordsDefaultPlaceholder = '11 or 24 words';
 
 const template = `
@@ -44,6 +41,10 @@ function submitValue(value) {
   this.callbacks.onSubmit(value);
 }
 
+function createWallet() {
+  this.callbacks.onCreateWallet();
+}
+
 function onTextareaInput(e) {
   const target = e.target;
   const wordsPlaceholder = this.element.querySelector('#words-placeholder');
@@ -81,7 +82,7 @@ function onFormSubmit(e) {
 
 function render(app, params, callbacks) {
 
-  const $cmp = createComponent(app, params, callbacks, template, {
+  const $cmp = utils.createComponent(app, params, callbacks, template, {
     onTextareaInput,
     onFormSubmit,
     submitValue,
