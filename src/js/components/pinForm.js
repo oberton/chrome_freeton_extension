@@ -94,7 +94,7 @@ function render(app, params, callbacks) {
 
   let goBackBtn;
 
-  if (typeof $cmp.callbacks.goBack === 'function') {
+  if ($cmp && $cmp.callbacks && _.isFunction($cmp.callbacks.goBack)) {
     goBackBtn = $cmp.element.querySelector('#pin-back');
     goBackBtn.style.display = 'inline-block';
     goBackBtn.addEventListener('click', $cmp.callbacks.goBack);
@@ -103,13 +103,13 @@ function render(app, params, callbacks) {
   $cmp.pinContainer = $cmp.element.querySelector('.pin-container');
   $cmp.pinContainer.addEventListener('click', $cmp.onPinContainerClick);
 
-  $cmp.onDestroy = () => {
+  $cmp.onDestroy(() => {
     $cmp.pinContainer.removeEventListener('click', $cmp.onPinContainerClick);
 
     if (goBackBtn) {
       goBackBtn.removeEventListener('click', $cmp.callbacks.goBack);
     }
-  };
+  });
 
   return $cmp;
 }

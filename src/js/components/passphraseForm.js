@@ -1,4 +1,5 @@
 import createComponent from '../utils/createComponent';
+import createWallet from '../ton/methods/createWallet';
 
 const wordsDefaultPlaceholder = '11 or 24 words';
 
@@ -13,6 +14,8 @@ const template = `
       <div id='words-placeholder' class='text-xs gtr-b color-light'>${wordsDefaultPlaceholder}</div>
     </div>
     <button class='btn-blue font-bold full-width text-md' type='submit'>Sign In</button>
+    <div class='text-center gtr-b-xs gtr-t-sm text-sm color-light'>or</div>
+    <button c-click='createWallet' class='btn-blue-light font-bold full-width' type='button'>Create Wallet</button>
   </form>
 `;
 
@@ -82,6 +85,7 @@ function render(app, params, callbacks) {
     onTextareaInput,
     onFormSubmit,
     submitValue,
+    createWallet,
   });
 
   $cmp.textarea = $cmp.element.querySelector('#phrase-area');
@@ -96,11 +100,11 @@ function render(app, params, callbacks) {
     $cmp.textarea.setSelectionRange(0, 0);
   });
 
-  $cmp.onDestroy = () => {
+  $cmp.onDestroy(() => {
     $cmp.textarea.removeEventListener('keypress', $cmp.onTextareaInput);
     $cmp.textarea.removeEventListener('keyup', $cmp.onTextareaInput);
     $cmp.form.removeEventListener('submit', $cmp.onFormSubmit);
-  };
+  });
 
   return $cmp;
 }

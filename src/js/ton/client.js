@@ -3,6 +3,12 @@ import { libWeb } from "@tonclient/lib-web";
 
 TonClient.useBinaryLibrary(libWeb);
 
-const client = new TonClient();
+window.TonClient = TonClient;
+
+const client = new TonClient({
+  network: {
+    server_address: conf.tonServerAddress,
+  },
+});
 
 export default client;

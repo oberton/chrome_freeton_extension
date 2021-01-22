@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "rm -Rf ./dist && NODE_ENV=production webpack"
+    "build": "rm -Rf ./dist && NODE_ENV=production webpack",
+    "serve": "webpack serve --host 0.0.0.0 --port 1235"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "eslint-plugin-import": "^2.22.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.1",
+    "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^1.3.3",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
@@ -37,6 +39,8 @@
   "dependencies": {
     "@tonclient/core": "^1.5.2",
     "@tonclient/lib-web": "^1.5.2",
-    "crypto-js": "^4.0.0"
+    "crypto-js": "^4.0.0",
+    "lodash": "^4.17.20",
+    "ton-client-web-js": "^0.28.0"
   }
 }

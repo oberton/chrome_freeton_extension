@@ -74,6 +74,20 @@ module.exports = {
     },
   },
 
+  devServer: {
+    historyApiFallback: {
+      disableDotRule: true,
+      rewrites: [{
+        from: /^\/$/,
+        to: '/html/popup.html',
+      }],
+    },
+    disableHostCheck: true,
+    contentBase: path.join(__dirname, '/dist'),
+    hot: false,
+    inline: false,
+  },
+
   plugins: [
 
     new webpack.DefinePlugin({
@@ -84,6 +98,13 @@ module.exports = {
       filename: 'stylesheets/main.css',
     }),
 
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      tonClient: ['js/ton/client.js', 'default'],
+      tonMethods: ['js/ton/methods.js', 'default'],
+      conf: ['conf.js', 'default'],
+    }),
+
     new HtmlWebpackPlugin({
       filename: './html/popup.html',
       template: './html/popup.html',
@@ -92,6 +113,7 @@ module.exports = {
 
     new CopyWebpackPlugin({
       patterns: [
+        { from: './sig-files', to: 'sig-files' },
         { from: '../node_modules/@tonclient/lib-web/tonclient.wasm', to: 'tonclient.wasm' },
         { from: './manifest.json', to: 'manifest.json'},
         { from: './images', to: 'images' },
