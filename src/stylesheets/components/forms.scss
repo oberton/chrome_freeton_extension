@@ -1,0 +1,14 @@
+.form {
+  &-label {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+  }
+  &-control {
+    display: block;
+    border-radius: 0;
+    border: 1px solid #ddd;
+    background-color: transparent;
+  }
+}

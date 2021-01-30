@@ -1,3 +1,15 @@
+import components from 'js/components';
+
+let allComponentTags;
+
+function getAllComponentTags() {
+  return _(components)
+    .keys()
+    .map(k => [k.replace(/([A-Z]{1})/g, '-$1'), k])
+    .fromPairs()
+    .value();
+}
+
 function getEventElements(element) {
   const nodes = [...element.querySelectorAll('*')];
   return nodes.filter((i) => i.getAttributeNames().filter((a) => a.match(/^c-.*$/)).length);
@@ -10,9 +22,22 @@ function createComponent(app, params, callbacks, template, methods) {
 
   $cmp.app               = app;
   $cmp.element           = document.createElement('div');
-  $cmp.element.innerHTML = template;
+  $cmp.element.innerHTML = _.template(template)({...params, conf });
+
   $cmp.params            = params;
   $cmp.callbacks         = callbacks;
+
+  if (!allComponentTags) {
+    allComponentTags = getAllComponentTags();
+  }
+
+  _.each(allComponentTags, (cmpName, tagName) => {
+    const tags = $cmp.element.getElementsByTagName(tagName);
+    if (!tags.length) {
+      return;
+    }
+    _.each(tags, tag => components[cmpName](tag, params));
+  });
 
   app.appendChild($cmp.element);
   app.currentComponent = $cmp;

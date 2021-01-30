@@ -40,7 +40,6 @@
     "@tonclient/core": "^1.5.2",
     "@tonclient/lib-web": "^1.5.2",
     "crypto-js": "^4.0.0",
-    "lodash": "^4.17.20",
-    "ton-client-web-js": "^0.28.0"
+    "lodash": "^4.17.20"
   }
 }
