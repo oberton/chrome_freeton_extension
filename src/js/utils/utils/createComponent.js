@@ -18,14 +18,19 @@ function getEventElements(element) {
 function createComponent(app, params, callbacks, template, methods) {
   const destroyCallbacks = [];
 
-  const $cmp = {};
+  let $cmp = {};
 
   $cmp.app               = app;
   $cmp.element           = document.createElement('div');
-  $cmp.element.innerHTML = _.template(template)({...params, conf });
+  $cmp.element.innerHTML = _.template(template)({...params, app: $cmp.app, conf, $cmp: components });
 
   $cmp.params            = params;
   $cmp.callbacks         = callbacks;
+
+  $cmp.$$reRender = () => {
+    $cmp.destroy();
+    $cmp = createComponent($cmp.app, $cmp.params, $cmp.callbacks, template, methods);
+  };
 
   if (!allComponentTags) {
     allComponentTags = getAllComponentTags();
@@ -36,6 +41,7 @@ function createComponent(app, params, callbacks, template, methods) {
     if (!tags.length) {
       return;
     }
+    debugger
     _.each(tags, tag => components[cmpName](tag, params));
   });
 
@@ -67,12 +73,14 @@ function createComponent(app, params, callbacks, template, methods) {
     const attributes = el.getAttributeNames().filter((a) => a.match(/^c-.*$/));
     _.each(attributes, attr => {
       const eventName = attr.split('-');
-      const methodName = el.getAttribute(attr);
+      const methodName = el.getAttribute(attr).split('(')[0];
       const method = $cmp[methodName];
+      const args = (el.getAttribute(attr).split(/[\(\)]/)[1] || '').split(/\s*,\s*/);
+      const fn = () => method(...args);
       if (eventName && _.isFunction(method)) {
-        el.addEventListener(eventName[1], method);
+        el.addEventListener(eventName[1], fn);
         $cmp.onDestroy(() => {
-          el.removeEventListener(eventName[1], method);
+          el.removeEventListener(eventName[1], fn);
         });
       }
     });

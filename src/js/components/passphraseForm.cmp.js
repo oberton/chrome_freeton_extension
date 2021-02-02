@@ -4,6 +4,9 @@ const template = `
   <form id='phrase-form' class='fadeIn'>
     <div class='phrase-form-container'>
       <div class='text-md gtr-b-2x'>Restore Surf</div>
+      <div class='text-line text-xs font-bold'>
+        <network-select></network-select>
+      </div>
       <div class='color-dim gtr-b'>Sign In with password backup.</div>
       <label id='area-label'>
         <textarea rows='1' autofocus placeholder='Master Password' class='form-control' required id='phrase-area'></textarea>

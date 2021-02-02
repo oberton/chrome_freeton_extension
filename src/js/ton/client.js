@@ -7,7 +7,7 @@ window.TonClient = TonClient;
 
 const client = new TonClient({
   network: {
-    server_address: conf.tonServerAddress,
+    server_address: conf.tonServers[0],
   },
 });
 

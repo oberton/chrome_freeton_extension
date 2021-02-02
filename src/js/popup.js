@@ -3,8 +3,8 @@ import 'stylesheets/main.scss';
 let passphrase;
 let logoutButton;
 
-function renderPhraseForm(app) {
-  const form = $cmp.passphraseForm(app, {}, {
+async function renderPhraseForm(app) {
+  const form = await $cmp.passphraseForm(app, {}, {
     onCreateWallet: async () => {
       const { phrase } = await tonMethods.createWallet();
       passphrase = phrase;
@@ -19,14 +19,14 @@ function renderPhraseForm(app) {
   });
 }
 
-function createPin(app) {
-  const pinForm = $cmp.pinForm(app, {
+async function createPin(app) {
+  const pinForm = await $cmp.pinForm(app, {
     title: 'Create PIN',
     placeholder: 'It will only work on this device',
   }, {
-    goBack: () => {
+    goBack: async () => {
       pinForm.destroy();
-      $cmp.phrase(app);
+      await $cmp.wallets(app);
     },
     onSubmit: (pin) => {
       pinForm.destroy();
@@ -35,20 +35,22 @@ function createPin(app) {
   });
 }
 
-function confirmPin(app, prevPin) {
-  const pinForm = $cmp.pinForm(app, {
+async function confirmPin(app, prevPin) {
+  const pinForm = await $cmp.pinForm(app, {
     title: 'Confirm PIN',
     placeholder: 'Repeat PIN from step before',
     prevPin,
   }, {
-    onSubmit: (pin) => {
-      const phraseEncrypted = utils.crypto.encrypt(passphrase, pin);
-      utils.storage.set({phraseEncrypted}, () => {
-        logoutButton.style.display = 'inline-block';
-        pinForm.destroy();
-        $cmp.phrase(app, {passphrase});
-        passphrase = null;
-      });
+    onSubmit: async (pin) => {
+      // const phraseEncrypted = utils.crypto.encrypt(passphrase, pin);
+      const network = conf.currentTonServer || conf.tonServers[0];
+      const phrases = await utils.storage.push('myPhrases', {passphrase, network}, pin);
+      // phraseEncrypted});
+
+      logoutButton.style.display = 'inline-block';
+      pinForm.destroy();
+      await $cmp.wallets(app, {phrases});
+      passphrase = null;
     },
     goBack: () => {
       pinForm.destroy();
@@ -57,49 +59,55 @@ function confirmPin(app, prevPin) {
   });
 }
 
-function renderApp(app) {
+async function renderApp(app) {
   app.innerHTML = '';
 
   logoutButton = document.getElementById('logout-button');
   let pinForm;
 
-  const logout = () => {
-    utils.storage.remove('phraseEncrypted', () => {
-      logoutButton.style.display = 'none';
-      if (app && app.currentComponent && app.currentComponent.destroy) {
-        app.currentComponent.destroy();
-      }
-      renderPhraseForm(app);
-    });
+  const logout = async () => {
+    await utils.storage.remove('myPhrases');
+    logoutButton.style.display = 'none';
+    if (app && app.currentComponent && app.currentComponent.destroy) {
+      app.currentComponent.destroy();
+    }
+    renderPhraseForm(app);
   };
 
   logoutButton.addEventListener('click', logout);
 
-  utils.storage.get(['phraseEncrypted'], (result) => {
-    if (result && result.phraseEncrypted) {
-      logoutButton.style.display = 'inline-block';
-      pinForm = $cmp.pinForm(app, {
-        title: 'Enter PIN',
-      }, {
-        onSubmit: (pin) => {
-          passphrase = utils.crypto.decrypt(result.phraseEncrypted, pin);
-          if (!passphrase) {
-            pinForm.onError();
-            return;
-          }
-          pinForm.destroy();
-          $cmp.phrase(app, {passphrase});
-          passphrase = null;
-        },
-      });
-    } else {
-      renderPhraseForm(app);
-    }
-  });
+  const result = await utils.storage.get(['myPhrases']);
+
+  if (result && result.myPhrases) {
+    logoutButton.style.display = 'inline-block';
+    pinForm = await $cmp.pinForm(app, {
+      title: 'Enter PIN',
+    }, {
+      onSubmit: async (pin) => {
+        const phrases = await utils.storage.getArrayValue('myPhrases', pin);
+        if (!phrases) {
+          pinForm.onError();
+          return;
+        }
+        pinForm.destroy();
+        conf.myPin = pin;
+        await $cmp.wallets(app, {phrases});
+        passphrase = null;
+      },
+    });
+  } else {
+    renderPhraseForm(app);
+  }
 }
 
+import App from './components/App.svelte';
+
 function startApp() {
-  const app = document.getElementById('app');
+  const target = document.getElementById('app');
+
+  const app = new App({
+    target,
+  })
 
   if (NODE_ENV !== 'production') {
     window.tonClient  = tonClient;
@@ -109,7 +117,7 @@ function startApp() {
     window.$cmp       = $cmp;
     window.utils      = utils;
   }
-  renderApp(app);
+  // renderApp(app);
 }
 
 document.addEventListener('DOMContentLoaded', startApp);

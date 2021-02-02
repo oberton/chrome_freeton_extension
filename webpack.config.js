@@ -6,6 +6,7 @@ const CopyWebpackPlugin    = require('copy-webpack-plugin');
 const HtmlWebpackPlugin    = require('html-webpack-plugin');
 
 const NODE_ENV             = process.env.NODE_ENV || 'none';
+const isProd               = NODE_ENV === 'production';
 
 module.exports = {
 
@@ -34,6 +35,9 @@ module.exports = {
       loader  : 'babel-loader',
       exclude : /node_modules/,
     }, {
+      test: /\.svelte$/,
+      loader: 'svelte-loader',
+    }, {
       test   : /\.(png|jpg|gif|svg|ttf|woff|woff2|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader : 'file-loader',
       options: {
@@ -50,12 +54,12 @@ module.exports = {
         loader: 'css-loader',
         options : {
           url : false,
-          sourceMap : NODE_ENV !== 'production',
+          sourceMap : !isProd,
         },
       }, {
         loader: 'sass-loader',
         options: {
-          sourceMap: NODE_ENV !== "production",
+          sourceMap: !isProd,
           sassOptions : {
             sourceComments : true,
           },
@@ -130,7 +134,7 @@ module.exports = {
   },
 };
 
-if (NODE_ENV === 'production') {
+if (isProd) {
   module.exports.plugins.push(
     new webpack.LoaderOptionsPlugin({
       minimize: true,

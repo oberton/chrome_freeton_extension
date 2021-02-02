@@ -27,8 +27,8 @@ async function fetchAbi() {
 }
 
 async function createWallet() {
-  const phrase        = await tonClient.crypto.mnemonic_from_random({words_count: 12, dictionary: 1});
-  const keys          = await tonClient.crypto.mnemonic_derive_sign_keys({...phrase, words_count: 12, path: "m/44'/396'/0'/0/0", dictionary: 1});
+  const phrase = await tonClient.crypto.mnemonic_from_random({words_count: 12, dictionary: 1});
+  const keys   = await tonClient.crypto.mnemonic_derive_sign_keys({...phrase, words_count: 12, path: "m/44'/396'/0'/0/0", dictionary: 1});
 
   const signer = {
     keys,
@@ -69,7 +69,12 @@ async function createWallet() {
     signer,
   };
 
-  const wallet = tonClient.abi.encode_message(payloadEncodeMessage);
+  const wallet = await tonClient.abi.encode_message(payloadEncodeMessage);
+
+  if (conf.myPin) {
+    const network = tonClient.config.network.server_address;
+    await utils.storage.push('myPhrases', {passphrase: phrase.phrase, network}, conf.myPin);
+  }
 
   return {
     wallet,
