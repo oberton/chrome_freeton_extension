@@ -4,69 +4,80 @@ import crypto from './crypto';
 
 function get(_objKeys) {
   return new Promise((resolve, reject) => {
-    if (_.get(chrome, 'storage.local')) {
-      chrome.storage.local.get(_objKeys, resolve);
-      return;
+    try {
+      if (_.get(chrome, 'storage.local')) {
+        chrome.storage.local.get(_objKeys, resolve);
+        return;
+      }
+
+      if (NODE_ENV === 'production') {
+        reject(new Error('Storage is not defined'));
+        return;
+      }
+
+      const objKeys = _.flatten([_objKeys]);
+
+      const result = {};
+      _.each(objKeys, key => {
+        result[key] = window.localStorage.getItem(key);
+      });
+
+      resolve(result);
+    } catch(e) {
+      reject(e);
     }
-
-    if (NODE_ENV === 'production') {
-      reject(new Error('Storage is not defined'));
-      return;
-    }
-
-    const objKeys = _.flatten([_objKeys]);
-
-    const result = {};
-    _.each(objKeys, key => {
-      result[key] = window.localStorage.getItem(key);
-    });
-
-    resolve(result);
   });
 }
 
 function set(obj) {
   return new Promise((resolve, reject) => {
-    const [key, val] = _.toPairs(obj)[0];
+    try {
+      const [key, val] = _.toPairs(obj)[0];
 
-    if (_.get(chrome, 'storage.local')) {
-      chrome.storage.local.set(obj, resolve);
-      return;
+      if (_.get(chrome, 'storage.local')) {
+        chrome.storage.local.set(obj, resolve);
+        return;
+      }
+      if (NODE_ENV === 'production') {
+        reject(new Error('Storage is not defined'));
+        return;
+      }
+      window.localStorage.setItem(key, val);
+      resolve();
+    } catch(e) {
+      reject(e);
     }
-    if (NODE_ENV === 'production') {
-      reject(new Error('Storage is not defined'));
-      return;
-    }
-    window.localStorage.setItem(key, val);
-    resolve();
   });
 }
 
 function remove(_objKeys) {
   return new Promise((resolve, reject) => {
-    if (_.get(chrome, 'storage.local')) {
-      chrome.storage.local.remove(_objKeys, resolve);
-      return;
+    try {
+      if (_.get(chrome, 'storage.local')) {
+        chrome.storage.local.remove(_objKeys, resolve);
+        return;
+      }
+
+      if (NODE_ENV === 'production') {
+        reject(new Error('Storage is not defined'));
+        return;
+      }
+
+      const objKeys = _.flatten([_objKeys]);
+
+      _.each(objKeys, key => {
+        window.localStorage.removeItem(key);
+      });
+
+      resolve();
+    } catch(e) {
+      reject(e);
     }
-
-    if (NODE_ENV === 'production') {
-      reject(new Error('Storage is not defined'));
-      return;
-    }
-
-    const objKeys = _.flatten([_objKeys]);
-
-    _.each(objKeys, key => {
-      window.localStorage.removeItem(key);
-    });
-
-    resolve();
-
   });
 }
 
 function getArrayValue(key, pin) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     get(key).then(objValue => {
       let strValue = _.get(objValue, key);
 
@@ -91,12 +102,12 @@ function getArrayValue(key, pin) {
       }
 
       resolve(arrValue);
-    });
+    }).catch(reject);
   });
 }
 
 function push(key, value, pin) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     getArrayValue(key, pin).then(arrValue => {
       if (!arrValue) {
         arrValue = [];
@@ -110,12 +121,12 @@ function push(key, value, pin) {
         resolve(arrValue);
       });
 
-    });
+    }).catch(reject);
   });
 }
 
 function splice(key, index, count, pin) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     getArrayValue(key, pin).then(arrValue => {
       if (!arrValue) {
         resolve(undefined);
@@ -129,7 +140,7 @@ function splice(key, index, count, pin) {
       set({[key]: strValue}).then(() => {
         resolve(arrValue);
       });
-    });
+    }).catch(reject);
   });
 }
 
