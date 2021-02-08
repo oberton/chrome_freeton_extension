@@ -48,6 +48,6 @@
     "fetch": "readonly",
     "conf": "readonly",
     "utils": "readonly",
-    "$cmp": "readonly",
+    "App": "readonly",
   }
 }

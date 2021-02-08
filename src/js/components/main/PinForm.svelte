@@ -13,6 +13,10 @@
     pin = [];
   }
 
+  function goBack() {
+    dispatch('back', true);
+  }
+
   function keyClick(action) {
     if (action === -1) {
       pin.pop();
@@ -32,16 +36,17 @@
 
 <div class={`pin-form fadeIn ${$$props.pinError ? "pin-error" : ""}`}>
   <div class='text-md gtr-b' id='pin-title'>
-    <span class="color-blue head-xs" id='pin-back' style="
-      display: none;
-      cursor: pointer;
-      height: 0.5em;
-      width: 1em;
-      vertical-align: middle;
-      line-height: 0;
-      margin-left: -0.2em;">
-      &#8592;
-    </span>
+    {#if $$props.canGoBack}
+      <span class="color-blue head-xs" on:click={goBack} style="
+        cursor: pointer;
+        height: 0.5em;
+        width: 1em;
+        vertical-align: top;
+        line-height: 0;
+        margin-left: -0.2em;">
+        &#8592;
+      </span>
+    {/if}
     <span>
       {$$props.title}
     </span>

@@ -11,6 +11,15 @@
   position: relative;
   text-align: center;
   text-decoration: none;
+  &.btn-round {
+    width: 3em;
+    border-radius: 3em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 3em;
+  }
 }
 
 .btn {

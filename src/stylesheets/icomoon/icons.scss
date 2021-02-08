@@ -1,0 +1,16 @@
+.#{$icomoon-prefix}-caret-down { 
+  &:before {
+    content: $icon-caret-down;
+  }
+}
+.#{$icomoon-prefix}-copy { 
+  &:before {
+    content: $icon-copy;
+  }
+}
+.#{$icomoon-prefix}-delete { 
+  &:before {
+    content: $icon-delete;
+  }
+}
+

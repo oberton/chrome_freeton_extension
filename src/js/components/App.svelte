@@ -1,14 +1,18 @@
 <script>
   import { onMount } from 'svelte';
 
-  import storage from 'js/utils/utils/storage';
-
-  import PinForm from './PinForm.svelte';
+  import PinForm from './main/PinForm.svelte';
+  import LoginForm from './main/LoginForm.svelte';
+  import Wallet from './main/Wallet.svelte';
 
 	let name = 'world';
   let wallets = null;
   let step = null;
   let pinError = false;
+  let loggedIn = false;
+
+  let phrase;
+  let newPin;
 
 
   function showPinError() {
@@ -20,8 +24,9 @@
 
   async function checkPin(e) {
     const pin = e.detail;
+
     try {
-      const phrases = await storage.getArrayValue('myPhrases', pin);
+      const phrases = await utils.storage.getArrayValue('myPhrases', pin);
 
       if (!phrases) {
         showPinError();
@@ -30,17 +35,55 @@
 
       conf.myPin = pin;
       step = 'wallet';
+      loggedIn = true;
     } catch (e) {
       showPinError();
     }
   }
 
+  function createPin(e) {
+    newPin = e.detail;
+    step = 'confirmPin';
+  }
+
+  function confirmPin(e) {
+    setTimeout(async () => {
+      const pin = e.detail;
+      if (pin !== newPin) {
+        showPinError();
+        return;
+      }
+
+      conf.myPin = pin;
+
+      const result = await tonMethods.getWalletData(phrase);
+
+      const network = conf.currentTonServer || conf.tonServers[0];
+      const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network}, pin);
+
+      conf.myPin = pin;
+      step = 'wallet';
+    });
+  }
+
+  function signIn(e) {
+    phrase = e.detail;
+    step = 'createPin';
+  }
+
+  async function logout() {
+    await utils.storage.remove('myPhrases');
+    loggedIn = false;
+    step = 'login';
+  }
+
 	onMount(async () => {
-    const result = await storage.get(['myPhrases']);
+    const result = await utils.storage.get(['myPhrases']);
     name = result;
 
     if (result && result.myPhrases) {
       step = 'pin';
+      loggedIn = true;
     } else {
       step = 'login';
     }
@@ -49,16 +92,42 @@
 
 
 <div>
+  {#if loggedIn }
+    <div
+      id="logout-button"
+      class="color-blue font-bold text-sm"
+      on:click={logout}
+      style="position: absolute; cursor: pointer;top: 1.7em;right: 1.5em;">
+        Logout
+    </div>
+  {/if}
+
   {#if step === 'pin'}
     <PinForm title={'Enter Pin'} pinError={pinError} on:submit={checkPin} />
+  {/if}
 
+  {#if step === 'createPin'}
+    <PinForm
+      title={'Create Pin'}
+      placeholder={'It will only work on this device'}
+      on:submit={createPin} />
+  {/if}
+
+  {#if step === 'confirmPin'}
+    <PinForm
+      title={'Confirm Pin'}
+      placeholder={'Repeat PIN from step before'}
+      canGoBack={true}
+      pinError={pinError}
+      on:back={() => step = 'createPin'}
+      on:submit={confirmPin} />
   {/if}
 
   {#if step === 'login'}
-    <div>login step</div>
+    <LoginForm on:submit={signIn} />
   {/if}
 
   {#if step === 'wallet'}
-    <div>hello wallet</div>
+    <Wallet></Wallet>
   {/if}
 </div>

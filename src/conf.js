@@ -1,5 +1,5 @@
 const conf = {};
 
-conf.tonServers = ['net.ton.dev', 'net.ton.dev', 'fld.ton.dev'];
+conf.tonServers = ['main.ton.dev', 'net.ton.dev', 'fld.ton.dev'];
 
 export default conf;

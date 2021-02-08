@@ -15,7 +15,7 @@ function blobToBase64(blob) {
 }
 
 async function fetchBlob() {
-  const response = await fetch('/sig-files/SetcodeMultisigWallet.tvc');
+  const response = await fetch('/sig-files/SetcodeMultisigWallet2.tvc');
   const blob = await response.blob();
   return blob;
 }
@@ -26,9 +26,26 @@ async function fetchAbi() {
   return JSON.parse(text);
 }
 
-async function createWallet() {
-  const phrase = await tonClient.crypto.mnemonic_from_random({words_count: 12, dictionary: 1});
-  const keys   = await tonClient.crypto.mnemonic_derive_sign_keys({...phrase, words_count: 12, path: "m/44'/396'/0'/0/0", dictionary: 1});
+async function createWallet(_phrase, isNew) {
+  const client = new tonClient({
+    network: {
+      server_address: conf.currentTonServer || conf.tonServers[0],
+    },
+  });
+
+  let phrase = _phrase;
+
+  if (!phrase) {
+    const clientPhrase = await client.crypto.mnemonic_from_random({words_count: 12, dictionary: 1});
+    phrase = clientPhrase.phrase;
+  }
+
+  const keys   = await client.crypto.mnemonic_derive_sign_keys({
+    phrase,
+    words_count: 12,
+    path: "m/44'/396'/0'/0/0",
+    dictionary: 1,
+  });
 
   const signer = {
     keys,
@@ -69,16 +86,16 @@ async function createWallet() {
     signer,
   };
 
-  const wallet = await tonClient.abi.encode_message(payloadEncodeMessage);
+  const wallet = await client.abi.encode_message(payloadEncodeMessage);
 
-  if (conf.myPin) {
-    const network = tonClient.config.network.server_address;
-    await utils.storage.push('myPhrases', {passphrase: phrase.phrase, network}, conf.myPin);
+  if (conf.myPin && isNew) {
+    const network = client.config.network.server_address;
+    await utils.storage.push('myPhrases', {phrase, network}, conf.myPin);
   }
 
   return {
     wallet,
-    ...phrase,
+    phrase,
   };
 }
 

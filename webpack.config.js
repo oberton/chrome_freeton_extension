@@ -108,7 +108,6 @@ module.exports = {
       tonMethods: ['js/ton/methods.js', 'default'],
       conf: ['conf.js', 'default'],
       utils: ['js/utils/index.js', 'default'],
-      $cmp: ['js/components/index.js', 'default'],
     }),
 
     new HtmlWebpackPlugin({
@@ -122,6 +121,7 @@ module.exports = {
         { from: './sig-files', to: 'sig-files' },
         { from: '../node_modules/@tonclient/lib-web/tonclient.wasm', to: 'tonclient.wasm' },
         { from: './manifest.json', to: 'manifest.json'},
+        { from: './fonts', to: './fonts' },
         { from: './images', to: 'images' },
       ],
     }),

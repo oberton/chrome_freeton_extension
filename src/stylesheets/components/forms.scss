@@ -1,7 +1,48 @@
-select.form-control {
+.form-select {
   display: block;
-  border-radius: 0;
-  border: none;
-  padding: 0;
-  background-color: transparent;
+  position: relative;
+  &:after {
+    @include icon-pseudo($icon-caret-down);
+    display: block;
+    position: absolute;
+    top: 36px;
+    right: 0;
+  }
+  select {
+    -webkit-appearance: none;
+    -moz-appearance : none;
+    border-style: none none solid none;
+    border-radius: 0px;
+    padding: 12px 0 0 0;
+    background-color: transparent;
+    display: block;
+    width: 100%;
+    padding: 35px 0 5px 0;
+    border-color: #eee;
+    &:focus {
+      border-color: #43a3e8;
+    }
+  }
+
+  &-label {
+    color: #999;
+    position: absolute;
+    top: 0;
+    bottom: auto;
+    line-height: 45px;
+    font-weight: $fw-norm;
+    padding: 0;
+    margin: 0;
+    transition: top 200ms ease-in;
+
+    -webkit-transform-origin: bottom left;
+    transform-origin: bottom left;
+
+    -webkit-transition: all .3s cubic-bezier(0.4,0,0.2,1);
+    transition: all .3s cubic-bezier(0.4,0,0.2,1);
+
+    -webkit-transition-property: color,bottom,transform;
+    transition-property: color,bottom,transform;
+    pointer-events: none;
+  }
 }

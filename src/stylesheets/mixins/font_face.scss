@@ -1,0 +1,12 @@
+@mixin font-face-as-well($name, $filename, $weight: normal, $style: normal, $prefix: '') {
+  @font-face {
+    font-family: $name;
+    src: url('#{$font-path}/#{$name}/#{$filename}#{$prefix}.eot');
+    src: url('#{$font-path}/#{$name}/#{$filename}#{$prefix}.svg##{$name}') format('svg'),
+         url('#{$font-path}/#{$name}/#{$filename}#{$prefix}.eot?#iefix') format('embedded-opentype'),
+         url('#{$font-path}/#{$name}/#{$filename}#{$prefix}.woff') format('woff'),
+         url('#{$font-path}/#{$name}/#{$filename}#{$prefix}.ttf') format('truetype');
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
