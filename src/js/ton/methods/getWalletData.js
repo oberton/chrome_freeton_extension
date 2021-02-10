@@ -1,30 +1,5 @@
-function blobToBase64(blob) {
-  return new Promise((resolve, reject) => {
-    try {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        const base64 = dataUrl.split(',')[1];
-        resolve(base64);
-      };
-      reader.readAsDataURL(blob);
-    } catch(e) {
-      reject(e);
-    }
-  });
-}
-
-async function fetchBlob() {
-  const response = await fetch('/sig-files/SetcodeMultisigWallet2.tvc');
-  const blob = await response.blob();
-  return blob;
-}
-
-async function fetchAbi() {
-  const response = await fetch('/sig-files/SetcodeMultisigWallet.abi.json');
-  const text = await response.text();
-  return JSON.parse(text);
-}
+import fetchAbi from './fetchAbi';
+import fetchTvc from './fetchTvc';
 
 async function createWallet(_phrase, isNew) {
   const client = new tonClient({
@@ -65,8 +40,7 @@ async function createWallet(_phrase, isNew) {
     },
   };
 
-  const blob = await fetchBlob();
-  const tvc  = await blobToBase64(blob);
+  const tvc = await fetchTvc();
 
   const deploy_set = {
     tvc,
@@ -94,6 +68,7 @@ async function createWallet(_phrase, isNew) {
   }
 
   return {
+    keys,
     wallet,
     phrase,
   };

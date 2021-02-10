@@ -61,19 +61,19 @@
   <form id='phrase-form' class='fadeIn' on:submit={signIn}>
     <div class='phrase-form-container'>
       <div class='text-md gtr-b-2x'>Restore Surf</div>
-      <div class='text-row text-xs font-bold'>
+      <div class='text-row font-bold'>
         <NetworkSwitcher />
       </div>
       <div class='color-dim gtr-b'>Sign In with password backup.</div>
-      <label id='area-label'>
+      <div class='form-group'>
         <textarea
           rows='1'
           bind:value={phrase}
           on:keydown={onAreaKeydown}
-          placeholder='Master Password'
-          class='form-control'
+          class={`form-control ${phrase ? "" : "empty"}`}
           required></textarea>
-      </label>
+        <label class='form-label'>Master Password</label>
+      </div>
       <div id='words-placeholder' class='text-xs gtr-b color-light'>{wordsPlaceholder}</div>
     </div>
     <button class='btn-blue font-bold full-width text-md' type='submit'>Sign In</button>

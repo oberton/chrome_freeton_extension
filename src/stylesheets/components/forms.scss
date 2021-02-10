@@ -1,16 +1,12 @@
-.form-select {
+
+
+.form {
   display: block;
   position: relative;
-  &:after {
-    @include icon-pseudo($icon-caret-down);
-    display: block;
-    position: absolute;
-    top: 36px;
-    right: 0;
+  &-group {
+    position: relative;
   }
-  select {
-    -webkit-appearance: none;
-    -moz-appearance : none;
+  &-control {
     border-style: none none solid none;
     border-radius: 0px;
     padding: 12px 0 0 0;
@@ -22,25 +18,43 @@
     &:focus {
       border-color: #43a3e8;
     }
+    &:not(:empty), &:not(.empty) {
+      + .form-label {
+        transform: scale(0.7) translateY(-2em);
+      }
+    }
   }
+  &-select {
+    &:after {
+      @include icon-pseudo($icon-caret-down);
+      display: block;
+      position: absolute;
+      top: 36px;
+      right: 0;
+      font-size: 0.7em;
+    }
+    select {
+      font-size: 1em;
+      -webkit-appearance: none;
+      -moz-appearance : none;
+      @extend .form-control;
+    }
 
+  }
   &-label {
     color: #999;
     position: absolute;
-    top: 0;
+    top: 1.2em;
     bottom: auto;
     line-height: 45px;
-    font-weight: $fw-norm;
+    font-weight: 400;
     padding: 0;
     margin: 0;
     transition: top 200ms ease-in;
-
     -webkit-transform-origin: bottom left;
     transform-origin: bottom left;
-
-    -webkit-transition: all .3s cubic-bezier(0.4,0,0.2,1);
-    transition: all .3s cubic-bezier(0.4,0,0.2,1);
-
+    -webkit-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-transition-property: color,bottom,transform;
     transition-property: color,bottom,transform;
     pointer-events: none;

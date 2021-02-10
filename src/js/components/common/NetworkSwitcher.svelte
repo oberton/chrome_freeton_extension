@@ -1,4 +1,4 @@
-<div class='form-select'>
+<div class='form-select form-group'>
   <select
     on:change={() => updateCurrentNetwork()}
     bind:value={currentServer}>
@@ -6,7 +6,7 @@
       <option value={server}>{server}</option>
     {/each}
   </select>
-  <label class='form-select-label'>
+  <label class='form-label'>
     Ton Sever
   </label>
 </div>

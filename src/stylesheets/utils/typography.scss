@@ -25,3 +25,9 @@
     font-weight: $fw-bold;
   }
 }
+
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

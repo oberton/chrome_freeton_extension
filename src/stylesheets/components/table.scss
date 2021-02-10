@@ -6,3 +6,17 @@
     display: table-cell;
   }
 }
+
+.cell {
+  @for $i from 1 to 13 {
+    &-#{$i}{
+      width: percentage($i / 12);
+    }
+    &-#{$i}em {
+      width: #{$i}em;
+      &-2x {
+        width: #{$i * 2}em;
+      }
+    }
+  }
+}
