@@ -3,6 +3,8 @@ import fetchTvc from './fetchTvc';
 
 async function stakeNow(walletData, stakeForm) {
 
+  let stake = 13 * 1000000000;
+
   const client = new tonClient({
     network: {
       server_address: conf.currentTonServer || conf.tonServers[0],
@@ -19,7 +21,7 @@ async function stakeNow(walletData, stakeForm) {
   let call_set = {
     function_name: 'addOrdinaryStake',
     input: {
-      stake: 13000000000,
+      stake: stake,
     },
   };
 
@@ -49,7 +51,7 @@ async function stakeNow(walletData, stakeForm) {
     function_name: 'sendTransaction',
     input: {
       dest: '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
-      value: 13000000000 + 1000000000,
+      value: stake + 0.5 * 1000000000,
       bounce: true,
       flags: 1,
       payload: message.body,
