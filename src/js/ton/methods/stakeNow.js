@@ -19,7 +19,7 @@ async function stakeNow(walletData, stakeForm) {
   let call_set = {
     function_name: 'addOrdinaryStake',
     input: {
-      stake: 13,
+      stake: 13000000000,
     },
   };
 
@@ -28,18 +28,15 @@ async function stakeNow(walletData, stakeForm) {
   };
 
   const depoolPayload = {
-    address: '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
     abi,
     call_set,
     signer,
+    is_internal: true,
   };
 
-  let message = await client.abi.encode_message(depoolPayload);
+  let message = null;
 
-// address: "0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c"
-// data_to_sign: null
-// message: "te6ccgEBAQEAPQAAdYgBJ4tCowoWLbx5ZbDvBM6Xi9/EfM8npodUEscJVfrhAlgAAAAF3htvq6WAihkcKrBj9AAAAAAAAAA2"
-// message_id:
+  message = await client.abi.encode_message_body(depoolPayload);
 
   abiValue = await fetchAbi();
 
@@ -51,11 +48,11 @@ async function stakeNow(walletData, stakeForm) {
   call_set = {
     function_name: 'sendTransaction',
     input: {
-      dest: depoolPayload.address,
-      value: 1000000000,
+      dest: '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
+      value: 13000000000 + 1000000000,
       bounce: true,
       flags: 1,
-      payload: message.message,
+      payload: message.body,
     },
   };
 
@@ -73,30 +70,20 @@ async function stakeNow(walletData, stakeForm) {
 
   message = await client.abi.encode_message(message_encode_params);
 
-  debugger
-
   const paramsOfSendMessage = {
     message: message.message,
     abi,
     send_events: true,
   };
 
-  let result = await client.processing.send_message(paramsOfSendMessage);
+  let result = null;
 
-  const paramsOfWaitForTransaction = {
-    abi,
-    message: message.message,
-    shard_block_id: result.shard_block_id,
-    send_events: true,
+  const processParams = {
+    message_encode_params,
+    send_events: false,
   };
 
-  // const processParams = {
-  //   message_encode_params,
-  //   send_events: false,
-  // };
-
-    // const result = await client.processing.process_message(processParams);
-  result = await client.processing.wait_for_transaction(paramsOfWaitForTransaction);
+  result = await client.processing.process_message(processParams);
 
   debugger
 
