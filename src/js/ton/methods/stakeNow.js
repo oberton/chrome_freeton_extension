@@ -1,15 +1,143 @@
 import fetchAbi from './fetchAbi';
 import fetchTvc from './fetchTvc';
 
+
+async function getCustodians1(client, abiDir) {
+  // const client = new tonClient({
+  //   network: {
+  //     server_address: conf.currentTonServer || conf.tonServers[0],
+  //   },
+  // });
+
+  let result = await client.net.wait_for_collection({
+    collection: 'accounts',
+    filter: {
+      id: {
+        eq: '0:428c93d1dad5fe1f3e1bf19e42939891bcf44f02bfd90fbcaa24bbbd9c4446bb',
+      },
+    },
+    result: 'id balance(format: DEC) boc',
+    timeout: 4000,
+  });
+
+  let parseMessage = {
+    boc: result.result.boc
+  }
+  
+  result = await client.boc.parse_account(parseMessage);
+  
+  debugger;
+
+  return;
+}
+
+async function getCustodians(client, address, abiDir, keys) {
+
+  let account = await client.net.query_collection({
+      collection: 'accounts',
+      filter: { id: { eq: address } },
+      result: 'boc'
+  })
+
+  let abiValue = await fetchAbi(abiDir);
+
+  const message_encode_params = {
+    address: address,
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    },
+    call_set: {
+      function_name: 'getCustodians',
+      input: {}
+    },
+    signer: {
+      type: 'None'
+    }
+  };
+
+  let encoded_message = await client.abi.encode_message(message_encode_params);
+
+  let response = await client.tvm.run_tvm({ 
+    message: encoded_message.message, 
+    account: account.result[0].boc, 
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    } 
+  });
+  
+  return response.decoded.output.custodians;
+}
+
+async function getTransactionIds(client, address, abiDir, keys) {
+
+  let account = await client.net.query_collection({
+      collection: 'accounts',
+      filter: { id: { eq: address } },
+      result: 'boc'
+  })
+
+  let abiValue = await fetchAbi(abiDir);
+
+  const message_encode_params = {
+    address: address,
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    },
+    call_set: {
+      function_name: 'getTransactionIds',
+      input: {}
+    },
+    signer: {
+      type: 'None'
+    }
+  };
+
+  let encoded_message = await client.abi.encode_message(message_encode_params);
+  
+  let response = await client.tvm.run_tvm({ 
+    message: encoded_message.message, 
+    account: account.result[0].boc, 
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    } 
+  });
+  
+  return response.decoded.output.ids;
+}
+
+
+
 async function stakeNow(walletData, stakeForm) {
 
-  let stake = 13 * 1000000000;
+  
 
   const client = new tonClient({
     network: {
       server_address: conf.currentTonServer || conf.tonServers[0],
     },
   });
+
+  // let a = await test();
+
+  let custodians = await getCustodians(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json', walletData.keys);
+  console.log(custodians);
+
+  custodians = await getTransactionIds(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json', walletData.keys);
+  console.log(custodians);
+
+  return;
+
+  
+
+
+
+  // Ordinary Stake Example
+
+  let stake = 13 * 1000000000;
 
   let abiValue = await fetchAbi('/sig-files/DePool.abi.json');
 
