@@ -31,7 +31,7 @@ async function getCustodians1(client, abiDir) {
   return;
 }
 
-async function getCustodians(client, address, abiDir, keys) {
+async function getCustodians(client, address, abiDir) {
 
   let account = await client.net.query_collection({
       collection: 'accounts',
@@ -70,7 +70,7 @@ async function getCustodians(client, address, abiDir, keys) {
   return response.decoded.output.custodians;
 }
 
-async function getTransactionIds(client, address, abiDir, keys) {
+async function getTransactionIds(client, address, abiDir) {
 
   let account = await client.net.query_collection({
       collection: 'accounts',
@@ -123,10 +123,10 @@ async function stakeNow(walletData, stakeForm) {
 
   // let a = await test();
 
-  let custodians = await getCustodians(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json', walletData.keys);
+  let custodians = await getCustodians(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json');
   console.log(custodians);
 
-  custodians = await getTransactionIds(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json', walletData.keys);
+  custodians = await getTransactionIds(client, walletData.wallet.address, '/sig-files/SetcodeMultisigWallet.abi.json');
   console.log(custodians);
 
   return;
