@@ -4,7 +4,7 @@
     <NetworkSwitcher on:change={refreshWallets} />
   </div>
   {#each wallets as wallet, index}
-    <WalletItem wallet={wallet} on:remove={() => removeWallet(index)}/>
+    <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(index)}/>
   {/each}
 
  <button on:click={createWallet} class='btn-blue-light font-bold full-width' type='button'>Create Wallet</button>

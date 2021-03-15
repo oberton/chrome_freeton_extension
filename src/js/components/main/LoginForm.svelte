@@ -72,7 +72,7 @@
           on:keydown={onAreaKeydown}
           class={`form-control ${phrase ? "" : "empty"}`}
           required></textarea>
-        <label class='form-label'>Master Password</label>
+          <label class='form-label'>Master Password</label>
       </div>
       <div id='words-placeholder' class='text-xs gtr-b color-light'>{wordsPlaceholder}</div>
     </div>
