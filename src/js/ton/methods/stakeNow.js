@@ -278,10 +278,8 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
   // debugger;
   // debugger;
 
+  // получить все депулы трех версий
   let depools_code_hashes = Object.values(DepoolsCodeHashes);
-
-  // let custodians = await getAccountsCount(client, depools_code_hashes);
-  // let custodians = await getAccountsList(client, depools_code_hashes, 50, []);
   let custodians = await getAllAccountsList(client, depools_code_hashes);
   console.log(custodians);
 
