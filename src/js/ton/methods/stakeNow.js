@@ -177,13 +177,14 @@ async function withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, a
   return result;
 }
 
-async function getDepoolCount(client, depools_code_hashes=[]) {
+// получить кол-во записей для аккаунтов. Фильтруется по массиву хешей кода от аккаунтов
+async function getAccountsCount(client, code_hashes=[]) {
 
   let fetch = await client.net.aggregate_collection({
       collection: 'accounts',
       filter: { 
         code_hash: { 
-          in: depools_code_hashes
+          in: code_hashes
         } 
       }
       // ,
@@ -196,11 +197,12 @@ async function getDepoolCount(client, depools_code_hashes=[]) {
   return Number(fetch.values[0]);
 }
 
-async function getDepoolList(client, depools_code_hashes=[], limit=50, ignoreIds=[]) {
+// получить список аккаунтов по массиву хешей кода от аккаунтов, игнорируя определенные аккаунты из массива ignoreIds. Максимум записей - 50шт
+async function getAccountsList(client, code_hashes=[], limit=50, ignoreIds=[]) {
 
   let filter = {
     code_hash: { 
-      in: depools_code_hashes
+      in: code_hashes
     } 
   };
 
@@ -225,14 +227,15 @@ async function getDepoolList(client, depools_code_hashes=[], limit=50, ignoreIds
   return fetch.result;
 }
 
-async function getAllDepoolList(client, depools_code_hashes=[]) {
-  let count = await getDepoolCount(client, depools_code_hashes);
+// получить список абсолютно всех аккаунтов по массиву хешей кода от аккаунтов
+async function getAllAccountsList(client, depools_code_hashes=[]) {
+  let count = await getAccountsCount(client, depools_code_hashes);
   console.log('c', count)
   let accounts = [];
   let ignoreIds = [];
   
   while(count > 0) {
-    let fetch = await getDepoolList(client, depools_code_hashes, 50, ignoreIds);
+    let fetch = await getAccountsList(client, depools_code_hashes, 50, ignoreIds);
     if (fetch.length > 0) {
       for (let i = 0; i < fetch.length; i++) {
         ignoreIds.push(fetch[i].id);
@@ -271,16 +274,15 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
 
   // let custodians = await getCustodians(client, walletAddr, abiWalletDir);
   // let custodians = await getTransactionIds(client, walletAddr, abiWalletDir);
-  // let custodians = await getDepoolList(client);
 
   // debugger;
   // debugger;
 
   let depools_code_hashes = Object.values(DepoolsCodeHashes);
 
-  // let custodians = await getDepoolCount(client, depools_code_hashes);
-  // let custodians = await getDepoolList(client, depools_code_hashes, 50, []);
-  let custodians = await getAllDepoolList(client, depools_code_hashes);
+  // let custodians = await getAccountsCount(client, depools_code_hashes);
+  // let custodians = await getAccountsList(client, depools_code_hashes, 50, []);
+  let custodians = await getAllAccountsList(client, depools_code_hashes);
   console.log(custodians);
 
   // let a = await withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir);
