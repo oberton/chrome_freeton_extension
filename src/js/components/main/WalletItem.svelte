@@ -68,9 +68,16 @@
 
   function stake(e) {
     e.preventDefault();
-    tonMethods.stakeNow(walletData, stakeForm);
+    tonMethods.stakeNow(
+      null, 
+      walletData.wallet.address, 
+      walletData.keys, 
+      '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c', 
+      '/sig-files/DePool.abi.json', 
+      '/sig-files/SetcodeMultisigWallet.abi.json',
+      stakeForm.summ
+    );
   }
-
 
   let copying = false;
 
