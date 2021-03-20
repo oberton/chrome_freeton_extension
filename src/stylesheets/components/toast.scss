@@ -1,0 +1,22 @@
+.toast {
+  padding: 15px 10px;
+  width: 100%;
+  max-width: 330px;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  &-container {
+    position: fixed;
+    top: 5px;
+    left: 10px;
+    right: 10px;
+    max-width: 340px;
+  }
+  &-error {
+    background: #fbb9b5;
+    color: #E91E63;
+  }
+  &-info {
+    color: #0083e0;
+    background: #baddf7;
+  }
+}

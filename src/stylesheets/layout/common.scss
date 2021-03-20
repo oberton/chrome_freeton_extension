@@ -10,11 +10,19 @@ html {
 
 body {
   font-size: 1.6rem;
-  padding: 1em;
+  padding: 0;
   max-width: 380px;
   position: relative;
+  margin: 0;
+  height: 400px;
+}
+
+#app {
+  padding: 1em;
+  height: 400px;
 }
 
 * {
   outline: none!important;
+  box-sizing: border-box;
 }

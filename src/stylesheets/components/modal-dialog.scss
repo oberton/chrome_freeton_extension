@@ -1,0 +1,24 @@
+.modal-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: opacity 200ms ease-in;
+  background: rgba(96,125,139, 0.8);
+  opacity: 0;
+  padding: 1em;
+  &-content {
+    background: white;
+    width: 100%;
+    height: auto;
+    min-height: 1em;
+    padding: 1em;
+    display: inline-block;
+    border-radius: 3px;
+    box-shadow: 0 3px 20px rgba(0,0,0,0.3);
+  }
+  &.shown {
+    opacity: 1;
+  }
+}

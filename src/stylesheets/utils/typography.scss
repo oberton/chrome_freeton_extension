@@ -10,8 +10,16 @@
   $typo-start: $typo-start + 0.75;
 }
 
-.text-center {
-  text-align: center;
+.text {
+  &-left {
+    text-align: left;
+  }
+  &-center {
+    text-align: center;
+  }
+  &-right {
+    text-align: right;
+  }
 }
 
 .font {

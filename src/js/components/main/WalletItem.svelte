@@ -1,30 +1,43 @@
 <div class='tbl hover-parent'>
-  <div class='tbl-cell alg-m gtr-r'>
+  <div class='tbl-cell alg-m'>
     <div class='gtr-ver'>
       <div class='text-md'>
-        {balance}
+        {(balance || 0).toFixed(3)}
       </div>
-      <div>
+      <div class='row-r-sm'>
         <div class='tbl' style='table-layout: fixed;'>
-          <div class='tbl-cell gtr-r text-sm'>
+          <div class='tbl-cell text-sm'>
             <div class='ellipsis'>
               {address}
             </div>
           </div>
-          <div class='tbl-cell gtr-l' style='width: 3.5rem;'>
+          <div class='tbl-cell' style='width: 3.5rem;'>
             <button type='button' class='btn-blue-light btn-round' with-tooltip={copying ? "Copied!" : "Copy Address"} on:click={() => copyAddress(address)}>
               <span class='icon-copy text-lg'></span>
             </button>
           </div>
-          <div class='tbl-cell alg-m hover-parent-show' style='width: 3.5rem'>
-            <button type='button' class='btn-red-light btn-round' with-tooltip='Remove' on:click={removeWallet}>
-              <span class='icon-delete text-lg'></span>
-            </button>
+          <div class='tbl-cell alg-m' style='width: 3.5rem'>
+            <div class='smile'>
+
+              <button
+                type="button"
+                use:tooltipMenu
+                class="btn-dim-light btn-round">
+                <span class="icon-ellipsis-v smile" style="padding-top: 2px;"></span>
+              </button>
+
+              <div class='tooltip-menu'>
+                <div class='tooltip-menu-item' close-tooltip on:click={removeWallet}>
+                  Delete
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
 
-      <form class='tbl' on:submit={stake}>
+      <form class='tbl' on:submit={stake} style='display: none;'>
         <div class='tbl-cell text-md cell-4 gtr-r'>
           <div class='form-group'>
             <input class='form-control' bind:value={stakeForm.address} type='address' required />
@@ -47,8 +60,8 @@
 </div>
 
 <script>
-  import { createEventDispatcher } from 'svelte';
   import { onMount } from 'svelte';
+  import { tooltipMenu } from 'js/directives/tooltipMenu.dir.js';
 
   const dispatch = createEventDispatcher();
   let walletData = {};
@@ -69,11 +82,11 @@
   function stake(e) {
     e.preventDefault();
     tonMethods.stakeNow(
-      null, 
-      walletData.wallet.address, 
-      walletData.keys, 
-      '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c', 
-      '/sig-files/DePool.abi.json', 
+      null,
+      walletData.wallet.address,
+      walletData.keys,
+      '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
+      '/sig-files/DePool.abi.json',
       '/sig-files/SetcodeMultisigWallet.abi.json',
       stakeForm.summ
     );

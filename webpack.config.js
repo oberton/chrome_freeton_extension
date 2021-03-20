@@ -96,6 +96,7 @@ module.exports = {
 
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify(NODE_ENV),
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
 
     new MiniCssExtractPlugin({
@@ -107,6 +108,8 @@ module.exports = {
       tonClient: ['js/ton/client.js', 'default'],
       tonMethods: ['js/ton/methods.js', 'default'],
       conf: ['conf.js', 'default'],
+      onMount: ['svelte', 'onMount'],
+      createEventDispatcher: ['svelte', 'createEventDispatcher'],
       utils: ['js/utils/index.js', 'default'],
     }),
 

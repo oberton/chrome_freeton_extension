@@ -3,7 +3,7 @@
 
   import PinForm from './main/PinForm.svelte';
   import LoginForm from './main/LoginForm.svelte';
-  import Wallet from './main/Wallet.svelte';
+  import WalletsMain from './main/WalletsMain.svelte';
 
 	let name = 'world';
   let wallets = null;
@@ -87,18 +87,27 @@
     } else {
       step = 'login';
     }
+
+    conf.myPin = '222222';
+    step = 'wallet';
 	});
 </script>
 
 
 <div>
   {#if loggedIn }
+
     <div
       id="logout-button"
       class="color-blue font-bold text-sm"
       on:click={logout}
-      style="position: absolute; cursor: pointer;top: 1.7em;right: 1.5em;">
-        Logout
+      style="position: absolute; cursor: pointer; top: 10px; right: 0px;">
+      <button
+        type="button"
+        class="btn-blue-light btn-round"
+        title="Logout">
+          <span class="icon-logout text-lg"></span>
+      </button>
     </div>
   {/if}
 
@@ -128,6 +137,6 @@
   {/if}
 
   {#if step === 'wallet'}
-    <Wallet></Wallet>
+    <WalletsMain />
   {/if}
 </div>

@@ -1,0 +1,32 @@
+.tabs {
+  display: inline-block;
+  &-container {
+    text-align: center;
+  }
+  &-item {
+    float: left;
+    padding: 5px 10px;
+    background: rgba(#1392ed, 0.2);
+    color: darken(#1392ed, 15%);
+    transtion: background 200ms ease-in;
+    font-weight: $fw-semi;
+    cursor: pointer;
+    &:hover {
+      background: rgba(#1392ed, 0.35);
+    }
+    &:first-child {
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+    }
+    &:last-child {
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
+    }
+    &.active {
+      &, &:hover {
+        background: #1392ed;
+        color: white;
+      }
+    }
+  }
+}
