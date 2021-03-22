@@ -37,7 +37,10 @@
                 <div class='tooltip-menu-item' close-tooltip on:click={backupWallet}>
                   {t('actions.phrase.backup')}
                 </div>
-              </div>
+                 <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
+                  {t('actions.tokens.send')}
+                </div>
+             </div>
 
             </div>
           </div>
@@ -83,6 +86,12 @@
       <PinForm pinError={pinError} on:submit={checkPin} />
     </ModalDialog>
   {/if}
+
+  {#if showSendCrystalsForm }
+    <ModalDialog on:close={() => showSendCrystalsForm = false} headline={t('actions.tokens.send')}>
+      <SendTokensForm wallet={walletData.wallet} />
+    </ModalDialog>
+  {/if}
 </div>
 
 <script>
@@ -91,7 +100,6 @@
   let address = '';
   let balance = 0;
 
-  let showPinForm = false;
   let pinError = false;
 
   let showPhraseDialog = false;
@@ -112,9 +120,14 @@
     showPhraseDialog = true;
   }
 
-
+  let showPinForm = false;
   function backupWallet() {
     showPinForm = true;
+  }
+
+  let showSendCrystalsForm = false;
+  function sendCrystals() {
+    showSendCrystalsForm = true;
   }
 
   let stakeForm = {

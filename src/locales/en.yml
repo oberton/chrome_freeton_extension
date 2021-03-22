@@ -22,6 +22,10 @@ info:
 actions:
   logout: "Logout"
 
+  tokens:
+    send: "Send Tokens"
+    confirm_send: "Confirm and Send"
+
   pin:
     enter: "Enter Pin"
     create: "Create Pin"
@@ -33,6 +37,7 @@ actions:
   wallet:
     create: "Create Wallet"
     restore: "Restore Wallet"
+    receive: "Send Crystals"
 
   phrase:
     backup: "Backup Master Password"
@@ -43,6 +48,15 @@ actions:
 
   common:
     delete_item: "Delete"
+
+labels:
+  from: 'From'
+  to: 'To'
+  amount: 'Amount'
+  comment: 'Comment (optional)'
+  ton:
+    server: "Ton Server"
+  master_password: 'Master Password'
 
 common:
   or: "or"

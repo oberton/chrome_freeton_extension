@@ -7,7 +7,7 @@
     {/each}
   </select>
   <label class='form-label'>
-    Ton Sever
+    {t('labels.ton.server')}
   </label>
 </div>
 
