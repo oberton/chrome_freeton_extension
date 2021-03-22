@@ -8,6 +8,8 @@ const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const NODE_ENV             = process.env.NODE_ENV || 'none';
 const isProd               = NODE_ENV === 'production';
 
+const yaml                 = require('js-yaml');
+
 module.exports = {
 
   context: `${__dirname}/src`,
@@ -21,6 +23,7 @@ module.exports = {
 
   entry: {
     popup: './js/popup',
+    en: './locales/en.yml',
   },
 
   output: {
@@ -108,9 +111,9 @@ module.exports = {
       tonClient: ['js/ton/client.js', 'default'],
       tonMethods: ['js/ton/methods.js', 'default'],
       conf: ['conf.js', 'default'],
-      onMount: ['svelte', 'onMount'],
-      createEventDispatcher: ['svelte', 'createEventDispatcher'],
+      svelte: ['svelte'],
       utils: ['js/utils/index.js', 'default'],
+      t: ['js/translate.js', 't'],
     }),
 
     new HtmlWebpackPlugin({
@@ -120,13 +123,21 @@ module.exports = {
     }),
 
     new CopyWebpackPlugin({
-      patterns: [
-        { from: './sig-files', to: 'sig-files' },
-        { from: '../node_modules/@tonclient/lib-web/tonclient.wasm', to: 'tonclient.wasm' },
-        { from: './manifest.json', to: 'manifest.json'},
-        { from: './fonts', to: './fonts' },
-        { from: './images', to: 'images' },
-      ],
+      patterns: [{
+        from: 'locales/**/*',
+        to: 'locales/[name].json',
+        transform: (content) => Buffer.from(JSON.stringify(yaml.load(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })), 'utf8'),
+      }, {
+        from: './sig-files', to: 'sig-files',
+      }, {
+        from: '../node_modules/@tonclient/lib-web/tonclient.wasm', to: 'tonclient.wasm',
+      }, {
+        from: './manifest.json', to: 'manifest.json',
+      }, {
+        from: './fonts', to: './fonts',
+      }, {
+        from: './images', to: 'images',
+      }],
     }),
 
     new webpack.PrefetchPlugin(path.join('stylesheets/main.scss')),

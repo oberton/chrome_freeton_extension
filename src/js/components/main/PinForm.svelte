@@ -1,7 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  const dispatch = svelte.createEventDispatcher();
   const pinLength = 6;
   const pinDots = _.times(pinLength);
 
@@ -35,22 +33,24 @@
 </script>
 
 <div class={`pin-form fadeIn ${$$props.pinError ? "pin-error" : ""}`}>
-  <div class='text-md gtr-b' id='pin-title'>
-    {#if $$props.canGoBack}
-      <span class="color-blue head-xs" on:click={goBack} style="
-        cursor: pointer;
-        height: 0.5em;
-        width: 1em;
-        vertical-align: top;
-        line-height: 0;
-        margin-left: -0.2em;">
-        &#8592;
+  {#if $$props.canGoBack || $$props.title }
+    <div class='text-md gtr-b' id='pin-title'>
+      {#if $$props.canGoBack}
+        <span class="color-blue head-xs" on:click={goBack} style="
+          cursor: pointer;
+          height: 0.5em;
+          width: 1em;
+          vertical-align: top;
+          line-height: 0;
+          margin-left: -0.2em;">
+          &#8592;
+        </span>
+      {/if}
+      <span>
+        {$$props.title || ""}
       </span>
-    {/if}
-    <span>
-      {$$props.title}
-    </span>
-  </div>
+    </div>
+  {/if}
   <div class='pin-dots gtr-ver'>
     {#each pinDots as dot}
       <div class={pin.length > dot ? "pin-dots-item active" : "pin-dots-item"}></div>

@@ -12,8 +12,12 @@
             </div>
           </div>
           <div class='tbl-cell' style='width: 3.5rem;'>
-            <button type='button' class='btn-blue-light btn-round' with-tooltip={copying ? "Copied!" : "Copy Address"} on:click={() => copyAddress(address)}>
-              <span class='icon-copy text-lg'></span>
+            <button
+              type='button'
+              class='btn-blue-light btn-round'
+              with-tooltip={copying ? t('info.copied') : t('actions.address.copy')}
+              on:click={() => copyAddress(address)}>
+                <span class='icon-copy text-lg'></span>
             </button>
           </div>
           <div class='tbl-cell alg-m' style='width: 3.5rem'>
@@ -28,7 +32,10 @@
 
               <div class='tooltip-menu'>
                 <div class='tooltip-menu-item' close-tooltip on:click={removeWallet}>
-                  Delete
+                  {t('actions.common.delete_item')}
+                </div>
+                <div class='tooltip-menu-item' close-tooltip on:click={backupWallet}>
+                  {t('actions.phrase.backup')}
                 </div>
               </div>
 
@@ -57,22 +64,58 @@
 
     </div>
   </div>
+
+  {#if showPhraseDialog }
+    <ModalDialog on:close={() => showPhraseDialog = false} headline='Master Password'>
+      <div style='user-select: none;'>
+        <div class='text-line'>
+          {walletData.phrase}
+        </div>
+        <div class='text-xs color-red'>
+          {t('info.phrase.no_photo')}
+        </div>
+      </div>
+    </ModalDialog>
+  {/if}
+
+  {#if showPinForm }
+    <ModalDialog on:close={() => showPinForm = false} headline={t('actions.pin.enter')}>
+      <PinForm pinError={pinError} on:submit={checkPin} />
+    </ModalDialog>
+  {/if}
 </div>
 
 <script>
-  import { onMount } from 'svelte';
-  import { tooltipMenu } from 'js/directives/tooltipMenu.dir.js';
-
-  const dispatch = createEventDispatcher();
+  const dispatch = svelte.createEventDispatcher();
   let walletData = {};
   let address = '';
   let balance = 0;
+
+  let showPinForm = false;
+  let pinError = false;
+
+  let showPhraseDialog = false;
 
   function removeWallet() {
     dispatch('removeWallet', true);
   }
 
+  function checkPin(pin) {
+    if (pin.detail !== conf.myPin) {
+      pinError = true;
+      setTimeout(() => {
+        pinError = false;
+      }, 150);
+      return;
+    }
+    showPinForm = false;
+    showPhraseDialog = true;
+  }
 
+
+  function backupWallet() {
+    showPinForm = true;
+  }
 
   let stakeForm = {
     address: '',
@@ -102,7 +145,7 @@
     }, 200);
   }
 
-	onMount(async () => {
+	svelte.onMount(async () => {
     walletData = await tonMethods.getWalletData($$props.wallet.phrase);
     address = _.get(walletData, 'wallet.address');
     try {

@@ -13,9 +13,7 @@
 
 
 <script>
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  const dispatch = svelte.createEventDispatcher();
 
   function updateCurrentNetwork(tonServer) {
     setTimeout(() => {

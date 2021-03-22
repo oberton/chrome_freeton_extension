@@ -1,11 +1,53 @@
+<div class='gtr-t'>
+  {#if loggedIn }
+
+    <div
+      id="logout-button"
+      class="color-blue font-bold text-sm"
+      on:click={logout}
+      style="position: absolute; cursor: pointer; top: 25px; right: 0px;">
+      <button
+        type="button"
+        class="btn-blue-light btn-round"
+        title={t('actions.logout')}>
+          <span class="icon-logout text-lg"></span>
+      </button>
+    </div>
+  {/if}
+
+  {#if step === 'pin'}
+    <PinForm title={t('actions.pin.enter')} pinError={pinError} on:submit={checkPin} />
+  {/if}
+
+  {#if step === 'createPin'}
+    <PinForm
+      title={t('actions.pin.create')}
+      placeholder={t('info.pin.device_info')}
+      on:submit={createPin} />
+  {/if}
+
+  {#if step === 'confirmPin'}
+    <PinForm
+      title={t('actions.pin.confirm')}
+      placeholder={t('info.pin.confirm_info')}
+      canGoBack={true}
+      pinError={pinError}
+      on:back={() => step = 'createPin'}
+      on:submit={confirmPin} />
+  {/if}
+
+  {#if step === 'login'}
+    <LoginForm on:submit={signIn} />
+  {/if}
+
+  {#if step === 'wallet'}
+    <WalletsMain />
+  {/if}
+</div>
+
 <script>
-  import { onMount } from 'svelte';
 
-  import PinForm from './main/PinForm.svelte';
-  import LoginForm from './main/LoginForm.svelte';
-  import WalletsMain from './main/WalletsMain.svelte';
-
-	let name = 'world';
+	let name = '';
   let wallets = null;
   let step = null;
   let pinError = false;
@@ -77,7 +119,7 @@
     step = 'login';
   }
 
-	onMount(async () => {
+	svelte.onMount(async () => {
     const result = await utils.storage.get(['myPhrases']);
     name = result;
 
@@ -88,55 +130,7 @@
       step = 'login';
     }
 
-    conf.myPin = '222222';
-    step = 'wallet';
+    /* conf.myPin = '222222'; */
+    /* step = 'wallet'; */
 	});
 </script>
-
-
-<div>
-  {#if loggedIn }
-
-    <div
-      id="logout-button"
-      class="color-blue font-bold text-sm"
-      on:click={logout}
-      style="position: absolute; cursor: pointer; top: 10px; right: 0px;">
-      <button
-        type="button"
-        class="btn-blue-light btn-round"
-        title="Logout">
-          <span class="icon-logout text-lg"></span>
-      </button>
-    </div>
-  {/if}
-
-  {#if step === 'pin'}
-    <PinForm title={'Enter Pin'} pinError={pinError} on:submit={checkPin} />
-  {/if}
-
-  {#if step === 'createPin'}
-    <PinForm
-      title={'Create Pin'}
-      placeholder={'It will only work on this device'}
-      on:submit={createPin} />
-  {/if}
-
-  {#if step === 'confirmPin'}
-    <PinForm
-      title={'Confirm Pin'}
-      placeholder={'Repeat PIN from step before'}
-      canGoBack={true}
-      pinError={pinError}
-      on:back={() => step = 'createPin'}
-      on:submit={confirmPin} />
-  {/if}
-
-  {#if step === 'login'}
-    <LoginForm on:submit={signIn} />
-  {/if}
-
-  {#if step === 'wallet'}
-    <WalletsMain />
-  {/if}
-</div>

@@ -5,70 +5,67 @@
     </div>
   </div>
 
-  <div class='text-line'>
+  <div class='text-line text-sm'>
     <Tabs bind:tab={activeTab} tabs={tabs} />
   </div>
 
 
-  {#if activeTab === "Wallets"}
+  {#if activeTab === t('main.tabs.wallets') }
     <div>
       {#each wallets as wallet, index}
         <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(index)}/>
       {/each}
 
-      <div class='text-right gtr-t row-r'>
+      <div class='text-center gtr-t row-r-xs'>
         <div class='smile'>
           <button
             use:tooltipMenu
-            placement='top-end'
+            placement='top'
             class='btn-blue btn-round smile'>
             <span class='icon-add text-lg'></span>
           </button>
           <div class='tooltip-menu'>
             <div class='tooltip-menu-item' close-tooltip on:click={createWallet}>
-              Create Wallet
+              {t('actions.wallet.create')}
             </div>
             <div class='tooltip-menu-item' close-tooltip on:click={displayRestoreDialog}>
-              Restore Wallet
+              {t('actions.wallet.restore')}
             </div>
           </div>
         </div>
       </div>
       {#if showRestoreDialog }
-        <ModalDialog on:close={() => showRestoreDialog = false} headline='Restore Wallet'>
+        <ModalDialog on:close={() => showRestoreDialog = false} headline={t('actions.wallet.restore')}>
           <div>
             <div class='text-row'>
               <PhraseArea bind:phrase={phrase} />
             </div>
             <button class="btn-blue font-bold full-width text-md" on:click={restoreWallet}>
-              Restore
+              {t('actions.wallet.restore')}
             </button>
           </div>
         </ModalDialog>
       {/if}
     </div>
 
-  {:else if activeTab === "DePools"}
+  {:else if activeTab === t('main.tabs.depools') }
     <DePools />
   {/if}
 
 </div>
 
 <script>
-  import { tooltipMenu } from 'js/directives/tooltipMenu.dir';
-  import NetworkSwitcher from '../common/NetworkSwitcher.svelte';
-  import ModalDialog from '../common/ModalDialog.svelte';
-  import WalletItem from './WalletItem.svelte';
-  import PhraseArea from 'js/components/common/PhraseArea.svelte';
-  import Tabs from 'js/components/common/Tabs.svelte';
-  import DePools from './DePools.svelte';
-
   let showRestoreDialog = false;
 
   let wallets = [];
   let phrase = '';
 
-  const tabs = ["Wallets", "DePools", "My Stakes"];
+  const tabs = [
+    t('main.tabs.wallets'),
+    t('main.tabs.stakes'),
+    t('main.tabs.depools'),
+  ];
+
   let activeTab = tabs[0];
 
   async function refreshWallets() {
@@ -84,7 +81,7 @@
 
   async function removeWallet(index) {
     await utils.storage.splice('myPhrases', index, 1, conf.myPin);
-    utils.toast.info('Wallet Removed');
+    utils.toast.info(t('info.wallet.removed'));
     refreshWallets();
   }
 
@@ -95,7 +92,7 @@
 
   async function restoreWallet() {
     if (_.find(wallets, w => w.phrase === phrase)) {
-      utils.toast.error('Wallet is already added.');
+      utils.toast.error(t('info.wallet.exists'));
       return;
     }
 
@@ -109,14 +106,14 @@
 
       showRestoreDialog = false;
 
-      utils.toast.info('Wallet Restored');
+      utils.toast.info('info.wallet.restored');
 
     } catch(e) {
-      utils.toast.error('Invalid Phrase');
+      utils.toast.error('info.phrase.invalid');
     }
   }
 
-	onMount(async () => {
+	svelte.onMount(async () => {
     refreshWallets();
 	});
 </script>

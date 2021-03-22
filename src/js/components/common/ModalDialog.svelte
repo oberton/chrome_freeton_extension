@@ -4,7 +4,7 @@
       <div class='modal-dialog-content'>
         <div class='text-line'>
           <div class='tbl'>
-            <div class='tbl-cell alg-m text-lg font-semi'>
+            <div class='tbl-cell alg-m text-md'>
               {headline}
             </div>
             <div class='tbl-cell cell-gtr alg-m'>
@@ -30,7 +30,7 @@
 
   export let headline;
 
-  const dispatch = createEventDispatcher();
+  const dispatch = svelte.createEventDispatcher();
 
   function hide() {
     currentBlock.classList.remove('shown');
@@ -46,7 +46,7 @@
     hide();
   }
 
-	onMount(async () => {
+	svelte.onMount(async () => {
     currentBlock.parentElement.removeChild(currentBlock);
     document.body.appendChild(currentBlock);
     setTimeout(() => {

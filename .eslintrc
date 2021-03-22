@@ -49,5 +49,7 @@
     "conf": "readonly",
     "utils": "readonly",
     "App": "readonly",
+    "t": "readonly",
+    "svelte": "readonly",
   }
 }

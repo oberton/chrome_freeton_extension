@@ -62,4 +62,4 @@ function tooltipMenu(node) {
   };
 }
 
-export { tooltipMenu };
+export default tooltipMenu;
