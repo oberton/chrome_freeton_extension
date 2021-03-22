@@ -47,7 +47,7 @@
         </div>
       </div>
 
-      <form class='tbl' on:submit={stake} style='display: none;'>
+      <form class='tbl' on:submit={stake}>
         <div class='tbl-cell text-md cell-4 gtr-r'>
           <div class='form-group'>
             <input class='form-control' bind:value={stakeForm.address} type='address' required />
