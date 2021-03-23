@@ -255,6 +255,135 @@ async function getAllAccountsList(client, depools_code_hashes=[]) {
 
 
 
+String.prototype.hexEncode = function() {
+    var hex, i;
+
+    var result = "";
+    for (i=0; i<this.length; i++) {
+        hex = this.charCodeAt(i).toString(16);
+        result += ("000"+hex).slice(-4);
+    }
+
+    return result
+}
+
+String.prototype.hexDecode = function() {
+    var j;
+    var hexes = this.match(/.{1,4}/g) || [];
+    var back = "";
+    for(j = 0; j<hexes.length; j++) {
+        back += String.fromCharCode(parseInt(hexes[j], 16));
+    }
+
+    return back;
+}
+
+const transferAbi = {
+    "ABI version": 2,
+    "functions": [
+        {
+            "name": "transfer",
+            "id": "0x00000000",
+            "inputs": [{"name":"comment","type":"bytes"}],
+            "outputs": []
+        }
+    ],
+    "events": [],
+    "data": []
+}
+
+async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='') {
+
+  let body = null;
+  if (comment != undefined || comment != null) {
+    let signer = {
+      type: 'None',
+    };
+
+    body = (await client.abi.encode_message_body({
+        abi: {
+          type: 'Serialized',
+          value: transferAbi,
+        },
+        call_set: {
+            function_name: "transfer",
+            input:{
+                comment: comment.hexEncode()
+            }
+        },
+        is_internal: true,
+        signer: signer,
+    })).body;  
+  }
+
+  let submitTransactionParams = {
+      dest: to,
+      value: amount,
+      bounce: true,
+      allBalance: false,
+      payload: body
+  };
+
+  let abiValue = await fetchAbi(abiWalletDir);
+
+  let params = {
+      send_events: false,
+      message_encode_params: {
+          address: from,
+          abi: {
+            type: 'Serialized',
+            value: abiValue,
+          },
+          call_set: {
+              function_name: 'submitTransaction',
+              input: submitTransactionParams
+          },
+
+          signer: {
+              type: 'Keys',
+              keys: keys
+          },
+      }
+  }
+
+  console.log(params);
+
+  let transactionInfo = await client.processing.process_message(params);
+  console.log(transactionInfo);
+  console.log("Transaction info:")
+
+  console.log("Id:")
+  console.log(transactionInfo.transaction.id);
+  console.log("messages:")
+  console.log(transactionInfo.out_messages);
+  const messages = transactionInfo.out_messages;
+  // try{
+  //     const decoded_comment1 = (await client.abi.decode_message({
+  //         abi: transferAbi, 
+  //         message: messages[0]
+  //     })).value;
+          
+  //     console.log(decoded_comment1);
+
+  //     const decoded_comment2 = (await client.abi.decode_message({
+  //         abi: transferAbi, 
+  //         message: messages[1]
+  //     })).value;
+  //     console.log(decoded_comment2.toString);
+  // } catch {
+
+  // }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -279,13 +408,24 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
   // debugger;
 
   // получить все депулы трех версий
-  let depools_code_hashes = Object.values(DepoolsCodeHashes);
-  let custodians = await getAllAccountsList(client, depools_code_hashes);
-  console.log(custodians);
+  // let depools_code_hashes = Object.values(DepoolsCodeHashes);
+  // let custodians = await getAllAccountsList(client, depools_code_hashes);
+  // console.log(custodians);
 
+  // забрать весь стейк с депула
   // let a = await withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir);
   // console.log(a);
 
+  // отправить токены
+  let a = await sendToken(
+    client, 
+    walletAddr, 
+    '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
+    0.5 * 1_000_000_000, 
+    keys, 
+    abiWalletDir, 
+    ''
+  );
 
 
   return;
