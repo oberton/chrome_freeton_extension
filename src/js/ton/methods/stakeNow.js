@@ -292,6 +292,7 @@ const transferAbi = {
     "data": []
 }
 
+// amount - размерность в TON
 async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='') {
 
   let body = null;
@@ -318,7 +319,7 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='
 
   let submitTransactionParams = {
       dest: to,
-      value: amount,
+      value: amount * 1_000_000_000,
       bounce: true,
       allBalance: false,
       payload: body
@@ -421,7 +422,7 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
     client, 
     walletAddr, 
     '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
-    0.5 * 1_000_000_000, 
+    0.1, 
     keys, 
     abiWalletDir, 
     ''
