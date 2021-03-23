@@ -295,7 +295,7 @@ const transferAbi = {
 // amount - размерность в TON
 async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='') {
 
-  let body = null;
+  let body = '';
   if (comment != undefined || comment != null) {
     let signer = {
       type: 'None',
@@ -347,17 +347,20 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='
       }
   }
 
-  console.log(params);
+  // console.log(params);
 
   let transactionInfo = await client.processing.process_message(params);
-  console.log(transactionInfo);
-  console.log("Transaction info:")
+  
+  // console.log("Transaction info:")
+  // console.log(transactionInfo);
 
-  console.log("Id:")
-  console.log(transactionInfo.transaction.id);
-  console.log("messages:")
-  console.log(transactionInfo.out_messages);
-  const messages = transactionInfo.out_messages;
+  // console.log("Id:")
+  // console.log(transactionInfo.transaction.id);
+
+  // console.log("messages:")
+  // console.log(transactionInfo.out_messages);
+
+  // const messages = transactionInfo.out_messages;
   // try{
   //     const decoded_comment1 = (await client.abi.decode_message({
   //         abi: transferAbi, 
@@ -374,6 +377,8 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='
   // } catch {
 
   // }
+
+  return transactionInfo;
 }
 
 
@@ -439,7 +444,7 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
     0.1, 
     keys, 
     abiWalletDir, 
-    ''
+    null
   );
 
 
