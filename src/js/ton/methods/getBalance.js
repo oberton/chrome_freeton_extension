@@ -1,11 +1,6 @@
 async function getBalance(address) {
-  const client = new tonClient({
-    network: {
-      server_address: conf.currentTonServer || conf.tonServers[0],
-    },
-  });
 
-  const result = await client.net.wait_for_collection({
+  const result = await conf.tonClient.net.wait_for_collection({
     collection: 'accounts',
     filter: {
       id: {

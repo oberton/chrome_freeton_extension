@@ -5,7 +5,7 @@ const DepoolsCodeHashes = {
 };
 
 // получить список аккаунтов по массиву хешей кода от аккаунтов, игнорируя определенные аккаунты из массива ignoreIds. Максимум записей - 50шт
-async function getAccountsList(client, code_hashes = [], limit = 50, ignoreIds = []) {
+async function getAccountsList(code_hashes = [], limit = 50, ignoreIds = []) {
 
   const filter = {
     code_hash: {
@@ -19,7 +19,7 @@ async function getAccountsList(client, code_hashes = [], limit = 50, ignoreIds =
     };
   }
 
-  const fetch = await client.net.query_collection({
+  const fetch = await conf.tonClient.net.query_collection({
     collection: 'accounts',
     filter: filter,
     orderBy:[
@@ -32,8 +32,8 @@ async function getAccountsList(client, code_hashes = [], limit = 50, ignoreIds =
   return fetch.result;
 }
 
-async function getAccountsCount(client, code_hashes = []) {
-  const fetch = await client.net.aggregate_collection({
+async function getAccountsCount(code_hashes = []) {
+  const fetch = await conf.tonClient.net.aggregate_collection({
     collection: 'accounts',
     filter: {
       code_hash: {
@@ -46,14 +46,14 @@ async function getAccountsCount(client, code_hashes = []) {
 }
 
 // получить список абсолютно всех аккаунтов по массиву хешей кода от аккаунтов
-async function getAllAccountsList(client, depools_code_hashes = []) {
-  let count = await getAccountsCount(client, depools_code_hashes);
+async function getAllAccountsList(depools_code_hashes = []) {
+  let count = await getAccountsCount(depools_code_hashes);
 
   let accounts = [];
   const ignoreIds = [];
 
   while(count > 0) {
-    const fetch = await getAccountsList(client, depools_code_hashes, 50, ignoreIds);
+    const fetch = await getAccountsList(depools_code_hashes, 50, ignoreIds);
     if (fetch.length > 0) {
       for (let i = 0; i < fetch.length; i += 1) {
         ignoreIds.push(fetch[i].id);
@@ -72,16 +72,10 @@ async function getAllAccountsList(client, depools_code_hashes = []) {
   return accounts;
 }
 
-async function getDepools(_client) {
-
-  const client = _client || new tonClient({
-    network: {
-      server_address: conf.currentTonServer || conf.tonServers[0],
-    },
-  });
+async function getDepools() {
 
   const depoolsCodeHashes = Object.values(DepoolsCodeHashes);
-  const custodians = await getAllAccountsList(client, depoolsCodeHashes);
+  const custodians = await getAllAccountsList(depoolsCodeHashes);
   return custodians;
 }
 

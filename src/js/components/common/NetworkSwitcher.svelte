@@ -19,6 +19,7 @@
     setTimeout(() => {
       utils.storage.set({currentServer});
       conf.currentTonServer = currentServer;
+      conf.tonClient = tonMethods.getClient();
       dispatch('change', conf.currentTonServer);
     });
   }
