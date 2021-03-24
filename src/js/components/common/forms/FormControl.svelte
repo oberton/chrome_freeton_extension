@@ -3,6 +3,9 @@
     type={$$props.type || "text"}
     class={"form-control " + (('' + value) ? "" : " empty")}
     value={value}
+    min={$$props.min || undefined}
+    max={$$props.max || undefined}
+    step={$$props.step || undefined}
     on:input={e => value = e.target.value}
     required={$$props.required || false} />
 

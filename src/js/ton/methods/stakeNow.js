@@ -255,29 +255,6 @@ async function getAllAccountsList(depools_code_hashes=[]) {
 
 
 
-String.prototype.hexEncode = function() {
-    var hex, i;
-
-    var result = "";
-    for (i=0; i<this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += ("000"+hex).slice(-4);
-    }
-
-    return result
-}
-
-String.prototype.hexDecode = function() {
-    var j;
-    var hexes = this.match(/.{1,4}/g) || [];
-    var back = "";
-    for(j = 0; j<hexes.length; j++) {
-        back += String.fromCharCode(parseInt(hexes[j], 16));
-    }
-
-    return back;
-}
-
 
 
 
@@ -309,14 +286,14 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
   // console.log(a);
 
   // отправить токены
-  let a = await sendToken(
-    walletAddr, 
-    '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
-    0.1, 
-    keys, 
-    abiWalletDir, 
-    null
-  );
+  // let a = await tonMethods.sendTokens(
+  //   walletAddr, 
+  //   '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
+  //   0.1, 
+  //   keys, 
+  //   abiWalletDir, 
+  //   null
+  // );
 
 
   return;

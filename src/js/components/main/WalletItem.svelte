@@ -2,6 +2,7 @@
   <div class='tbl-cell alg-m'>
     <div class='gtr-ver'>
       <div class='text-md'>
+        <span class={"icon-gem text-md smile alg-m gtr-r-xs color-" + (balance ? "blue" : "dim")}></span>
         {(balance || 0).toFixed(3)}
       </div>
       <div class='row-r-sm'>
@@ -89,7 +90,11 @@
 
   {#if showSendCrystalsForm }
     <ModalDialog on:close={() => showSendCrystalsForm = false} headline={t('actions.tokens.send')}>
-      <SendTokensForm wallet={walletData.wallet} />
+      <SendTokensForm
+        on:transactionSent={onTransactionSent}
+        wallet={walletData.wallet}
+        keys={walletData.keys}
+        balance={balance} />
     </ModalDialog>
   {/if}
 </div>
@@ -128,6 +133,11 @@
   let showSendCrystalsForm = false;
   function sendCrystals() {
     showSendCrystalsForm = true;
+  }
+
+  function onTransactionSent() {
+    showSendCrystalsForm = false;
+    utils.toast.info(t('info.transaction.sent'));
   }
 
   let stakeForm = {

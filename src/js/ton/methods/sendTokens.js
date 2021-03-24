@@ -1,3 +1,4 @@
+import hex from 'js/utils/utils/hex';
 import fetchAbi from './fetchAbi';
 
 const transferAbi = {
@@ -33,7 +34,7 @@ async function sendTokens(from, to, amount, keys, abiWalletDir, comment = null) 
       call_set: {
         function_name: "transfer",
         input: {
-          comment: comment.hexEncode(),
+          comment: hex.encode(comment || ''),
         },
       },
       is_internal: true,

@@ -6,6 +6,7 @@ main:
 
 info:
   copied: "Copied"
+
   pin:
     device_info: "It will only work on this device."
     confirm_info: "Repeat PIN from step before."
@@ -18,6 +19,10 @@ info:
   phrase:
     invalid: "Invalid Phrase"
     no_photo: "Do not take photos or screenshots. Other apps can get access to them. Write everything down on paper and store it in a safe place."
+
+  transaction:
+    error: "Send Transaction Failed"
+    sent: "Transaction Sent"
 
 actions:
   logout: "Logout"
