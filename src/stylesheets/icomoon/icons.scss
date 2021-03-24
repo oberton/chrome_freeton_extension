@@ -1,3 +1,8 @@
+.#{$icomoon-prefix}-gem { 
+  &:before {
+    content: $icon-gem;
+  }
+}
 .#{$icomoon-prefix}-add { 
   &:before {
     content: $icon-add;
@@ -28,14 +33,14 @@
     content: $icon-cash;
   }
 }
-.#{$icomoon-prefix}-copy { 
-  &:before {
-    content: $icon-copy;
-  }
-}
 .#{$icomoon-prefix}-logout { 
   &:before {
     content: $icon-logout;
+  }
+}
+.#{$icomoon-prefix}-copy { 
+  &:before {
+    content: $icon-copy;
   }
 }
 .#{$icomoon-prefix}-delete { 

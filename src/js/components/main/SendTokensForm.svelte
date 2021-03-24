@@ -1,5 +1,5 @@
 <div>
-  <form>
+  <form on:submit|preventDefault={sendTokens}>
 
     <div class='text-row'>
 
@@ -17,11 +17,13 @@
         type='number'
         required={true}
         bind:value={formData.amount}
+        min={0.001}
+        max={$$props.balance}
+        step={0.001}
         label={t('labels.amount')} />
 
       <FormControl
-        type='number'
-        required={true}
+        type='text'
         bind:value={formData.comment}
         label={t('labels.comment')} />
 
@@ -35,11 +37,28 @@
 </div>
 
 <script>
+  const dispatch = svelte.createEventDispatcher();
+
   const formData = {
     from: $$props.wallet.address,
     to: '',
     amount: '',
     comment: '',
   };
+
+  async function sendTokens() {
+    utils.page.showLoader();
+    const abiWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json';
+
+    try {
+      const result = await tonMethods.sendTokens(formData.from, formData.to, formData.amount, $$props.keys, abiWalletDir, formData.comment);
+      dispatch('transactionSent', result);
+      utils.page.hideLoader();
+    } catch(e) {
+      utils.toast.error(t('info.transaction.error'));
+      utils.page.hideLoader();
+    }
+
+  }
 
 </script>

@@ -130,7 +130,7 @@
       step = 'login';
     }
 
-    conf.myPin = '111111';
+    conf.myPin = '222222';
     step = 'wallet';
 	});
 </script>

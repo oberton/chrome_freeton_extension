@@ -11,6 +11,7 @@ async function runApp() {
 
   if (currentServer && _.includes(conf.tonServers, currentServer)) {
     conf.currentTonServer = currentServer;
+    conf.tonClient = tonMethods.getClient();
   }
 
   const app = new App({
@@ -19,7 +20,6 @@ async function runApp() {
 
   if (NODE_ENV !== 'production') {
     _.assign(window, {
-      tonClient,
       t,
       svelte,
       tonMethods,

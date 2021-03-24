@@ -7,9 +7,9 @@ const DepoolsCodeHashes = {
 }
 
 // получить массив публичных ключей кастодианов
-async function getCustodians(client, address, abiWalletDir) {
+async function getCustodians(address, abiWalletDir) {
 
-  let account = await client.net.query_collection({
+  let account = await conf.tonClient.net.query_collection({
       collection: 'accounts',
       filter: { id: { eq: address } },
       result: 'boc'
@@ -32,9 +32,9 @@ async function getCustodians(client, address, abiWalletDir) {
     }
   };
 
-  let encoded_message = await client.abi.encode_message(message_encode_params);
+  let encoded_message = await conf.tonClient.abi.encode_message(message_encode_params);
 
-  let response = await client.tvm.run_tvm({ 
+  let response = await conf.tonClient.tvm.run_tvm({ 
     message: encoded_message.message, 
     account: account.result[0].boc, 
     abi: {
@@ -48,9 +48,9 @@ async function getCustodians(client, address, abiWalletDir) {
 
 
 // есть ли транзакции для подтверждения другими кастодианами у кошелька
-async function getTransactionIds(client, address, abiWalletDir) {
+async function getTransactionIds(address, abiWalletDir) {
 
-  let account = await client.net.query_collection({
+  let account = await conf.tonClient.net.query_collection({
       collection: 'accounts',
       filter: { id: { eq: address } },
       result: 'boc'
@@ -73,9 +73,9 @@ async function getTransactionIds(client, address, abiWalletDir) {
     }
   };
 
-  let encoded_message = await client.abi.encode_message(message_encode_params);
+  let encoded_message = await conf.tonClient.abi.encode_message(message_encode_params);
   
-  let response = await client.tvm.run_tvm({ 
+  let response = await conf.tonClient.tvm.run_tvm({ 
     message: encoded_message.message, 
     account: account.result[0].boc, 
     abi: {
@@ -87,8 +87,8 @@ async function getTransactionIds(client, address, abiWalletDir) {
   return response.decoded.output.ids;
 }
 
-async function getAccountType(client, address) {
-  let account = await client.net.query_collection({
+async function getAccountType(address) {
+  let account = await conf.tonClient.net.query_collection({
       collection: 'accounts',
       filter: { id: { eq: address } },
       result: 'acc_type_name'
@@ -99,15 +99,15 @@ async function getAccountType(client, address) {
 
 
 // аккаунт активный или нет true false
-async function accountIsActive(client, address) {
-  let accountType = await getAccountType(client, address);
+async function accountIsActive(address) {
+  let accountType = await getAccountType(address);
 
   return accountType == 'Active';
 }
 
 
 // вернуть весь стейк
-async function withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir) {
+async function withdrawAll(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir) {
   let abiValue = await fetchAbi(abiDepoolDir);
 
   let abi = {
@@ -133,7 +133,7 @@ async function withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, a
 
   let message = null;
 
-  message = await client.abi.encode_message_body(depoolPayload);
+  message = await conf.tonClient.abi.encode_message_body(depoolPayload);
 
   abiValue = await fetchAbi(abiWalletDir);
 
@@ -165,22 +165,22 @@ async function withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, a
     signer,
   };
 
-  message = await client.abi.encode_message(message_encode_params);
+  message = await conf.tonClient.abi.encode_message(message_encode_params);
 
   const processParams = {
     message_encode_params,
     send_events: false,
   };
 
-  let result = await client.processing.process_message(processParams);
+  let result = await conf.confClient.processing.process_message(processParams);
 
   return result;
 }
 
 // получить кол-во записей для аккаунтов. Фильтруется по массиву хешей кода от аккаунтов
-async function getAccountsCount(client, code_hashes=[]) {
+async function getAccountsCount(code_hashes=[]) {
 
-  let fetch = await client.net.aggregate_collection({
+  let fetch = await conf.tonClient.net.aggregate_collection({
       collection: 'accounts',
       filter: { 
         code_hash: { 
@@ -198,7 +198,7 @@ async function getAccountsCount(client, code_hashes=[]) {
 }
 
 // получить список аккаунтов по массиву хешей кода от аккаунтов, игнорируя определенные аккаунты из массива ignoreIds. Максимум записей - 50шт
-async function getAccountsList(client, code_hashes=[], limit=50, ignoreIds=[]) {
+async function getAccountsList(code_hashes=[], limit=50, ignoreIds=[]) {
 
   let filter = {
     code_hash: { 
@@ -214,7 +214,7 @@ async function getAccountsList(client, code_hashes=[], limit=50, ignoreIds=[]) {
 
   
 
-  let fetch = await client.net.query_collection({
+  let fetch = await conf.tonClient.net.query_collection({
       collection: 'accounts',
       filter: filter,
       orderBy:[
@@ -228,14 +228,14 @@ async function getAccountsList(client, code_hashes=[], limit=50, ignoreIds=[]) {
 }
 
 // получить список абсолютно всех аккаунтов по массиву хешей кода от аккаунтов
-async function getAllAccountsList(client, depools_code_hashes=[]) {
-  let count = await getAccountsCount(client, depools_code_hashes);
+async function getAllAccountsList(depools_code_hashes=[]) {
+  let count = await getAccountsCount(depools_code_hashes);
   console.log('c', count)
   let accounts = [];
   let ignoreIds = [];
   
   while(count > 0) {
-    let fetch = await getAccountsList(client, depools_code_hashes, 50, ignoreIds);
+    let fetch = await getAccountsList(depools_code_hashes, 50, ignoreIds);
     if (fetch.length > 0) {
       for (let i = 0; i < fetch.length; i++) {
         ignoreIds.push(fetch[i].id);
@@ -255,187 +255,45 @@ async function getAllAccountsList(client, depools_code_hashes=[]) {
 
 
 
-String.prototype.hexEncode = function() {
-    var hex, i;
 
-    var result = "";
-    for (i=0; i<this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += ("000"+hex).slice(-4);
-    }
 
-    return result
-}
 
-String.prototype.hexDecode = function() {
-    var j;
-    var hexes = this.match(/.{1,4}/g) || [];
-    var back = "";
-    for(j = 0; j<hexes.length; j++) {
-        back += String.fromCharCode(parseInt(hexes[j], 16));
-    }
 
-    return back;
-}
 
-const transferAbi = {
-    "ABI version": 2,
-    "functions": [
-        {
-            "name": "transfer",
-            "id": "0x00000000",
-            "inputs": [{"name":"comment","type":"bytes"}],
-            "outputs": []
-        }
-    ],
-    "events": [],
-    "data": []
-}
 
-// amount - размерность в TON
-async function sendToken(client, from, to, amount, keys, abiWalletDir, sendForce=true, comment=null) {
 
-  let body = '';
-  if (comment != undefined || comment != null) {
-    let signer = {
-      type: 'None',
-    };
 
-    body = (await client.abi.encode_message_body({
-        abi: {
-          type: 'Serialized',
-          value: transferAbi,
-        },
-        call_set: {
-            function_name: "transfer",
-            input:{
-                comment: comment.hexEncode()
-            }
-        },
-        is_internal: true,
-        signer: signer,
-    })).body;  
-  }
 
-  let submitTransactionParams = {
-      dest: to,
-      value: amount * 1_000_000_000,
-      bounce: !sendForce,
-      allBalance: false,
-      payload: body
-  };
 
-  let abiValue = await fetchAbi(abiWalletDir);
 
-  let params = {
-      send_events: false,
-      message_encode_params: {
-          address: from,
-          abi: {
-            type: 'Serialized',
-            value: abiValue,
-          },
-          call_set: {
-              function_name: 'submitTransaction',
-              input: submitTransactionParams
-          },
 
-          signer: {
-              type: 'Keys',
-              keys: keys
-          },
-      }
-  }
 
-  // console.log(params);
-
-  let transactionInfo = await client.processing.process_message(params);
+async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir, amountToken) {
   
-  // console.log("Transaction info:")
-  // console.log(transactionInfo);
-
-  // console.log("Id:")
-  // console.log(transactionInfo.transaction.id);
-
-  // console.log("messages:")
-  // console.log(transactionInfo.out_messages);
-
-  // const messages = transactionInfo.out_messages;
-  // try{
-  //     const decoded_comment1 = (await client.abi.decode_message({
-  //         abi: transferAbi, 
-  //         message: messages[0]
-  //     })).value;
-          
-  //     console.log(decoded_comment1);
-
-  //     const decoded_comment2 = (await client.abi.decode_message({
-  //         abi: transferAbi, 
-  //         message: messages[1]
-  //     })).value;
-  //     console.log(decoded_comment2.toString);
-  // } catch {
-
-  // }
-
-  return transactionInfo;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir, amountToken) {
-  
-  if (client == undefined || client == null) {
-    client = new tonClient({
-      network: {
-        server_address: conf.currentTonServer || conf.tonServers[0],
-      },
-    })
-  }
-
-  // let custodians = await getCustodians(client, walletAddr, abiWalletDir);
-  // let custodians = await getTransactionIds(client, walletAddr, abiWalletDir);
+  // let custodians = await getCustodians(walletAddr, abiWalletDir);
+  // let custodians = await getTransactionIds(walletAddr, abiWalletDir);
 
   // debugger;
   // debugger;
 
   // получить все депулы трех версий
   // let depools_code_hashes = Object.values(DepoolsCodeHashes);
-  // let custodians = await getAllAccountsList(client, depools_code_hashes);
+  // let custodians = await getAllAccountsList(depools_code_hashes);
   // console.log(custodians);
 
   // забрать весь стейк с депула
-  // let a = await withdrawAll(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir);
+  // let a = await withdrawAll(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir);
   // console.log(a);
 
   // отправить токены
-  let a = await sendToken(
-    client, 
-    walletAddr, 
-    // '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
-    '0:6b824a6cc6e879e584bfd88025677c51ac560f2614b7e87d60dc9c8ec884dc96', 
-    0.1, 
-    keys, 
-    abiWalletDir,
-    false, 
-    null
-  );
-  console.log(a);
-
+  // let a = await tonMethods.sendTokens(
+  //   walletAddr, 
+  //   '0:122f9c193e2b925e432356ef1e868ee84559696a48845a8b9cf781c67f2c75d9', 
+  //   0.1, 
+  //   keys, 
+  //   abiWalletDir, 
+  //   null
+  // );
 
 
   return;
@@ -473,7 +331,7 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
 
   let message = null;
 
-  message = await client.abi.encode_message_body(depoolPayload);
+  message = await conf.tonClient.abi.encode_message_body(depoolPayload);
 
   abiValue = await fetchAbi(abiWalletDir);
 
@@ -505,14 +363,14 @@ async function stakeNow(client, walletAddr, keys, depoolAddr, abiDepoolDir, abiW
     signer,
   };
 
-  message = await client.abi.encode_message(message_encode_params);
+  message = await conf.tonClient.abi.encode_message(message_encode_params);
 
   const processParams = {
     message_encode_params,
     send_events: false,
   };
 
-  let result = await client.processing.process_message(processParams);
+  let result = await conf.tonClient.processing.process_message(processParams);
 
   debugger
 
