@@ -293,7 +293,7 @@ const transferAbi = {
 }
 
 // amount - размерность в TON
-async function sendToken(client, from, to, amount, keys, abiWalletDir, comment='') {
+async function sendToken(client, from, to, amount, keys, abiWalletDir, comment=null) {
 
   let body = '';
   if (comment != undefined || comment != null) {
