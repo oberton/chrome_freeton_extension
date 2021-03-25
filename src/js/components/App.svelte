@@ -1,13 +1,14 @@
-<div class='gtr-t'>
+<div>
   {#if loggedIn }
 
     <div
       id="logout-button"
-      class="color-blue font-bold text-sm"
-      on:click={logout}
-      style="position: absolute; cursor: pointer; top: 25px; right: 0px;">
+      class="text-right cell-12"
+      style='height: 45px; margin-bottom: -45px; display: block;'
+      on:click={logout}>
       <button
         type="button"
+        style='margin-top: -9px'
         class="btn-blue-light btn-round"
         title={t('actions.logout')}>
           <span class="icon-logout text-lg"></span>
@@ -130,7 +131,7 @@
       step = 'login';
     }
 
-    conf.myPin = '222222';
-    step = 'wallet';
+    /* conf.myPin = '222222'; */
+    /* step = 'wallet'; */
 	});
 </script>
