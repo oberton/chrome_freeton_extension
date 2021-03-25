@@ -16,12 +16,12 @@
         <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(index)}/>
       {/each}
 
-      <div class='text-center gtr-t row-r-xs'>
+      <div class='text-center gtr-t-2x row-r-xs hover-parent' style='position: absolute; bottom: 0; left: 0; right: 0;'>
         <div class='smile'>
           <button
             use:tooltipMenu
             placement='top'
-            class='btn-blue btn-round smile'>
+            class='btn-blue btn-round smile hover-parent-show'>
             <span class='icon-add text-lg'></span>
           </button>
           <div class='tooltip-menu'>
