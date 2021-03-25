@@ -1,5 +1,5 @@
 <div>
-  <div class='text-line row-t-2x gtr-r-2x'>
+  <div class='text-line gtr-r-3x'>
     <div class='gtr-r-sm'>
       <NetworkSwitcher on:change={refreshWallets} />
     </div>

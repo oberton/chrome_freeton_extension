@@ -1,10 +1,10 @@
 <div>
   <form id='phrase-form' class='fadeIn' on:submit={signIn}>
     <div class='phrase-form-container'>
-      <div class='text-md text-line'>
+      <div class='text-md text-row'>
         {t('actions.wallet.restore')}
       </div>
-      <div class='text-line font-bold'>
+      <div class='gtr-ver font-bold'>
         <NetworkSwitcher />
       </div>
       <div class='gtr-t color-dim row-b-xs'>

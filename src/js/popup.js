@@ -2,12 +2,16 @@ import 'stylesheets/main.scss';
 import App from 'js/components/App.svelte';
 import "./components/index";
 import "./directives/index";
-import { init as initTranslate } from 'js/translate.js';
+import { init as initTranslate } from 'js/translate';
 
 async function runApp() {
   const target = document.getElementById('app');
 
-  const { currentServer } = await utils.storage.get('currentServer');
+  let { currentServer } = await utils.storage.get('currentServer');
+
+  if (!currentServer) {
+    currentServer = conf.tonServers[0];
+  }
 
   if (currentServer && _.includes(conf.tonServers, currentServer)) {
     conf.currentTonServer = currentServer;

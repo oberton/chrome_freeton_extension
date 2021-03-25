@@ -1,14 +1,16 @@
-<div class='form-select form-group'>
-  <select
-    on:change={() => updateCurrentNetwork()}
-    bind:value={currentServer}>
-    {#each tonServers as server}
-      <option value={server}>{server}</option>
-    {/each}
-  </select>
-  <label class='form-label'>
-    {t('labels.ton.server')}
-  </label>
+<div class='row-t-2x smile cell-12'>
+  <div class='form-select form-group'>
+    <select
+      on:change={() => updateCurrentNetwork()}
+      bind:value={currentServer}>
+      {#each tonServers as server}
+        <option value={server}>{server}</option>
+      {/each}
+    </select>
+    <label class='form-label'>
+      {t('labels.ton.server')}
+    </label>
+  </div>
 </div>
 
 
