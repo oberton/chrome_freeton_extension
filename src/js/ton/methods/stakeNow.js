@@ -405,7 +405,7 @@ async function deployStandardWalletContract(keys, abiDir, tvcDir, owners, expect
         value: abiValue
     },
     deploy_set: {
-        tvc: tvcDir,
+        tvc: tvcValue,
         initial_data: {}
     },
     call_set: {
@@ -437,7 +437,7 @@ async function deployStandardWalletContract(keys, abiDir, tvcDir, owners, expect
   });
 
   if (result.length === 0) {
-    const mess = `You need to transfer at least 0.5 tokens for deploy to ${address} to your network`
+    const mess = `You need to transfer at least 0.5 tokens for deploy to ${address} to your ${client.config.network.server_address}`
     console.log(mess);
     throw new Error(mess)
   }
@@ -450,7 +450,7 @@ async function deployStandardWalletContract(keys, abiDir, tvcDir, owners, expect
 
   // Balance is stored as HEX so we need to convert it.
   if (result[0].acc_type == ACCOUNT_TYPE_UNINITIALIZED && BigInt(result[0].balance) <= BigInt(CONTRACT_REQUIRED_DEPLOY_TOKENS)) {
-    const mess = `Balance of ${address} is too low for deploy to network`
+    const mess = `Balance of ${address} is too low for deploy to ${client.config.network.server_address}`
     console.log(mess);
     throw new Error(mess)
   }
@@ -566,14 +566,15 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
 
 
 
-  let testNewSetcodeWalletAddress = '0:f851ca051b33d869f0ebf63f0c7f9c7487610298bcbbfd01813c39f65ae0ff43'
+  // Deploy Default Surf Contract
+  let testNewSetcodeWalletAddress = keys // Я хз почему в эту переменную приходит адресс
+  let keysPair = depoolAddr; // Я хз почему в эту переменную приходит пара ключей
   let setcodeTVCDir = '/sig-files/SetcodeMultisigWallet2.tvc'
-  let abit = await fetchTvc(setcodeTVCDir);
+  let abiSetcodeWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json'
 
-  // let r = await deploySurfWallet(keys, abiWalletDir, tvcDir, expectedAddress)
+  let r = await deploySurfWallet(keysPair, abiSetcodeWalletDir, setcodeTVCDir, testNewSetcodeWalletAddress)
   console.log(r);
-
-
+  
   return;
 
   

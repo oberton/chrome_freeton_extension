@@ -14,14 +14,14 @@ function blobToBase64(blob) {
   });
 }
 
-async function fetchBlob() {
-  const response = await fetch('/sig-files/SetcodeMultisigWallet2.tvc');
+async function fetchBlob(tvcDir) {
+  const response = await fetch(tvcDir);
   const blob = await response.blob();
   return blob;
 }
 
-async function fetchTvc() {
-  const blob = await fetchBlob();
+async function fetchTvc(tvcDir = '/sig-files/SetcodeMultisigWallet2.tvc') {
+  const blob = await fetchBlob(tvcDir);
   const tvc  = await blobToBase64(blob);
   return tvc;
 }
