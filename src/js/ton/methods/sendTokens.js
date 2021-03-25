@@ -47,8 +47,8 @@ async function sendTokens(from, to, amount, keys, abiWalletDir, comment = null, 
   const submitTransactionParams = {
     dest: to,
     value: amount * 1000000000,
-    bounce: true,
-    allBalance: !sendForce,
+    bounce: !sendForce,
+    allBalance: false,
     payload,
   };
 
