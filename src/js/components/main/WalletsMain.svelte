@@ -11,7 +11,7 @@
 
 
   {#if activeTab === t('main.tabs.wallets') }
-    <div class='row-l'>
+    <div class='row-l-xs'>
 
       {#if wallets.length }
         <div style='max-height: 350px; overflow: auto;' class='row gtr-hor'>

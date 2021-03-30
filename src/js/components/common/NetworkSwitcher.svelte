@@ -1,4 +1,4 @@
-<div class='row-t smile cell-12'>
+<div class='row-t gtr-l-sm smile cell-12'>
   <div class='form-select form-group'>
     <select
       on:change={() => updateCurrentNetwork()}
