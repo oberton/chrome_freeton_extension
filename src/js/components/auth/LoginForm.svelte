@@ -1,4 +1,4 @@
-<div>
+<div class='gtr-t'>
   <form id='phrase-form' class='fadeIn' on:submit={signIn}>
     <div class='phrase-form-container'>
       <div class='text-md text-row'>
@@ -22,6 +22,12 @@
       {t('actions.wallet.create')}
     </button>
   </form>
+
+  {#if showCreateWalletDialog }
+    <ModalDialog on:close={() => showCreateWalletDialog = false} headline={t('actions.wallet.create')}>
+      <CreateWalletForm on:walletAdded={onWalletAdded}/>
+    </ModalDialog>
+  {/if}
 </div>
 
 <script>
@@ -34,8 +40,15 @@
     dispatch('submit', phrase.trim());
   }
 
+  let showCreateWalletDialog = false;
+
+  function onWalletAdded(e) {
+    showCreateWalletDialog = false;
+    phrase = e.detail;
+    signIn();
+  }
+
   async function createWallet() {
-    const { phrase } = await tonMethods.getWalletData(null, true);
-    dispatch('submit', phrase);
+    showCreateWalletDialog = true;
   }
 </script>

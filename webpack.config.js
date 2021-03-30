@@ -109,6 +109,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       _: 'lodash',
       tonMethods: ['js/ton/methods.js', 'default'],
+      to: ['js/utils/to.js', 'default'],
       conf: ['conf.js', 'default'],
       svelte: ['svelte'],
       utils: ['js/utils/index.js', 'default'],

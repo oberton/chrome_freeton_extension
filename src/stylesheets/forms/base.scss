@@ -13,3 +13,33 @@
 .form-control:focus {
   border-color: #43a3e8;
 }
+
+.form {
+  &-radio {
+    input {
+      position: absolute;
+      left: -9999em;
+      + span {
+        &:before {
+          content: '';
+          display: inline-block;
+          border-radius: 100%;
+          margin-right: 0.4em;
+          box-shadow: inset 0 0 0 2px #ccc;
+          vertical-align: baseline;
+          margin-bottom: -0.1em;
+          width: 1em;
+          height: 1em;
+        }
+      }
+      &:checked {
+        + span {
+          &:before {
+            box-shadow: inset 0 0 0 2px $blue-base, inset 0 0 0 5px white;
+            background: $blue-base;
+          }
+        }
+      }
+    }
+  }
+}

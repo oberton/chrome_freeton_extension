@@ -29,6 +29,7 @@ async function runApp() {
       tonMethods,
       app,
       conf,
+      to,
       utils,
     });
   }

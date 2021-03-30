@@ -50,14 +50,16 @@
     utils.page.showLoader();
     const abiWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json';
 
-    try {
-      const result = await tonMethods.sendTokens(formData.from, formData.to, formData.amount, $$props.keys, abiWalletDir, formData.comment);
-      dispatch('transactionSent', result);
-      utils.page.hideLoader();
-    } catch(e) {
-      utils.toast.error(t('info.transaction.error'));
-      utils.page.hideLoader();
+    const [err, result] = await to(tonMethods.sendTokens(formData.from, formData.to, formData.amount, $$props.keys, abiWalletDir, formData.comment));
+
+    utils.page.hideLoader();
+
+    if (err) {
+      utils.exception(err);
+      return;
     }
+
+    dispatch('transactionSent', result);
 
   }
 

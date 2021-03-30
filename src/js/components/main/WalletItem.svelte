@@ -1,13 +1,13 @@
 <div class='tbl hover-parent'>
   <div class='tbl-cell alg-m'>
-    <div class='gtr-ver'>
+    <div class='gtr-ver-xs'>
       <div class='text-md'>
-        <span class={"icon-gem text-md smile alg-m gtr-r-xs color-" + (balance ? "blue" : "dim")}></span>
+        <span class={"icon-gem smile alg-m gtr-r-xs color-" + (accountType === "Active" ? "blue" : "dim")}></span>
         {(balance || 0).toFixed(3)}
       </div>
-      <div class='row-r-sm'>
+      <div class='row-r-sm row-t-sm'>
         <div class='tbl' style='table-layout: fixed;'>
-          <div class='tbl-cell text-sm'>
+          <div class='tbl-cell text-xs'>
             <div class='ellipsis'>
               {address}
             </div>
@@ -38,9 +38,11 @@
                 <div class='tooltip-menu-item' close-tooltip on:click={backupWallet}>
                   {t('actions.phrase.backup')}
                 </div>
-                 <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
-                  {t('actions.tokens.send')}
-                </div>
+                {#if accountType === "Active"}
+                  <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
+                    {t('actions.tokens.send')}
+                  </div>
+                {/if}
              </div>
 
             </div>
@@ -48,7 +50,7 @@
         </div>
       </div>
 
-      <form class='tbl' on:submit={stake}>
+      <!--<form class='tbl' on:submit={stake}>
         <div class='tbl-cell text-md cell-4 gtr-r'>
           <div class='form-group'>
             <input class='form-control' bind:value={stakeForm.address} type='address' required />
@@ -64,7 +66,7 @@
         <div class='tbl-cell cell-4'>
           <button class='btn-blue btn-bold' type='submit'>Stake Now</button>
         </div>
-      </form>
+      </form>-->
 
     </div>
   </div>
@@ -104,6 +106,7 @@
   let walletData = {};
   let address = '';
   let balance = 0;
+  let accountType;
 
   let pinError = false;
 
@@ -168,14 +171,59 @@
     }, 200);
   }
 
+  let deploying = false;
+
+  async function deployContract() {
+    if (deploying) {
+      return;
+    }
+
+    deploying = true;
+
+    const tvcDir = '/sig-files/SetcodeMultisigWallet2.tvc';
+    const abiDir = '/sig-files/SetcodeMultisigWallet.abi.json';
+
+    const [err, result] = await to(tonMethods.deployWalletContract(walletData.keys, abiDir, tvcDir, [`0x${walletData.keys.public}`], walletData.wallet.address));
+
+    if (err) {
+      utils.exception(err);
+      return;
+    }
+
+    getBalance();
+  }
+
+  let balanceTimeout;
+  async function getBalance() {
+    clearTimeout(balanceTimeout);
+
+    let err, data;
+
+    [err, data] = await to(tonMethods.getBalance(address));
+
+    if (err) {
+      utils.exception(err);
+    }
+
+    balance = _.get(data, 'result.balance', 0) / 1000000000;
+
+    [err, accountType] = await to(tonMethods.getAccountType(walletData.wallet.address));
+
+    if (err) {
+      utils.exception(err);
+      return;
+    }
+
+    if (accountType && accountType !== 'Active' && balance >= 0.5) {
+      deployContract();
+    }
+
+    balanceTimeout = setTimeout(getBalance, 30000);
+  }
+
 	svelte.onMount(async () => {
     walletData = await tonMethods.getWalletData($$props.wallet.phrase);
     address = _.get(walletData, 'wallet.address');
-    try {
-      const data = await tonMethods.getBalance(address);
-      balance = _.get(data, 'result.balance', 0) / 1000000000;
-    } catch(e) {
-      balance = 0;
-    }
+    getBalance();
   });
 </script>

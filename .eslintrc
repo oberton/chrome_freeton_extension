@@ -50,5 +50,6 @@
     "App": "readonly",
     "t": "readonly",
     "svelte": "readonly",
+    "to": "readonly",
   }
 }

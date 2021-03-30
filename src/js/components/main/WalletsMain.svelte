@@ -5,18 +5,36 @@
     </div>
   </div>
 
-  <div class='text-line text-sm'>
+  <!--<div class='text-line text-sm'>
     <Tabs bind:tab={activeTab} tabs={tabs} />
-  </div>
+  </div>-->
 
 
   {#if activeTab === t('main.tabs.wallets') }
-    <div>
-      {#each wallets as wallet, index}
-        <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(index)}/>
-      {/each}
+    <div class='row-l'>
 
-      <div class='text-center gtr-t-2x row-r-xs'>
+      {#if wallets.length }
+        <div style='max-height: 350px; overflow: auto;' class='row gtr-hor'>
+          {#each wallets as wallet (wallet.phrase)}
+            <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
+          {/each}
+        </div>
+      {:else}
+        <div class='text-center pos-rel' style='height: 350px'>
+          <div class='tbl'>
+            <div class='tbl-cell text-center alg-m'>
+              <div class='text-md'>
+                {t('info.no_data')}
+              </div>
+              <div class='gtr-t text-sm gtr-hor'>
+                {t('info.wallet.create_first')}
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+
+      <div class='text-center gtr-ver bg-white row-r-xs' style='position: absolute; bottom: 0; left: 0; right: 0;'>
         <div class='smile'>
           <button
             use:tooltipMenu
@@ -46,6 +64,11 @@
           </div>
         </ModalDialog>
       {/if}
+      {#if showCreateWalletDialog}
+        <ModalDialog on:close={() => showCreateWalletDialog = false} headline={t('actions.wallet.create')}>
+          <CreateWalletForm on:walletAdded={onWalletAdded}/>
+        </ModalDialog>
+      {/if}
     </div>
 
   {:else if activeTab === t('main.tabs.depools') }
@@ -59,6 +82,13 @@
 
   let wallets = [];
   let phrase = '';
+  let allWallets;
+
+  let showAdvanced = false;
+
+  function toggleAdvanced() {
+    showAdvanced = !showAdvanced;
+  }
 
   const tabs = [
     t('main.tabs.wallets'),
@@ -70,19 +100,30 @@
 
   async function refreshWallets() {
     const currentNetwork =  conf.currentTonServer || conf.tonServers[0];
-    const allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
+    allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
     wallets = allWallets.filter(w => w.network === currentNetwork);
+    console.log(wallets);
   }
 
-  async function createWallet() {
-    const { phrase } = await tonMethods.getWalletData(null, true);
+  let showCreateWalletDialog = false;
+
+  function createWallet() {
+    showCreateWalletDialog = true;
+  }
+
+  function onWalletAdded() {
+    showCreateWalletDialog = false;
     refreshWallets();
+    utils.toast.info(t('info.wallet.created'));
   }
 
-  async function removeWallet(index) {
-    await utils.storage.splice('myPhrases', index, 1, conf.myPin);
+  async function removeWallet(wallet) {
+    const indexToRemove = _.findIndex(allWallets, w => {
+      return w.phrase === wallet.phrase && w.network === wallet.network;
+    });
+    await utils.storage.splice('myPhrases', indexToRemove, 1, conf.myPin);
     utils.toast.info(t('info.wallet.removed'));
-    refreshWallets();
+    setTimeout(refreshWallets);
   }
 
   function displayRestoreDialog() {

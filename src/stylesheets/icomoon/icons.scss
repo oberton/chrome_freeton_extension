@@ -1,11 +1,11 @@
-.#{$icomoon-prefix}-gem { 
+.#{$icomoon-prefix}-angle-down { 
   &:before {
-    content: $icon-gem;
+    content: $icon-angle-down;
   }
 }
-.#{$icomoon-prefix}-add { 
+.#{$icomoon-prefix}-angle-up { 
   &:before {
-    content: $icon-add;
+    content: $icon-angle-up;
   }
 }
 .#{$icomoon-prefix}-ellipsis-v { 
@@ -16,6 +16,16 @@
 .#{$icomoon-prefix}-caret-down { 
   &:before {
     content: $icon-caret-down;
+  }
+}
+.#{$icomoon-prefix}-gem { 
+  &:before {
+    content: $icon-gem;
+  }
+}
+.#{$icomoon-prefix}-add { 
+  &:before {
+    content: $icon-add;
   }
 }
 .#{$icomoon-prefix}-wallet { 

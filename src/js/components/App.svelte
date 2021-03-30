@@ -3,12 +3,11 @@
 
     <div
       id="logout-button"
-      class="text-right cell-12"
+      class="text-right cell-12 gtr-t-sm"
       style='height: 45px; margin-bottom: -45px; display: block;'
       on:click={logout}>
       <button
         type="button"
-        style='margin-top: -9px'
         class="btn-blue-light btn-round"
         title={t('actions.logout')}>
           <span class="icon-logout text-lg"></span>

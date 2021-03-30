@@ -7,11 +7,15 @@ main:
 info:
   copied: "Copied"
 
+  no_data: 'Nothing to show'
+
   pin:
     device_info: "It will only work on this device."
     confirm_info: "Repeat PIN from step before."
 
   wallet:
+    create_first: "Create your first wallet by clicking the plus-button"
+    created: 'Wallet Created'
     restored: "Wallet Restored"
     removed: "Wallet Removed"
     exists: "Wallet is already added"
@@ -55,6 +59,7 @@ actions:
     delete_item: "Delete"
 
 labels:
+  advanced: 'Advanced'
   from: 'From'
   to: 'To'
   amount: 'Amount'
@@ -62,6 +67,9 @@ labels:
   ton:
     server: "Ton Server"
   master_password: 'Master Password'
+  wallet:
+    contract: 'Contract to deploy'
+    word_count: 'Words Count'
 
 common:
   or: "or"

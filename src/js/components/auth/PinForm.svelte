@@ -34,7 +34,7 @@
 
 <div class={`pin-form fadeIn ${$$props.pinError ? "pin-error" : ""}`}>
   {#if $$props.canGoBack || $$props.title }
-    <div class='text-md gtr-b' id='pin-title'>
+    <div class='text-md gtr-ver' id='pin-title'>
       {#if $$props.canGoBack}
         <span class="color-blue head-xs" on:click={goBack} style="
           cursor: pointer;
