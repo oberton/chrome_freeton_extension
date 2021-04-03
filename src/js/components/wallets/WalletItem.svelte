@@ -13,13 +13,10 @@
             </div>
           </div>
           <div class='tbl-cell' style='width: 3.5rem;'>
-            <button
-              type='button'
-              class='btn-blue-light btn-round'
-              with-tooltip={copying ? t('info.copied') : t('actions.address.copy')}
-              on:click={() => copyAddress(address)}>
-                <span class='icon-copy text-lg'></span>
-            </button>
+            <CopyTextBtn
+              label={t('actions.address.copy')}
+              value={address}>
+            </CopyTextBtn>
           </div>
           <div class='tbl-cell alg-m' style='width: 3.5rem'>
             <div class='smile'>
@@ -32,14 +29,17 @@
               </button>
 
               <div class='tooltip-menu'>
-                <div class='tooltip-menu-item' close-tooltip on:click={removeWallet}>
+                <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
                   {t('actions.common.delete_item')}
                 </div>
-                <div class='tooltip-menu-item' close-tooltip on:click={backupWallet}>
+                <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
                   {t('actions.phrase.backup')}
                 </div>
+                <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
+                  {t('actions.phrase.backup_keys')}
+                </div>
                 {#if accountType === "Active"}
-                  <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
+                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
                     {t('actions.tokens.send')}
                   </div>
                 {/if}
@@ -71,8 +71,8 @@
     </div>
   </div>
 
-  {#if showPhraseDialog }
-    <ModalDialog on:close={() => showPhraseDialog = false} headline='Master Password'>
+  {#if $flag.phraseDialog }
+    <ModalDialog on:close={toggleFlag.phraseDialog} headline='Master Password'>
       <div style='user-select: none;'>
         <div class='text-line'>
           {walletData.phrase}
@@ -84,14 +84,14 @@
     </ModalDialog>
   {/if}
 
-  {#if showPinForm }
-    <ModalDialog on:close={() => showPinForm = false} headline={t('actions.pin.enter')}>
+  {#if $flag.pinFormDialog }
+    <ModalDialog on:close={toggleFlag.pinFormDialog} headline={t('actions.pin.enter')}>
       <PinForm pinError={pinError} on:submit={checkPin} />
     </ModalDialog>
   {/if}
 
-  {#if showSendCrystalsForm }
-    <ModalDialog on:close={() => showSendCrystalsForm = false} headline={t('actions.tokens.send')}>
+  {#if $flag.sendCrystalFormDialog }
+    <ModalDialog on:close={toggleFlag.sendCrystalFormDialog} headline={t('actions.tokens.send')}>
       <SendTokensForm
         on:transactionSent={onTransactionSent}
         wallet={walletData.wallet}
@@ -99,22 +99,34 @@
         balance={balance} />
     </ModalDialog>
   {/if}
+
+  <BackupKeysDialog
+    walletData={walletData}
+    on:close={toggleFlag.backupKeysDialog}
+    shown={$flag.backupKeysDialog}>
+  </BackupKeysDialog>
+
 </div>
 
 <script>
+  const { flag, toggleFlag } = utils.initFlags([
+    'phraseDialog',
+    'pinFormDialog',
+    'sendCrystalFormDialog',
+    'backupKeysDialog',
+  ]);
+
   const dispatch = svelte.createEventDispatcher();
+
   let walletData = {};
   let address = '';
   let balance = 0;
   let accountType;
 
+  let deploying = false;
+  let balanceTimeout;
+
   let pinError = false;
-
-  let showPhraseDialog = false;
-
-  function removeWallet() {
-    dispatch('removeWallet', true);
-  }
 
   function checkPin(pin) {
     if (pin.detail !== conf.myPin) {
@@ -124,22 +136,12 @@
       }, 150);
       return;
     }
-    showPinForm = false;
-    showPhraseDialog = true;
-  }
-
-  let showPinForm = false;
-  function backupWallet() {
-    showPinForm = true;
-  }
-
-  let showSendCrystalsForm = false;
-  function sendCrystals() {
-    showSendCrystalsForm = true;
+    toggleFlag.pinFormDialog(false);
+    toggleFlag.phraseDialog(true);
   }
 
   function onTransactionSent() {
-    showSendCrystalsForm = false;
+    toggleFlag.sendCrystalFormDialog(false);
     utils.toast.info(t('info.transaction.sent'));
   }
 
@@ -161,18 +163,6 @@
     );
   }
 
-  let copying = false;
-
-  function copyAddress(text) {
-    copying = true;
-    utils.copyToClipboard(text);
-    setTimeout(() => {
-      copying = false;
-    }, 200);
-  }
-
-  let deploying = false;
-
   async function deployContract() {
     if (deploying) {
       return;
@@ -193,7 +183,6 @@
     getBalance();
   }
 
-  let balanceTimeout;
   async function getBalance() {
     clearTimeout(balanceTimeout);
 

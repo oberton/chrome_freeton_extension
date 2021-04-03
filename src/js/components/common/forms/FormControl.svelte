@@ -6,6 +6,7 @@
     min={$$props.min || undefined}
     max={$$props.max || undefined}
     step={$$props.step || undefined}
+    readonly={$$props.readonly || undefined}
     on:input={e => value = e.target.value}
     required={$$props.required || false} />
 

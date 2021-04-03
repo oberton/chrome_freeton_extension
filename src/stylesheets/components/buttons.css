@@ -11,7 +11,9 @@
   position: relative;
   text-align: center;
   text-decoration: none;
+  font-size: 1.5rem;
   &.btn-round {
+    font-size: 1.3rem;
     width: 3em;
     border-radius: 3em;
     text-align: center;

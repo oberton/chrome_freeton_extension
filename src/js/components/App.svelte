@@ -1,6 +1,5 @@
 <div>
   {#if loggedIn }
-
     <div
       id="logout-button"
       class="text-right cell-12 gtr-t-sm"
@@ -16,7 +15,10 @@
   {/if}
 
   {#if step === 'pin'}
-    <PinForm title={t('actions.pin.enter')} pinError={pinError} on:submit={checkPin} />
+    <PinForm
+      title={t('actions.pin.enter')}
+      pinError={pinError}
+      on:submit={checkPin} />
   {/if}
 
   {#if step === 'createPin'}
@@ -40,8 +42,8 @@
     <LoginForm on:submit={signIn} />
   {/if}
 
-  {#if step === 'wallet'}
-    <WalletsMain />
+  {#if step === 'main'}
+    <Main />
   {/if}
 </div>
 
@@ -55,7 +57,6 @@
 
   let phrase;
   let newPin;
-
 
   function showPinError() {
     pinError = true;
@@ -76,7 +77,7 @@
       }
 
       conf.myPin = pin;
-      step = 'wallet';
+      step = 'main';
       loggedIn = true;
     } catch (e) {
       showPinError();
@@ -104,7 +105,7 @@
       const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network}, pin);
 
       conf.myPin = pin;
-      step = 'wallet';
+      step = 'main';
     });
   }
 
@@ -130,7 +131,7 @@
       step = 'login';
     }
 
-    /* conf.myPin = '222222'; */
-    /* step = 'wallet'; */
+    conf.myPin = '222222';
+    step = 'main';
 	});
 </script>

@@ -19,14 +19,14 @@
     </div>
   </div>
 
-  <div class='gtr-t-2x text-sm font-semi' on:click={toggleAdvanced}>
+  <div class='gtr-t-2x text-sm font-semi' on:click={toggleFlag.showAdvanced}>
     <div class='smile' style='cursor: pointer'>
-      <span class={"smile gtr-r-sm icon-angle-" + (showAdvanced ? "up" : "down")}></span>
+      <span class={"smile gtr-r-sm icon-angle-" + ($flag.showAdvanced ? "up" : "down")}></span>
       {t('labels.advanced')}
     </div>
   </div>
 
-  {#if showAdvanced}
+  {#if $flag.showAdvanced }
     <div class='form-select form-group'>
       <select name='contract'>
         {#each contracts as contract}
@@ -48,22 +48,16 @@
 </form>
 
 <script>
-let showAdvanced = false;
-const contracts = conf.contracts;
-const dispatch = svelte.createEventDispatcher();
+  let showAdvanced = false;
+  const contracts = conf.contracts;
+  const dispatch = svelte.createEventDispatcher();
+  const { flag, toggleFlag } = utils.initFlags(['showAdvanced']);
 
-
-function toggleAdvanced() {
-  showAdvanced = !showAdvanced;
-}
-
-async function generateWallet(e) {
-  const params = _.fromPairs(Array.from(new FormData(e.target)));
-  const word_count = parseInt(params.word_count || 12, 10);
-  const contract = params.contract || conf.contracts[0];
-
-  const { phrase } = await tonMethods.getWalletData(null, true, { word_count }, contract);
-  dispatch('walletAdded', phrase);
-}
-
+  async function generateWallet(e) {
+    const params = _.fromPairs(Array.from(new FormData(e.target)));
+    const word_count = parseInt(params.word_count || 12, 10);
+    const contract = params.contract || conf.contracts[0];
+    const { phrase } = await tonMethods.getWalletData(null, true, { word_count }, contract);
+    dispatch('walletAdded', phrase);
+  }
 </script>

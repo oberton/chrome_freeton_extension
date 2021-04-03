@@ -1,3 +1,33 @@
+.#{$icomoon-prefix}-paste { 
+  &:before {
+    content: $icon-paste;
+  }
+}
+.#{$icomoon-prefix}-upload { 
+  &:before {
+    content: $icon-upload;
+  }
+}
+.#{$icomoon-prefix}-download { 
+  &:before {
+    content: $icon-download;
+  }
+}
+.#{$icomoon-prefix}-logout { 
+  &:before {
+    content: $icon-logout;
+  }
+}
+.#{$icomoon-prefix}-copy { 
+  &:before {
+    content: $icon-copy;
+  }
+}
+.#{$icomoon-prefix}-delete { 
+  &:before {
+    content: $icon-delete;
+  }
+}
 .#{$icomoon-prefix}-angle-down { 
   &:before {
     content: $icon-angle-down;
@@ -41,21 +71,6 @@
 .#{$icomoon-prefix}-cash { 
   &:before {
     content: $icon-cash;
-  }
-}
-.#{$icomoon-prefix}-logout { 
-  &:before {
-    content: $icon-logout;
-  }
-}
-.#{$icomoon-prefix}-copy { 
-  &:before {
-    content: $icon-copy;
-  }
-}
-.#{$icomoon-prefix}-delete { 
-  &:before {
-    content: $icon-delete;
   }
 }
 

@@ -47,6 +47,7 @@
   }
 
 	svelte.onMount(async () => {
+    dispatch('open', true);
     currentBlock.parentElement.removeChild(currentBlock);
     document.body.appendChild(currentBlock);
     setTimeout(() => {

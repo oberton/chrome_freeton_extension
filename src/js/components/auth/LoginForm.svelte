@@ -18,13 +18,13 @@
     <div class='text-center gtr-b-xs gtr-t-sm text-sm color-light'>
       {t('common.or')}
     </div>
-    <button on:click={createWallet} class='btn-blue-light font-bold full-width' type='button'>
+    <button on:click={toggleFlag.createWalletDialog} class='btn-blue-light font-bold full-width' type='button'>
       {t('actions.wallet.create')}
     </button>
   </form>
 
-  {#if showCreateWalletDialog }
-    <ModalDialog on:close={() => showCreateWalletDialog = false} headline={t('actions.wallet.create')}>
+  {#if $flag.createWalletDialog }
+    <ModalDialog on:close={toggleFlag.createWalletDialog} headline={t('actions.wallet.create')}>
       <CreateWalletForm on:walletAdded={onWalletAdded}/>
     </ModalDialog>
   {/if}
@@ -33,6 +33,9 @@
 <script>
 
   const dispatch = svelte.createEventDispatcher();
+  const { flag, toggleFlag } = utils.initFlags([
+    'createWalletDialog',
+  ]);
 
   let phrase = '';
 
@@ -40,15 +43,9 @@
     dispatch('submit', phrase.trim());
   }
 
-  let showCreateWalletDialog = false;
-
   function onWalletAdded(e) {
-    showCreateWalletDialog = false;
+    toggleFlag.createWalletDialog(false);
     phrase = e.detail;
     signIn();
-  }
-
-  async function createWallet() {
-    showCreateWalletDialog = true;
   }
 </script>
