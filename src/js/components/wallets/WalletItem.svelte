@@ -32,13 +32,15 @@
                 <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
                   {t('actions.common.delete_item')}
                 </div>
-                <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
-                  {t('actions.phrase.backup')}
-                </div>
-                <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
-                  {t('actions.phrase.backup_keys')}
-                </div>
+                {#if walletData.phrase }
+                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
+                    {t('actions.phrase.backup')}
+                  </div>
+                {/if}
                 {#if accountType === "Active"}
+                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
+                    {t('actions.phrase.backup_keys')}
+                  </div>
                   <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
                     {t('actions.tokens.send')}
                   </div>
@@ -211,7 +213,16 @@
   }
 
 	svelte.onMount(async () => {
-    walletData = await tonMethods.getWalletData($$props.wallet.phrase);
+    if ($$props.wallet.phrase) {
+      walletData = await tonMethods.getWalletData($$props.wallet.phrase);
+    } else if ($$props.wallet.secret && $$props.wallet.public) {
+      const keys = {
+        public: $$props.wallet.public,
+        secret: $$props.wallet.secret,
+      };
+      const wallet = await tonMethods.getWalletByKeys(keys);
+      walletData = { wallet, keys };
+    }
     address = _.get(walletData, 'wallet.address');
     getBalance();
   });

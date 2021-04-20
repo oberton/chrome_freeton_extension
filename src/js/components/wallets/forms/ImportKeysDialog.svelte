@@ -65,7 +65,7 @@
     fr.readAsText(file);
   }
 
-  function importKeys() {
+  async function importKeys() {
     if (!isValidKey(keys.public)) {
       utils.toast.error(t('info.keys.invalid.public'));
       return;
@@ -75,7 +75,18 @@
       utils.toast.error(t('info.keys.invalid.secret'));
       return;
     }
-    debugger
+
+    const [err, result] = await to(conf.tonClient.crypto.nacl_sign_keypair_from_secret_key({secret: keys.secret}));
+
+    if (err) {
+      utils.exception(err);
+      return;
+    }
+    if (result.public !== keys.public) {
+      utils.toast.error(t('info.keys.invalid.secret'));
+      return;
+    }
+    dispatch('add-keys', keys);
   }
 
 </script>

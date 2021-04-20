@@ -1,5 +1,4 @@
-import fetchAbi from './fetchAbi';
-import fetchTvc from './fetchTvc';
+import getWalletByKeys from './getWalletByKeys';
 
 async function createWallet(_phrase, isNew, _options = {}, contract = null) {
   let phrase = _phrase;
@@ -20,46 +19,6 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
     ...options,
   });
 
-  const signer = {
-    keys,
-    type: 'Keys',
-  };
-
-  const callSet = {
-    function_name: 'constructor',
-    header: {
-      pubkey: keys.public,
-    },
-    input: {
-      owners: [
-        `0x${keys.public}`,
-      ],
-      reqConfirms: 1,
-    },
-  };
-
-  const tvc = await fetchTvc();
-
-  const deploySet = {
-    tvc,
-  };
-
-  const abiValue = await fetchAbi();
-
-  const abi = {
-    value: abiValue,
-    type: 'Serialized',
-  };
-
-  const payloadEncodeMessage = {
-    abi,
-    deploy_set: deploySet,
-    call_set: callSet,
-    signer,
-  };
-
-  const wallet = await conf.tonClient.abi.encode_message(payloadEncodeMessage);
-
   if (conf.myPin && isNew) {
     const network = conf.tonClient.config.network.server_address;
     const payload = {
@@ -73,6 +32,8 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
 
     await utils.storage.push('myPhrases', payload, conf.myPin);
   }
+
+  const wallet = await getWalletByKeys(keys);
 
   return {
     keys,

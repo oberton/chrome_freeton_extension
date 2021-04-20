@@ -76,7 +76,7 @@ function remove(_objKeys) {
   });
 }
 
-function getArrayValue(key, pin) {
+function getArrayValue(key, pin = conf.myPin) {
   return new Promise((resolve, reject) => {
     get(key).then(objValue => {
       let strValue = _.get(objValue, key);
@@ -106,7 +106,7 @@ function getArrayValue(key, pin) {
   });
 }
 
-function push(key, value, pin) {
+function push(key, value, pin = conf.myPin) {
   return new Promise((resolve, reject) => {
     getArrayValue(key, pin).then(arrValue => {
       if (!arrValue) {
@@ -125,7 +125,7 @@ function push(key, value, pin) {
   });
 }
 
-function splice(key, index, count, pin) {
+function splice(key, index, count, pin = conf.myPin) {
   return new Promise((resolve, reject) => {
     getArrayValue(key, pin).then(arrValue => {
       if (!arrValue) {

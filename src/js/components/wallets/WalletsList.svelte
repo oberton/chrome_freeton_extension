@@ -63,6 +63,7 @@
 
   <ImportKeysDialog
     on:close={toggleFlag.importKeysDialog}
+    on:add-keys={importKeys}
     shown={$flag.importKeysDialog}>
   </ImportKeysDialog>
 </div>
@@ -85,8 +86,21 @@
     phrase = '';
   }
 
+  async function importKeys(e) {
+    const keys = e.detail;
+    toggleFlag.importKeysDialog(false);
+
+    await utils.storage.push('myPhrases', {
+      ...keys,
+      network: currentNetwork,
+    });
+
+    utils.toast.info(t('info.wallet.created'));
+  }
+
   async function refreshWallets() {
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
+    debugger
     wallets = allWallets.filter(w => w.network === currentNetwork);
   }
 
@@ -94,12 +108,22 @@
     toggleFlag.createWalletDialog(false);
     refreshWallets();
     utils.toast.info(t('info.wallet.created'));
+    refreshWallets();
   }
 
   async function removeWallet(wallet) {
     const indexToRemove = _.findIndex(allWallets, w => {
-      return w.phrase === wallet.phrase && w.network === wallet.network;
+      const phraseMatch = wallet.phrase && wallet.phrase === w.phrase;
+      if (phraseMatch) {
+        return true;
+      }
+      const keysMatch = wallet.public && wallet.secret && wallet.public === w.public && wallet.secret === w.secret;
+      if (keysMatch) {
+        return true;
+      }
+      return false;
     });
+
     await utils.storage.splice('myPhrases', indexToRemove, 1, conf.myPin);
     utils.toast.info(t('info.wallet.removed'));
     setTimeout(refreshWallets);
@@ -110,6 +134,7 @@
       utils.toast.error(t('info.wallet.exists'));
       return;
     }
+
     const [err, result] = await to(tonMethods.getWalletData(phrase));
 
     if (err) {
@@ -118,12 +143,10 @@
     }
 
     const network = conf.currentTonServer || conf.tonServers[0];
-    const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network}, conf.myPin);
+    const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network});
 
     refreshWallets();
-
     toggleFlag.restoreWallet(false);
-
     utils.toast.info('info.wallet.restored');
   }
 
