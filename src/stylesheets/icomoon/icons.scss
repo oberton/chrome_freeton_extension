@@ -1,3 +1,13 @@
+.#{$icomoon-prefix}-cog { 
+  &:before {
+    content: $icon-cog;
+  }
+}
+.#{$icomoon-prefix}-gem { 
+  &:before {
+    content: $icon-gem;
+  }
+}
 .#{$icomoon-prefix}-paste { 
   &:before {
     content: $icon-paste;
@@ -46,11 +56,6 @@
 .#{$icomoon-prefix}-caret-down { 
   &:before {
     content: $icon-caret-down;
-  }
-}
-.#{$icomoon-prefix}-gem { 
-  &:before {
-    content: $icon-gem;
   }
 }
 .#{$icomoon-prefix}-add { 

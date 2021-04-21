@@ -35,8 +35,19 @@ async function runApp() {
   }
 }
 
+async function detectLocale() {
+  const prevLocale = await utils.storage.get('locale')
+  const browserLocaleRaw = _.get(prevLocale, 'locale') || (navigator.language || conf.fallbackLocale).toLowerCase();
+  const browserLocale = browserLocaleRaw.split('-')[0];
+  if (conf.supportedLocales[browserLocale]) {
+    return browserLocale;
+  }
+  return conf.fallbackLocale;
+}
+
 async function startApp() {
-  const locale = 'en';
+  const locale = await detectLocale();
+  conf.currentLocale = locale;
   const response = await fetch(`/locales/${locale}.json`);
   const localeHash = await response.json();
   initTranslate(localeHash);

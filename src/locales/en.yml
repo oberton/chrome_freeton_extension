@@ -40,6 +40,7 @@ info:
     sent: "Transaction Sent"
 
 actions:
+  change_language: 'Change Language'
   logout: "Logout"
 
   tokens:

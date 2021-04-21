@@ -1,18 +1,26 @@
 <div>
-  {#if loggedIn }
-    <div
-      id="logout-button"
-      class="text-right cell-12 gtr-t-sm"
-      style='height: 45px; margin-bottom: -45px; display: block;'
-      on:click={logout}>
-      <button
-        type="button"
-        class="btn-blue-light btn-round"
-        title={t('actions.logout')}>
-          <span class="icon-logout text-lg"></span>
-      </button>
+  <div
+    id="logout-button"
+    class="text-right cell-12 gtr-t-sm"
+    style='height: 45px; margin-bottom: -45px; display: block;'>
+    <button
+      type="button"
+      class="btn-blue-light btn-round"
+      use:tooltipMenu
+      title={t('actions.logout')}>
+        <span class="icon-cog text-lg"></span>
+    </button>
+    <div class='tooltip-menu'>
+      <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
+        {t('actions.change_language')}
+      </div>
+      {#if loggedIn }
+        <div class='tooltip-menu-item' close-tooltip on:click={logout}>
+          {t('actions.logout')}
+        </div>
+      {/if}
     </div>
-  {/if}
+  </div>
 
   {#if step === 'pin'}
     <PinForm
@@ -45,9 +53,26 @@
   {#if step === 'main'}
     <Main />
   {/if}
+
+  {#if $flag.languageDialog}
+    <ModalDialog on:close={toggleFlag.languageDialog} headline={t('actions.change_language')}>
+      <div>
+        {#each supportedLocales as localeName, localeKey }
+          <div class='tooltip-menu-item'>{localeName}</div>
+        {/each}
+      </div>
+    </ModalDialog>
+  {/if}
 </div>
 
 <script>
+
+  const { flag, toggleFlag } = utils.initFlags([
+    'languageDialog',
+  ]);
+
+  const supportedLocales = conf.supportedLocales;
+  const currentLocale = conf.currentLocale;
 
 	let name = '';
   let wallets = null;

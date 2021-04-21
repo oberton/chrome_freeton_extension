@@ -1,6 +1,6 @@
 <div class='row-l-xs'>
   {#if wallets.length }
-    <div style='max-height: 350px; overflow: auto;' class='row gtr-hor'>
+    <div style='max-height: 350px; overflow: auto;' class='row gtr-hor gtr-ver-sm'>
       {#each wallets as wallet (wallet.phrase)}
         <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
       {/each}
@@ -100,7 +100,6 @@
 
   async function refreshWallets() {
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
-    debugger
     wallets = allWallets.filter(w => w.network === currentNetwork);
   }
 

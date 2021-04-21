@@ -4,7 +4,7 @@
       <div class='text-md text-row'>
         {t('actions.wallet.restore')}
       </div>
-      <div class='gtr-ver row-hor-sm font-bold'>
+      <div class='gtr-ver font-bold row-l-sm gtr-r-xs'>
         <NetworkSwitcher />
       </div>
       <div class='gtr-t color-dim row-b-xs'>
