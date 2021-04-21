@@ -31,7 +31,7 @@
 <script>
   const dispatch = svelte.createEventDispatcher();
 
-  let contract = conf.contracts[0];
+  let contract = conf.contracts[0].file;
 
   async function generateWallet(e) {
     const params = _.fromPairs(Array.from(new FormData(e.target)));

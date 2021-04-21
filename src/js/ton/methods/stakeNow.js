@@ -414,6 +414,17 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, sendForce
 
 
 async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir, amountToken) {
+
+  walletAddr = "0:1415fd7741c7d5b4dc8c85eb959e47247fd598f6246e064cef9d0b67475d60b4"
+  keys = {
+    "public": "0x3d7c499e736aef145b36bb5b9b78e1ecf0740fbe4e8c5a2a4927e5b5263c5637",
+    "secret": "0x0f35d9b703a25f328c28849743f33dec5d84ea42ed3705ad3f31889b912dd953"
+  }
+  let setcodeTVCDir = '/sig-files/SetcodeMultisigWallet2.tvc'
+  let abiSetcodeWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json'
+  
+  
+  
   
   // let custodians = await getCustodians(walletAddr, abiWalletDir);
   // let custodians = await getTransactionIds(walletAddr, abiWalletDir);
@@ -463,14 +474,20 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
 
 
   // Deploy Default Surf Contract
-  let testNewSetcodeWalletAddress = keys // Я хз почему в эту переменную приходит адресс
-  let keysPair = depoolAddr; // Я хз почему в эту переменную приходит пара ключей
-  let setcodeTVCDir = '/sig-files/SetcodeMultisigWallet2.tvc'
-  let abiSetcodeWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json'
+  // let testNewSetcodeWalletAddress = keys // Я хз почему в эту переменную приходит адресс
+  // let keysPair = depoolAddr; // Я хз почему в эту переменную приходит пара ключей
 
-  let r = await deploySurfWallet(keysPair, abiSetcodeWalletDir, setcodeTVCDir, testNewSetcodeWalletAddress)
-  console.log(r);
+  // let r = await deploySurfWallet(keysPair, abiSetcodeWalletDir, setcodeTVCDir, testNewSetcodeWalletAddress)
+  // console.log(r);
   
+
+
+
+
+
+
+
+
   return;
 
   

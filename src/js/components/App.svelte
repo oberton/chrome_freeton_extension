@@ -139,6 +139,7 @@
 
       conf.myPin = pin;
       step = 'main';
+      loggedIn = true;
     });
   }
 
