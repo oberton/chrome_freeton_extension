@@ -2,7 +2,6 @@ import 'stylesheets/main.scss';
 import App from 'js/components/App.svelte';
 import "./components/index";
 import "./directives/index";
-import { init as initTranslate } from 'js/translate';
 
 async function runApp() {
   const target = document.getElementById('app');
@@ -47,13 +46,7 @@ async function detectLocale() {
 
 async function startApp() {
   const locale = await detectLocale();
-  conf.currentLocale = locale;
-  const response = await fetch(`/locales/${locale}.json`);
-  const localeHash = await response.json();
-  initTranslate(localeHash);
-  if (NODE_ENV !== 'production') {
-    window.localeHash = localeHash;
-  }
+  await utils.changeLocale(locale);
   await runApp();
 }
 

@@ -4,7 +4,7 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
   let phrase = _phrase;
 
   const options = _.assign({
-    word_count: 12,
+    word_count: (phrase || '').split(' ').length() || 12,
     dictionary: 1,
   }, _options);
 

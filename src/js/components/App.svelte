@@ -1,68 +1,70 @@
 <div>
-  <div
-    id="logout-button"
-    class="text-right cell-12 gtr-t-sm"
-    style='height: 45px; margin-bottom: -45px; display: block;'>
-    <button
-      type="button"
-      class="btn-blue-light btn-round"
-      use:tooltipMenu
-      title={t('actions.logout')}>
-        <span class="icon-cog text-lg"></span>
-    </button>
-    <div class='tooltip-menu'>
-      <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
-        {t('actions.change_language')}
-      </div>
-      {#if loggedIn }
-        <div class='tooltip-menu-item' close-tooltip on:click={logout}>
-          {t('actions.logout')}
+  {#key currentLocale}
+    <div
+      id="logout-button"
+      class="text-right cell-12 gtr-t-sm"
+      style='height: 45px; margin-bottom: -45px; display: block;'>
+      <button
+        type="button"
+        class="btn-blue-light btn-round"
+        use:tooltipMenu
+        title={t('actions.logout')}>
+          <span class="icon-cog text-lg"></span>
+      </button>
+      <div class='tooltip-menu'>
+        <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
+          {t('actions.change_language')}
         </div>
-      {/if}
-    </div>
-  </div>
-
-  {#if step === 'pin'}
-    <PinForm
-      title={t('actions.pin.enter')}
-      pinError={pinError}
-      on:submit={checkPin} />
-  {/if}
-
-  {#if step === 'createPin'}
-    <PinForm
-      title={t('actions.pin.create')}
-      placeholder={t('info.pin.device_info')}
-      on:submit={createPin} />
-  {/if}
-
-  {#if step === 'confirmPin'}
-    <PinForm
-      title={t('actions.pin.confirm')}
-      placeholder={t('info.pin.confirm_info')}
-      canGoBack={true}
-      pinError={pinError}
-      on:back={() => step = 'createPin'}
-      on:submit={confirmPin} />
-  {/if}
-
-  {#if step === 'login'}
-    <LoginForm on:submit={signIn} />
-  {/if}
-
-  {#if step === 'main'}
-    <Main />
-  {/if}
-
-  {#if $flag.languageDialog}
-    <ModalDialog on:close={toggleFlag.languageDialog} headline={t('actions.change_language')}>
-      <div>
-        {#each supportedLocales as localeName, localeKey }
-          <div class='tooltip-menu-item'>{localeName}</div>
-        {/each}
+        {#if loggedIn }
+          <div class='tooltip-menu-item' close-tooltip on:click={logout}>
+            {t('actions.logout')}
+          </div>
+        {/if}
       </div>
-    </ModalDialog>
-  {/if}
+    </div>
+
+    {#if step === 'pin'}
+      <PinForm
+        title={t('actions.pin.enter')}
+        pinError={pinError}
+        on:submit={checkPin} />
+    {/if}
+
+    {#if step === 'createPin'}
+      <PinForm
+        title={t('actions.pin.create')}
+        placeholder={t('info.pin.device_info')}
+        on:submit={createPin} />
+    {/if}
+
+    {#if step === 'confirmPin'}
+      <PinForm
+        title={t('actions.pin.confirm')}
+        placeholder={t('info.pin.confirm_info')}
+        canGoBack={true}
+        pinError={pinError}
+        on:back={() => step = 'createPin'}
+        on:submit={confirmPin} />
+    {/if}
+
+    {#if step === 'login'}
+      <LoginForm on:submit={signIn} />
+    {/if}
+
+    {#if step === 'main'}
+      <Main />
+    {/if}
+
+    {#if $flag.languageDialog}
+      <ModalDialog on:close={toggleFlag.languageDialog} headline={t('actions.change_language')}>
+        <div>
+          {#each supportedLocales as locale }
+            <div class='tooltip-menu-item' on:click={() => setLocale(locale[0])}>{locale[1]}</div>
+          {/each}
+        </div>
+      </ModalDialog>
+    {/if}
+  {/key}
 </div>
 
 <script>
@@ -71,8 +73,14 @@
     'languageDialog',
   ]);
 
-  const supportedLocales = conf.supportedLocales;
-  const currentLocale = conf.currentLocale;
+  const supportedLocales = _.toPairs(conf.supportedLocales);
+  let currentLocale = conf.currentLocale;
+
+  async function setLocale(locale) {
+    toggleFlag.languageDialog();
+    await utils.changeLocale(locale);
+    currentLocale = locale;
+  }
 
 	let name = '';
   let wallets = null;
