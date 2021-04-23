@@ -2,7 +2,9 @@
   <div class='tbl-cell alg-m'>
     <div class='gtr-ver-xs'>
       <div class='text-md'>
-        <span class={"icon-gem smile alg-m gtr-r-xs color-" + (accountType === "Active" ? "blue" : "dim")}></span>
+        {#key accountType}
+          <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
+        {/key}
         {(balance || 0).toFixed(3)}
       </div>
       <div class='row-r-sm row-t-sm'>
@@ -152,19 +154,6 @@
     summ: 0,
   };
 
-  function stake(e) {
-    e.preventDefault();
-    tonMethods.stakeNow(
-      null,
-      walletData.wallet.address,
-      walletData.keys,
-      '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
-      '/sig-files/DePool.abi.json',
-      '/sig-files/SetcodeMultisigWallet.abi.json',
-      stakeForm.summ
-    );
-  }
-
   async function deployContract() {
     if (deploying) {
       return;
@@ -214,13 +203,13 @@
 
 	svelte.onMount(async () => {
     if ($$props.wallet.phrase) {
-      walletData = await tonMethods.getWalletData($$props.wallet.phrase);
+      walletData = await tonMethods.getWalletData($$props.wallet.phrase, false, {}, $$props.wallet.contract);
     } else if ($$props.wallet.secret && $$props.wallet.public) {
       const keys = {
         public: $$props.wallet.public,
         secret: $$props.wallet.secret,
       };
-      const wallet = await tonMethods.getWalletByKeys(keys);
+      const wallet = await tonMethods.getWalletByKeys(keys, $$props.wallet.contract);
       walletData = { wallet, keys };
     }
     address = _.get(walletData, 'wallet.address');

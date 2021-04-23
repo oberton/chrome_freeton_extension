@@ -1,8 +1,10 @@
 <div class='row-l-xs'>
   {#if wallets.length }
-    <div style='max-height: 350px; overflow: auto;' class='row gtr-hor'>
-      {#each wallets as wallet (wallet.phrase)}
-        <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
+    <div style='max-height: 350px; overflow: auto;' class='row gtr-hor gtr-ver-sm'>
+      {#each wallets as wallet (wallet.tmpId)}
+        <div class='hoverable gtr-hor-sm gtr-ver-sm row-hor-sm row-ver-sm'>
+          <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
+        </div>
       {/each}
     </div>
   {:else}
@@ -43,15 +45,8 @@
   </div>
 
   {#if $flag.restoreWalletDialog }
-    <ModalDialog on:open={setEmptyPhrase} on:close={toggleFlag.restoreWalletDialog} headline={t('actions.wallet.restore')}>
-      <div>
-        <div class='text-row'>
-          <PhraseArea bind:phrase={phrase} />
-        </div>
-        <button class="btn-blue font-bold full-width text-md" on:click={restoreWallet}>
-          {t('actions.wallet.restore')}
-        </button>
-      </div>
+    <ModalDialog on:close={toggleFlag.restoreWalletDialog} headline={t('actions.wallet.restore')}>
+      <RestoreWalletForm on:restore={restoreWallet}></RestoreWalletForm>
     </ModalDialog>
   {/if}
 
@@ -79,29 +74,34 @@
   ]);
 
   let wallets = [];
-  let phrase = '';
   let allWallets;
 
-  function setEmptyPhrase() {
-    phrase = '';
-  }
-
-  async function importKeys(e) {
-    const keys = e.detail;
-    toggleFlag.importKeysDialog(false);
-
-    await utils.storage.push('myPhrases', {
-      ...keys,
-      network: currentNetwork,
-    });
-
-    utils.toast.info(t('info.wallet.created'));
-  }
+  const contracts = conf.contracts;
 
   async function refreshWallets() {
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
-    debugger
     wallets = allWallets.filter(w => w.network === currentNetwork);
+  }
+
+  async function importKeys(e) {
+    const detail = e.detail;
+    const { keys } = detail;
+
+    toggleFlag.importKeysDialog(false);
+
+    const payload = {
+      ...keys,
+      network: currentNetwork,
+    };
+
+    if (detail.contract && detail.contract !== conf.contracts[0].file) {
+      payload.contract = detail.contract;
+    }
+
+    await utils.storage.push('myPhrases', payload);
+
+    utils.toast.info(t('info.wallet.created'));
+    await refreshWallets();
   }
 
   function onWalletAdded() {
@@ -112,41 +112,17 @@
   }
 
   async function removeWallet(wallet) {
-    const indexToRemove = _.findIndex(allWallets, w => {
-      const phraseMatch = wallet.phrase && wallet.phrase === w.phrase;
-      if (phraseMatch) {
-        return true;
-      }
-      const keysMatch = wallet.public && wallet.secret && wallet.public === w.public && wallet.secret === w.secret;
-      if (keysMatch) {
-        return true;
-      }
-      return false;
-    });
-
+    const indexToRemove = _.findIndex(allWallets, w => w.tmpId === wallet.tmpId);
     await utils.storage.splice('myPhrases', indexToRemove, 1, conf.myPin);
     utils.toast.info(t('info.wallet.removed'));
-    setTimeout(refreshWallets);
+    refreshWallets();
   }
 
-  async function restoreWallet() {
-    if (_.find(wallets, w => w.phrase === phrase)) {
-      utils.toast.error(t('info.wallet.exists'));
-      return;
-    }
-
-    const [err, result] = await to(tonMethods.getWalletData(phrase));
-
-    if (err) {
-      utils.exception(err);
-      return;
-    }
-
-    const network = conf.currentTonServer || conf.tonServers[0];
-    const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network});
-
-    refreshWallets();
-    toggleFlag.restoreWallet(false);
+  async function restoreWallet(e) {
+    const payload = e.detail;
+    const phrases = await utils.storage.push('myPhrases', payload);
+    setTimeout(refreshWallets);
+    toggleFlag.restoreWalletDialog(false);
     utils.toast.info('info.wallet.restored');
   }
 

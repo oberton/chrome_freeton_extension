@@ -3,7 +3,7 @@
     required={true}
     bind:value={phrase}
     on:keydown={onAreaKeydown}
-    label={t('labels.master_password')} />
+    label={$$props.placeholder || t('labels.master_password')} />
 
   <div id='words-placeholder' class='text-xs gtr-b color-light'>{wordsPlaceholder}</div>
 

@@ -29,3 +29,14 @@
 .pos-rel {
   position: relative;
 }
+
+.hoverable {
+  transition: background-color 200ms ease-in;
+  &:hover {
+    background-color: #F5F6FA;
+  }
+}
+
+.upcase {
+  text-transform: uppercase;
+}

@@ -40,6 +40,7 @@ info:
     sent: "Transaction Sent"
 
 actions:
+  change_language: 'Change Language'
   logout: "Logout"
 
   tokens:
@@ -88,7 +89,7 @@ labels:
   amount: 'Amount'
   comment: 'Comment (optional)'
   ton:
-    server: "Ton Server"
+    server: "Network"
   master_password: 'Master Password'
   wallet:
     contract: 'Contract to deploy'

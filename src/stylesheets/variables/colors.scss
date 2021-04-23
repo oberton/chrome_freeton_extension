@@ -1,8 +1,9 @@
 $blue-base: #0083e0;
 $red-base: #e71717;
+$color-label: #8c96a7;
 
 $text-colors: (
-  ('label', #999),
+  ('label', $color-label),
   ('dim', #666),
   ('blue', $blue-base),
   ('red', $red-base),

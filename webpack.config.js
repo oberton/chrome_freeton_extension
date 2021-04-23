@@ -40,6 +40,9 @@ module.exports = {
     }, {
       test: /\.svelte$/,
       loader: 'svelte-loader',
+      options: {
+        onwarn: () => true,
+      },
     }, {
       test   : /\.(png|jpg|gif|svg|ttf|woff|woff2|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader : 'file-loader',
@@ -165,5 +168,5 @@ if (isProd) {
     ],
   };
 } else {
-  module.devtool = 'source-map';
+  module.exports.devtool = 'source-map';
 }

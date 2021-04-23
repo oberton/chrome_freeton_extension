@@ -1,6 +1,7 @@
 // rely on window.localStorage in developent mode if chrome not available
 import safeJSONParse from './safeJSONParse';
 import crypto from './crypto';
+import tmpId from './tmpId';
 
 function get(_objKeys) {
   return new Promise((resolve, reject) => {
@@ -111,6 +112,9 @@ function push(key, value, pin = conf.myPin) {
     getArrayValue(key, pin).then(arrValue => {
       if (!arrValue) {
         arrValue = [];
+      }
+      if (_.isObject(value) && !_.isArray(value)) {
+        value.tmpId = tmpId();
       }
       arrValue.push(value);
       let strValue = JSON.stringify(arrValue);

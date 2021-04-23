@@ -1,7 +1,7 @@
 import fetchAbi from './fetchAbi';
 import fetchTvc from './fetchTvc';
 
-async function getWalletByKeys(keys) {
+async function getWalletByKeys(keys, contract) {
   const signer = {
     keys,
     type: 'Keys',
@@ -26,7 +26,7 @@ async function getWalletByKeys(keys) {
     tvc,
   };
 
-  const abiValue = await fetchAbi();
+  const abiValue = await fetchAbi(contract);
 
   const abi = {
     value: abiValue,
