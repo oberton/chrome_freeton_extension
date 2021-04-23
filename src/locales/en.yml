@@ -89,7 +89,7 @@ labels:
   amount: 'Amount'
   comment: 'Comment (optional)'
   ton:
-    server: "Ton Server"
+    server: "Network"
   master_password: 'Master Password'
   wallet:
     contract: 'Contract to deploy'

@@ -10,12 +10,17 @@
             label={t('keys.' + type)} />
         {/each}
 
-        <div class="gtr-ver text-right">
-          <label class="btn-blue-light btn-round" with-tooltip={t('actions.wallet.upload_keys')}>
+        <div class="gtr-ver text-right row-r-sm">
+          <label class="btn-blue-light btn-round" use:tooltip data-tooltip={t('actions.wallet.upload_keys')}>
             <input on:change={fileAttached} id='import-file-input' type='file' style='position: absolute; left: -999em' />
             <span class="icon-upload text-lg"></span>
           </label>
         </div>
+
+        <div style='margin-top: -45px' class='text-row'>
+          <ContractPicker bind:value={contract}></ContractPicker>
+        </div>
+
         <button class="btn-blue font-bold full-width text-md" type="submit">
           {t('actions.wallet.import_keys')}
         </button>
@@ -33,6 +38,8 @@
     public: '',
     secret: '',
   };
+
+  let contract = conf.contracts[0].file;
 
   function isValidKey(str) {
     return str.split('').length === 64;
@@ -86,7 +93,7 @@
       utils.toast.error(t('info.keys.invalid.secret'));
       return;
     }
-    dispatch('add-keys', keys);
+    dispatch('add-keys', {keys, contract});
   }
 
 </script>

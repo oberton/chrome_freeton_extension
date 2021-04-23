@@ -7,7 +7,7 @@
         <option value={server}>{server}</option>
       {/each}
     </select>
-    <label class='form-label'>
+    <label class='form-label upcase'>
       {t('labels.ton.server')}
     </label>
   </div>

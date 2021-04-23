@@ -39,10 +39,17 @@
       -moz-appearance : none;
       @extend .form-control;
     }
-
+    &.nospace {
+      select {
+        padding: 5px 0;
+      }
+      &:after {
+        top: 8px;
+      }
+    }
   }
   &-label {
-    color: #999;
+    color: $color-label;
     position: absolute;
     top: 1.2em;
     bottom: auto;

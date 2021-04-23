@@ -88,7 +88,7 @@
   let pinError = false;
   let loggedIn = false;
 
-  let phrase;
+  let newWallet;
   let newPin;
 
   function showPinError() {
@@ -132,10 +132,10 @@
 
       conf.myPin = pin;
 
-      const result = await tonMethods.getWalletData(phrase);
+      const result = await tonMethods.getWalletData(newWallet.phrase);
 
-      const network = conf.currentTonServer || conf.tonServers[0];
-      const phrases = await utils.storage.push('myPhrases', {phrase: result.phrase, network}, pin);
+      const network = newWallet.network || conf.currentTonServer || conf.tonServers[0];
+      const phrases = await utils.storage.push('myPhrases', {...newWallet, phrase: result.phrase, network}, pin);
 
       conf.myPin = pin;
       step = 'main';
@@ -143,7 +143,7 @@
   }
 
   function signIn(e) {
-    phrase = e.detail;
+    newWallet = e.detail;
     step = 'createPin';
   }
 

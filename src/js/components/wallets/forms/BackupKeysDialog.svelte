@@ -20,7 +20,8 @@
           type="button"
           class="btn-blue-light btn-round"
           on:click={downloadKeys}
-          with-tooltip={t('actions.wallet.download_keys')}>
+          use:tooltip
+          data-tooltip={t('actions.wallet.download_keys')}>
           <span class="icon-download text-lg"></span>
         </button>
       </div>

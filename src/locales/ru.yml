@@ -25,7 +25,7 @@ info:
     confirm_info: "Повторите ПИН из предыдущего шага"
 
   wallet:
-    create_first: "Создайте ваш первый кошелёт с помощью плюс-кнопки ниже."
+    create_first: "Создайте ваш первый кошелёт с помощью кнопки плюс"
     created: 'Кошелек создан'
     restored: "Кошелек восстановлен"
     removed: "Кошелек удален"
@@ -53,7 +53,7 @@ actions:
     confirm: "Подтвердите ПИН"
 
   address:
-    copy: "Скопировать"
+    copy: "Скопировать адрес"
 
   wallet:
     import_keys: 'Добавить пару ключей'
@@ -69,7 +69,7 @@ actions:
 
   sign_in:
     title: "Войти"
-    with_phrase: "Войти с помощью фразы"
+    with_phrase: "Войти с помощью мастер пароля"
 
   common:
     delete_item: "Удалить"
@@ -89,7 +89,7 @@ labels:
   amount: 'Сумма'
   comment: 'Коментарий (по желанию)'
   ton:
-    server: "Ton сервер"
+    server: "Сеть"
   master_password: 'Мастер пароль'
   wallet:
     contract: 'Применить контракт'

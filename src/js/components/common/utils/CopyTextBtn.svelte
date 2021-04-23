@@ -1,7 +1,8 @@
 <button
   type='button'
   class='btn-blue-light btn-round'
-  with-tooltip={copying ? t('info.copied') : $$props.label}
+  use:tooltip
+  data-tooltip={copying ? t('info.copied') : $$props.label}
   on:click={copyValue}>
     <span class='icon-copy text-lg'></span>
 </button>
@@ -14,6 +15,6 @@
     utils.copyToClipboard($$props.value);
     setTimeout(() => {
       copying = false;
-    }, 200);
+    }, 500);
   }
 </script>

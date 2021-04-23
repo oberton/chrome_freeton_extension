@@ -4,7 +4,7 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
   let phrase = _phrase;
 
   const options = _.assign({
-    word_count: (phrase || '').split(' ').length() || 12,
+    word_count: (phrase || '').split(' ').length || 12,
     dictionary: 1,
   }, _options);
 
@@ -26,14 +26,14 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
       network,
     };
 
-    if (contract && contract !== conf.contracts[0]) {
+    if (contract && contract !== conf.contracts[0].file) {
       payload.contract = contract;
     }
 
     await utils.storage.push('myPhrases', payload, conf.myPin);
   }
 
-  const wallet = await getWalletByKeys(keys);
+  const wallet = await getWalletByKeys(keys, contract);
 
   return {
     keys,

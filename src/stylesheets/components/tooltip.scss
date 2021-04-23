@@ -1,37 +1,19 @@
-@mixin tooltip-base {
-  color: #efeaea;
-  background: #1c1c1c;
-  font-size: 13px;
-}
-
-%tooltip-base {
-  position: relative;
-  &:hover {
-    &:before {
-      content: attr(with-tooltip);
-      z-index: 2020;
-      @include tooltip-base;
-      letter-spacing: initial;
-      text-transform: initial;
-      text-transform: none;
-      white-space: pre;
-      display: block;
-      position: absolute;
-      padding: 8px 10px;
-      border-radius: 2px;
-      top: 0;
-      margin-top: -32px;
-      right: 50%;
-      transform: translateX(50%);
-      line-height: 1.2;
-      animation: fadeIn 200ms ease-in;
-    }
-  }
-}
-
-[with-tooltip] {
-  position: relative;
-  &:hover {
-    @extend %tooltip-base;
+.tooltip {
+  padding: 10px;
+  font-size: 11px;
+  line-height: 17px;
+  letter-spacing: .04em;
+  text-align: center;
+  background-color: rgba(29, 33, 41, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: opacity 300ms ease-in;
+  white-space: nowrap;
+  color: white;
+  opacity: 0;
+  &.shown {
+    opacity: 1;
   }
 }

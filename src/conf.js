@@ -2,11 +2,11 @@ const conf = {};
 
 conf.tonServers = ['main.ton.dev', 'net.ton.dev'];
 conf.contracts = [{
-  name: 'Safe Multisig',
-  file:'SafeMultisigWallet',
-}, {
   name: 'Surf',
   file: 'SetcodeMultisigWallet',
+}, {
+  name: 'Safe Multisig',
+  file:'SafeMultisigWallet',
 }];
 
 conf.supportedLocales = {
