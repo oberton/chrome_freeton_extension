@@ -2,7 +2,7 @@
   {#if wallets.length }
     <div class='main-scrollable'>
       {#each wallets as wallet (wallet.tmpId)}
-        <div class='hoverable gtr-hor-sm gtr-ver-sm row-hor-sm row-ver-sm'>
+        <div class='hoverable gtr-hor-sm gtr-t-xxs gtr-b-xs row-hor-sm row-ver-sm'>
           <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
         </div>
       {/each}

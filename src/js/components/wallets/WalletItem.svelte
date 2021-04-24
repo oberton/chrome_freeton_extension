@@ -1,6 +1,6 @@
 <div class='tbl hover-parent'>
   <div class='tbl-cell alg-m'>
-    <div class='gtr-ver-xs'>
+    <div class='gtr-t-xs'>
       <div class='text-md'>
         {#key accountType}
           <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
@@ -9,18 +9,18 @@
       </div>
       <div class='row-r-sm row-t-sm'>
         <div class='tbl' style='table-layout: fixed;'>
-          <div class='tbl-cell text-xs'>
+          <div class='tbl-cell text-xs alg-m'>
             <div class='ellipsis'>
               {address}
             </div>
           </div>
-          <div class='tbl-cell' style='width: 3.5rem;'>
+          <div class='tbl-cell alg-m' style='width: 3.5rem;'>
             <CopyTextBtn
               label={t('actions.address.copy')}
               value={address}>
             </CopyTextBtn>
           </div>
-          <div class='tbl-cell alg-m' style='width: 3.5rem'>
+          <div class='tbl-cell alg-m' style='width: 4.5rem'>
             <div class='smile'>
 
               <button

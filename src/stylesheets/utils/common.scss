@@ -15,6 +15,9 @@
     opacity: 0;
     transition: opacity 200ms linear;
   }
+  &:not(:hover) .hover-parent-hidden {
+    display: none;
+  }
   &:hover {
     .hover-parent-show {
       opacity: 1;

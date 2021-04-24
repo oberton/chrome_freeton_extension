@@ -117,6 +117,7 @@ module.exports = {
       svelte: ['svelte'],
       utils: ['js/utils/index.js', 'default'],
       t: ['js/translate.js', 't'],
+      Buffer: ['buffer', 'Buffer'],
     }),
 
     new HtmlWebpackPlugin({
