@@ -1,5 +1,6 @@
-async function fetchAbi(contract) {
-  const sigFile = contract || `/sig-files/${conf.contracts[0].file}.abi.json`;
+async function fetchAbi(_contract) {
+  const contract = _contract || conf.contracts[0].file;
+  const sigFile = `/sig-files/${contract}.abi.json`;
   const response = await fetch(sigFile);
   const text = await response.text();
   return JSON.parse(text);

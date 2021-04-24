@@ -14,6 +14,8 @@ conf.supportedLocales = {
   en: 'English',
 };
 
+conf.telegramLink = '';
+
 conf.fallbackLocale = 'en';
 
 export default conf;

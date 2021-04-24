@@ -165,7 +165,7 @@
       step = 'login';
     }
 
-    /* conf.myPin = '222222'; */
-    /* step = 'main'; */
-	});
+    conf.myPin = '222222';
+    step = 'main';
+  });
 </script>

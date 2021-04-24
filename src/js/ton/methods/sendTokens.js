@@ -17,9 +17,10 @@ const transferAbi = {
 };
 
 // amount - размерность в TON
-async function sendTokens(from, to, amount, keys, abiWalletDir, comment = null, sendForce = true, abiPayloadContractDir = null, functionName = null, parametersJSON = null) {
-
+async function sendTokens(from, to, amount, keys, comment = null, sendForce = true, _contract = null, functionName = null, parametersJSON = null) {
   let payload = '';
+
+  const contract = _contract || conf.contracts[0].file;
 
   if (comment !== undefined && comment != null) {
     const signer = {
@@ -40,12 +41,12 @@ async function sendTokens(from, to, amount, keys, abiWalletDir, comment = null, 
       is_internal: true,
       signer: signer,
     })).body;
-  } else if (abiPayloadContractDir !== undefined && abiPayloadContractDir != null && functionName !== undefined && functionName != null && parametersJSON !== undefined && parametersJSON != null) {
+  } else if (functionName !== undefined && functionName != null && parametersJSON !== undefined && parametersJSON != null) {
     const signer = {
       type: 'None',
     };
 
-    let abiValue = await fetchAbi(abiPayloadContractDir);
+    const abiValue = await fetchAbi(contract);
 
     payload = (await conf.tonClient.abi.encode_message_body({
       abi: {
@@ -61,7 +62,7 @@ async function sendTokens(from, to, amount, keys, abiWalletDir, comment = null, 
     })).body;
   }
 
-  const abiValue = await fetchAbi(abiWalletDir);
+  const abiValue = await fetchAbi(contract);
 
   const submitTransactionParams = {
     dest: to,

@@ -1,46 +1,6 @@
-.#{$icomoon-prefix}-gems { 
+.#{$icomoon-prefix}-loop { 
   &:before {
-    content: $icon-gems;
-  }
-}
-.#{$icomoon-prefix}-cog { 
-  &:before {
-    content: $icon-cog;
-  }
-}
-.#{$icomoon-prefix}-gem { 
-  &:before {
-    content: $icon-gem;
-  }
-}
-.#{$icomoon-prefix}-paste { 
-  &:before {
-    content: $icon-paste;
-  }
-}
-.#{$icomoon-prefix}-upload { 
-  &:before {
-    content: $icon-upload;
-  }
-}
-.#{$icomoon-prefix}-download { 
-  &:before {
-    content: $icon-download;
-  }
-}
-.#{$icomoon-prefix}-logout { 
-  &:before {
-    content: $icon-logout;
-  }
-}
-.#{$icomoon-prefix}-copy { 
-  &:before {
-    content: $icon-copy;
-  }
-}
-.#{$icomoon-prefix}-delete { 
-  &:before {
-    content: $icon-delete;
+    content: $icon-loop;
   }
 }
 .#{$icomoon-prefix}-angle-down { 
@@ -63,9 +23,59 @@
     content: $icon-caret-down;
   }
 }
+.#{$icomoon-prefix}-telegram { 
+  &:before {
+    content: $icon-telegram;
+  }
+}
 .#{$icomoon-prefix}-add { 
   &:before {
     content: $icon-add;
+  }
+}
+.#{$icomoon-prefix}-paste { 
+  &:before {
+    content: $icon-paste;
+  }
+}
+.#{$icomoon-prefix}-upload { 
+  &:before {
+    content: $icon-upload;
+  }
+}
+.#{$icomoon-prefix}-download { 
+  &:before {
+    content: $icon-download;
+  }
+}
+.#{$icomoon-prefix}-cog { 
+  &:before {
+    content: $icon-cog;
+  }
+}
+.#{$icomoon-prefix}-logout { 
+  &:before {
+    content: $icon-logout;
+  }
+}
+.#{$icomoon-prefix}-copy { 
+  &:before {
+    content: $icon-copy;
+  }
+}
+.#{$icomoon-prefix}-delete { 
+  &:before {
+    content: $icon-delete;
+  }
+}
+.#{$icomoon-prefix}-gems { 
+  &:before {
+    content: $icon-gems;
+  }
+}
+.#{$icomoon-prefix}-gem { 
+  &:before {
+    content: $icon-gem;
   }
 }
 .#{$icomoon-prefix}-wallet { 

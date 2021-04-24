@@ -20,7 +20,9 @@ async function fetchBlob(tvcDir) {
   return blob;
 }
 
-async function fetchTvc(tvcDir = '/sig-files/SetcodeMultisigWallet2.tvc') {
+async function fetchTvc(_contract) {
+  const contract = _contract || conf.contracts[0].file;
+  const tvcDir = `/sig-files/${contract}.tvc`;
   const blob = await fetchBlob(tvcDir);
   const tvc  = await blobToBase64(blob);
   return tvc;

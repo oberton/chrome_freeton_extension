@@ -1,6 +1,6 @@
 <div class='row-l-xs'>
   {#if wallets.length }
-    <div style='max-height: 350px; overflow: auto;' class='row gtr-hor gtr-ver-sm'>
+    <div style='max-height: 318px; overflow: auto;' class='row gtr-hor gtr-ver-sm'>
       {#each wallets as wallet (wallet.tmpId)}
         <div class='hoverable gtr-hor-sm gtr-ver-sm row-hor-sm row-ver-sm'>
           <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
@@ -22,24 +22,50 @@
     </div>
   {/if}
 
-  <div class='text-center gtr-ver bg-white row-r-xs' style='position: absolute; bottom: 0; left: 0; right: 0;'>
-    <div class='smile'>
-      <button
-        use:tooltipMenu
-        placement='top'
-        class='btn-blue btn-round smile'>
-        <span class='icon-add text-lg'></span>
-      </button>
-      <div class='tooltip-menu'>
-        <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.createWalletDialog}>
-          {t('actions.wallet.create')}
+  <div class='text-center gtr-ver gtr-r bg-white row-r-xs' style='position: absolute; bottom: 0; left: 0; right: 0;'>
+    <div class='tbl fixed'>
+      <div class='tbl-cell alg-m cell-4'>
+        <button
+          use:tooltip
+          on:click={() => refreshWallets(true)}
+          data-tooltip={t('actions.wallet.refresh')}
+          class='btn-blue-light btn-round smile'>
+          <span class='icon-loop' style='font-size: 1.5em'></span>
+        </button>
+
+      </div>
+      <div class='tbl-cell cell-4 alg-m'>
+        <div class='smile'>
+          <button
+            use:tooltipMenu
+            use:tooltip
+            data-tooltip={t('actions.wallet.add')}
+            placement='top'
+            class='btn-blue btn-round smile'>
+            <span class='icon-add' style='font-size: 1.8em; line-height: 1.75em'></span>
+          </button>
+          <div class='tooltip-menu'>
+            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.createWalletDialog}>
+              {t('actions.wallet.create')}
+            </div>
+            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.restoreWalletDialog}>
+              {t('actions.wallet.restore')}
+            </div>
+            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.importKeysDialog}>
+              {t('actions.wallet.import_keys')}
+            </div>
+          </div>
         </div>
-        <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.restoreWalletDialog}>
-          {t('actions.wallet.restore')}
-        </div>
-        <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.importKeysDialog}>
-          {t('actions.wallet.import_keys')}
-        </div>
+
+      </div>
+
+      <div class='tbl-cell cell-4 alg-m'>
+        <a
+          href={telegramLink}
+          use:tooltip
+          class='btn-blue-light btn-round smile'>
+          <span class='icon-telegram' use:tooltip data-tooltip={t('info.telegram_chat_link')} style='font-size: 1.8em'></span>
+        </a>
       </div>
     </div>
   </div>
@@ -67,6 +93,8 @@
 
   export let currentNetwork;
 
+  const telegramLink = conf.telegramLink;
+
   const { flag, toggleFlag } = utils.initFlags([
     'createWalletDialog',
     'restoreWalletDialog',
@@ -78,7 +106,10 @@
 
   const contracts = conf.contracts;
 
-  async function refreshWallets() {
+  async function refreshWallets(force = false) {
+    if (force) {
+      wallets = [];
+    }
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
     wallets = allWallets.filter(w => w.network === currentNetwork);
   }

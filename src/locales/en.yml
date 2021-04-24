@@ -6,6 +6,7 @@ main:
 
 info:
   copied: "Copied"
+  telegram_chat_link: 'Oberton Telegram Chat'
 
   upload:
     invalid_keys: 'Invalid File Input'
@@ -56,12 +57,14 @@ actions:
     copy: "Copy Address"
 
   wallet:
+    add: 'Add Wallet'
     import_keys: 'Import Key Pair'
     create: "Create Wallet"
     restore: "Restore Wallet"
     receive: "Send Crystals"
     download_keys: 'Download Key Pair'
     upload_keys: 'Upload Key Pair'
+    refresh: 'Refresh Wallets'
 
   phrase:
     backup: "Backup Master Password"

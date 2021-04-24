@@ -99,6 +99,7 @@
       <SendTokensForm
         on:transactionSent={onTransactionSent}
         wallet={walletData.wallet}
+        contract={$$props.wallet.contract}
         keys={walletData.keys}
         balance={balance} />
     </ModalDialog>
@@ -161,10 +162,9 @@
 
     deploying = true;
 
-    const tvcDir = '/sig-files/SetcodeMultisigWallet2.tvc';
-    const abiDir = '/sig-files/SetcodeMultisigWallet.abi.json';
+    const contract = $$props.wallet.contract || conf.contracts[0].file;
 
-    const [err, result] = await to(tonMethods.deployWalletContract(walletData.keys, abiDir, tvcDir, [`0x${walletData.keys.public}`], walletData.wallet.address));
+    const [err, result] = await to(tonMethods.deployWalletContract(walletData.keys, contract, [`0x${walletData.keys.public}`], walletData.wallet.address));
 
     if (err) {
       utils.exception(err);

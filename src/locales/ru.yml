@@ -6,6 +6,7 @@ main:
 
 info:
   copied: "Скопированно"
+  telegram_chat_link: 'Чат Oberton в Telegram'
 
   upload:
     invalid_keys: 'Неправильный файл'
@@ -56,12 +57,14 @@ actions:
     copy: "Скопировать адрес"
 
   wallet:
+    add: 'Добавить кошелёк'
     import_keys: 'Добавить пару ключей'
     create: "Создать кошелек"
     restore: "Восстановить кошелек"
     receive: "Отправить кристаллы"
     download_keys: 'Скачать пару ключей'
     upload_keys: 'Загрузить пару ключей'
+    refresh: 'Обновить список кошельков'
 
   phrase:
     backup: "Сохранить мастер-фразу"

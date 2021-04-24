@@ -2,7 +2,7 @@ import fetchAbi from './fetchAbi';
 import fetchTvc from './fetchTvc';
 
 // amount - размерность в TON
-async function deployWalletContract(keys, abiDir, tvcDir, owners, expectedAddress = null, reqConfirms = 0) {
+async function deployWalletContract(keys, contract, owners, expectedAddress = null, reqConfirms = 0) {
   const client = conf.tonClient;
 
   // Account is active when contract is deployed.
@@ -14,8 +14,8 @@ async function deployWalletContract(keys, abiDir, tvcDir, owners, expectedAddres
   // Number of tokens required to deploy the contract.
   const CONTRACT_REQUIRED_DEPLOY_TOKENS = 500_000_000;
 
-  const abiValue = await fetchAbi(abiDir);
-  const tvcValue = await fetchTvc(tvcDir);
+  const abiValue = await fetchAbi(contract);
+  const tvcValue = await fetchTvc(contract);
 
   const { address } = await client.abi.encode_message({
     abi: {
