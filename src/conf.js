@@ -14,7 +14,7 @@ conf.supportedLocales = {
   en: 'English',
 };
 
-conf.telegramLink = '';
+conf.telegramLink = 'https://t.me/freeoberton';
 
 conf.fallbackLocale = 'en';
 

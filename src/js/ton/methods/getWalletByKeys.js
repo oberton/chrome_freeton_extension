@@ -20,7 +20,7 @@ async function getWalletByKeys(keys, contract) {
     },
   };
 
-  const tvc = await fetchTvc();
+  const tvc = await fetchTvc(contract);
 
   const deploySet = {
     tvc,

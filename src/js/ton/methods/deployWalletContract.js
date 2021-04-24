@@ -2,7 +2,7 @@ import fetchAbi from './fetchAbi';
 import fetchTvc from './fetchTvc';
 
 // amount - размерность в TON
-async function deployWalletContract(keys, contract, owners, expectedAddress = null, reqConfirms = 0) {
+async function deployWalletContract(keys, contract, owners, expectedAddress = null, reqConfirms = 1) {
   const client = conf.tonClient;
 
   // Account is active when contract is deployed.

@@ -1,6 +1,6 @@
 <div class='row-l-xs'>
   {#if wallets.length }
-    <div style='max-height: 318px; overflow: auto;' class='row gtr-hor gtr-ver-sm'>
+    <div class='main-scrollable'>
       {#each wallets as wallet (wallet.tmpId)}
         <div class='hoverable gtr-hor-sm gtr-ver-sm row-hor-sm row-ver-sm'>
           <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
@@ -62,6 +62,7 @@
       <div class='tbl-cell cell-4 alg-m'>
         <a
           href={telegramLink}
+          target='_blank'
           use:tooltip
           class='btn-blue-light btn-round smile'>
           <span class='icon-telegram' use:tooltip data-tooltip={t('info.telegram_chat_link')} style='font-size: 1.8em'></span>

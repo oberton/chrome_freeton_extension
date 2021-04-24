@@ -27,3 +27,21 @@ body {
   outline: none!important;
   box-sizing: border-box;
 }
+.main-scrollable {
+  @extend .gtr-hor;
+  @extend .gtr-ver-sm;
+  overflow: auto;
+  max-height: 318px;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: lighten($color-label, 25%);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: lighten($color-label, 10%);
+  }
+
+}

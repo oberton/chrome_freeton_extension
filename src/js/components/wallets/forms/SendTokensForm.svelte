@@ -48,7 +48,7 @@
 
   async function sendTokens() {
     utils.page.showLoader();
-    const [err, result] = await to(tonMethods.sendTokens(formData.from, formData.to, formData.amount, $$props.keys, formData.comment, false, $$props.contract));
+    const [err, result] = await to(tonMethods.sendTokens(formData.from, formData.to, formData.amount, $$props.keys, formData.comment || null, true, $$props.contract));
     utils.page.hideLoader();
 
     if (err) {
