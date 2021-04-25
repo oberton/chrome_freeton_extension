@@ -1,119 +1,144 @@
-<div class='tbl hover-parent'>
-  <div class='tbl-cell alg-m'>
-    <div class='gtr-t-xs'>
-      <div class='text-md'>
-        {#key accountType}
-          <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
-        {/key}
-        {(balance || 0).toFixed(3)}
-      </div>
-      <div class='row-r-sm row-t-sm'>
-        <div class='tbl' style='table-layout: fixed;'>
-          <div class='tbl-cell text-xs alg-m'>
-            <div class='ellipsis'>
-              {address}
+<div>
+  <div class='tbl hover-parent'>
+    <div class='tbl-cell alg-m'>
+      <div class='gtr-t-xs'>
+        <div class='text-md'>
+          {#key accountType}
+            <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
+          {/key}
+          {(balance || 0).toFixed(3)}
+        </div>
+        <div class='row-r-sm row-t-sm'>
+          <div class='tbl' style='table-layout: fixed;'>
+            <div class='tbl-cell text-xs alg-m'>
+              <div class='ellipsis'>
+                {address}
+              </div>
+            </div>
+            <div class='tbl-cell alg-m' style='width: 3.5rem;'>
+              <CopyTextBtn
+                label={t('actions.address.copy')}
+                value={address}>
+              </CopyTextBtn>
+            </div>
+            <div class='tbl-cell alg-m' style='width: 4.5rem'>
+              <div class='smile'>
+
+                <button
+                  type="button"
+                  use:tooltipMenu
+                  class="btn-dim-light btn-round">
+                  <span class="icon-ellipsis-v smile" style="padding-top: 2px;"></span>
+                </button>
+
+                <div class='tooltip-menu'>
+                  <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
+                    {t('actions.common.delete_item')}
+                  </div>
+                  {#if walletData.phrase }
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
+                      {t('actions.phrase.backup')}
+                    </div>
+                  {/if}
+                  {#if accountType === "Active"}
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
+                      {t('actions.phrase.backup_keys')}
+                    </div>
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
+                      {t('actions.tokens.send')}
+                    </div>
+                  {/if}
+              </div>
+
+              </div>
             </div>
           </div>
-          <div class='tbl-cell alg-m' style='width: 3.5rem;'>
-            <CopyTextBtn
-              label={t('actions.address.copy')}
-              value={address}>
-            </CopyTextBtn>
-          </div>
-          <div class='tbl-cell alg-m' style='width: 4.5rem'>
-            <div class='smile'>
-
-              <button
-                type="button"
-                use:tooltipMenu
-                class="btn-dim-light btn-round">
-                <span class="icon-ellipsis-v smile" style="padding-top: 2px;"></span>
-              </button>
-
-              <div class='tooltip-menu'>
-                <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
-                  {t('actions.common.delete_item')}
-                </div>
-                {#if walletData.phrase }
-                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
-                    {t('actions.phrase.backup')}
-                  </div>
-                {/if}
-                {#if accountType === "Active"}
-                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
-                    {t('actions.phrase.backup_keys')}
-                  </div>
-                  <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
-                    {t('actions.tokens.send')}
-                  </div>
-                {/if}
-             </div>
-
-            </div>
-          </div>
         </div>
+
       </div>
-
-      <!--<form class='tbl' on:submit={stake}>
-        <div class='tbl-cell text-md cell-4 gtr-r'>
-          <div class='form-group'>
-            <input class='form-control' bind:value={stakeForm.address} type='address' required />
-            <label class='form-label'>Address</label>
-          </div>
-        </div>
-        <div class='tbl-cell cell-4 gtr-r'>
-          <div class='form-group'>
-            <input class='form-control' bind:value={stakeForm.summ} type='number' required />
-            <label class='form-label'>Summ</label>
-          </div>
-        </div>
-        <div class='tbl-cell cell-4'>
-          <button class='btn-blue btn-bold' type='submit'>Stake Now</button>
-        </div>
-      </form>-->
-
     </div>
+
+    {#if $flag.phraseDialog }
+      <ModalDialog on:close={toggleFlag.phraseDialog} headline='Master Password'>
+        <div style='user-select: none;'>
+          <div class='text-line'>
+            {walletData.phrase}
+          </div>
+          <div class='text-xs color-red'>
+            {t('info.phrase.no_photo')}
+          </div>
+        </div>
+      </ModalDialog>
+    {/if}
+
+    {#if $flag.pinFormDialog }
+      <ModalDialog on:close={toggleFlag.pinFormDialog} headline={t('actions.pin.enter')}>
+        <PinForm pinError={pinError} on:submit={checkPin} />
+      </ModalDialog>
+    {/if}
+
+    {#if $flag.sendCrystalFormDialog }
+      <ModalDialog on:close={toggleFlag.sendCrystalFormDialog} headline={t('actions.tokens.send')}>
+        <SendTokensForm
+          on:transactionSent={onTransactionSent}
+          wallet={walletData.wallet}
+          contract={$$props.wallet.contract}
+          keys={walletData.keys}
+          balance={balance} />
+      </ModalDialog>
+    {/if}
+
+    <BackupKeysDialog
+      walletData={walletData}
+      on:close={toggleFlag.backupKeysDialog}
+      shown={$flag.backupKeysDialog}>
+    </BackupKeysDialog>
+
   </div>
 
-  {#if $flag.phraseDialog }
-    <ModalDialog on:close={toggleFlag.phraseDialog} headline='Master Password'>
-      <div style='user-select: none;'>
-        <div class='text-line'>
-          {walletData.phrase}
-        </div>
-        <div class='text-xs color-red'>
-          {t('info.phrase.no_photo')}
+  {#if showDevTool}
+    <form class='tbl' on:submit={stake}>
+      <div class='tbl-cell text-md cell-4 gtr-r'>
+        <div class='form-group'>
+          <input class='form-control' bind:value={stakeForm.address} type='address' required />
+          <label class='form-label'>Address</label>
         </div>
       </div>
-    </ModalDialog>
+      <div class='tbl-cell cell-4 gtr-r'>
+        <div class='form-group'>
+          <input class='form-control' bind:value={stakeForm.summ} type='number' required />
+          <label class='form-label'>Summ</label>
+        </div>
+      </div>
+      <div class='tbl-cell cell-4'>
+        <button class='btn-blue btn-bold' type='submit'>Stake Now</button>
+      </div>
+    </form>
   {/if}
-
-  {#if $flag.pinFormDialog }
-    <ModalDialog on:close={toggleFlag.pinFormDialog} headline={t('actions.pin.enter')}>
-      <PinForm pinError={pinError} on:submit={checkPin} />
-    </ModalDialog>
-  {/if}
-
-  {#if $flag.sendCrystalFormDialog }
-    <ModalDialog on:close={toggleFlag.sendCrystalFormDialog} headline={t('actions.tokens.send')}>
-      <SendTokensForm
-        on:transactionSent={onTransactionSent}
-        wallet={walletData.wallet}
-        contract={$$props.wallet.contract}
-        keys={walletData.keys}
-        balance={balance} />
-    </ModalDialog>
-  {/if}
-
-  <BackupKeysDialog
-    walletData={walletData}
-    on:close={toggleFlag.backupKeysDialog}
-    shown={$flag.backupKeysDialog}>
-  </BackupKeysDialog>
-
 </div>
 
+
 <script>
+
+  let stakeForm = {
+    address: '',
+    summ: 0,
+  };
+
+  function stake(e) {
+    e.preventDefault();
+    tonMethods.stakeNow(
+      null,
+      walletData.wallet.address,
+      walletData.keys,
+      $$props.wallet.contract || conf.contracts[0].file,
+      '0:93c5a151850b16de3cb2d87782674bc5efe23e6793d343aa096384aafd70812c',
+      '/sig-files/DePool.abi.json',
+      '/sig-files/SetcodeMultisigWallet.abi.json',
+    );
+  }
+
+  const showDevTool = NODE_ENV !== 'production' && conf.showDevTool;
   const { flag, toggleFlag } = utils.initFlags([
     'phraseDialog',
     'pinFormDialog',
@@ -149,11 +174,6 @@
     toggleFlag.sendCrystalFormDialog(false);
     utils.toast.info(t('info.transaction.sent'));
   }
-
-  let stakeForm = {
-    address: '',
-    summ: 0,
-  };
 
   async function deployContract() {
     if (deploying) {

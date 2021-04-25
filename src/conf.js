@@ -17,5 +17,6 @@ conf.supportedLocales = {
 conf.telegramLink = 'https://t.me/freeoberton';
 
 conf.fallbackLocale = 'en';
+conf.showDevTool = true;
 
 export default conf;
