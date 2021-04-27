@@ -393,6 +393,52 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, sendForce
 // }
 
 
+// подтвердить транзакцию
+async function confirmTransaction(walletAddr, transactionId, abiWalletDir, custodianKeys) {
+
+  if (transactionId == undefined || transactionId == null || transactionId.length == 0) {
+    return;
+  }
+
+  let abiValue = await fetchAbi(abiWalletDir);
+
+  let params = {
+      send_events: false,
+      message_encode_params: {
+          address: walletAddr,
+          abi: {
+            type: 'Serialized',
+            value: abiValue,
+          },
+          call_set: {
+              function_name: 'confirmTransaction',
+              input: {
+                transactionId: transactionId //string
+              }
+          },
+          signer: {
+              type: 'Keys',
+              keys: custodianKeys
+          },
+      }
+  }
+
+  let result = await conf.tonClient.processing.process_message(params);
+
+  return result;
+}
+
+// подтвердить все существующие транзакции
+async function confirmAllTransactions(walletAddr, abiWalletDir, custodianKeys) {
+  let transactionIds = await getTransactionIds(walletAddr, abiWalletDir);
+
+  let i;
+  for (i = 0; i < transactionIds.length; i++) {
+    let transactionId = transactionIds[i];
+    await confirmTransaction(walletAddr, transactionId, abiWalletDir, custodianKeys);
+  }
+}
+
 
 
 
@@ -414,14 +460,24 @@ async function sendToken(client, from, to, amount, keys, abiWalletDir, sendForce
 
 
 async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir, amountToken) {
-
-  walletAddr = "0:1415fd7741c7d5b4dc8c85eb959e47247fd598f6246e064cef9d0b67475d60b4"
-  keys = {
-    "public": "0x3d7c499e736aef145b36bb5b9b78e1ecf0740fbe4e8c5a2a4927e5b5263c5637",
-    "secret": "0x0f35d9b703a25f328c28849743f33dec5d84ea42ed3705ad3f31889b912dd953"
-  }
-  let setcodeTVCDir = '/sig-files/SetcodeMultisigWallet2.tvc'
+  walletAddr = keys
+  keys = depoolAddr
+  
+  let setcodeTVCDir = '/sig-files/SetcodeMultisigWallet.tvc'
   let abiSetcodeWalletDir = '/sig-files/SetcodeMultisigWallet.abi.json'
+  abiSetcodeWalletDir = 'SetcodeMultisigWallet'
+  
+  let safeTVCDir = '/sig-files/SafeMultisigWallet.tvc'
+  let abiSafeWalletDir = '/sig-files/SafeMultisigWallet.abi.json'
+  abiSafeWalletDir = 'SafeMultisigWallet'
+
+  console.log("DEV TOOL");
+  console.log(walletAddr);
+  console.log(keys);
+  
+  // let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
+  // console.log(output);
+
   
   
   
