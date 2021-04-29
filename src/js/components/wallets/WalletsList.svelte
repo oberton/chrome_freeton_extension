@@ -78,7 +78,7 @@
   {/if}
 
   {#if $flag.createWalletDialog }
-    <ModalDialog on:close={toggleFlag.createWalletDialog} headline={t('actions.wallet.create')}>
+    <ModalDialog on:close={() => toggleFlag.createWalletDialog(false)} headline={t('actions.wallet.create')}>
       <CreateWalletForm on:walletAdded={onWalletAdded}/>
     </ModalDialog>
   {/if}

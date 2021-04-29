@@ -33,12 +33,15 @@ info:
     exists: "Wallet is already added"
 
   phrase:
-    invalid: "Invalid Phrase"
+    invalid: "Invalid Master Password"
     no_photo: "Do not take photos or screenshots. Other apps can get access to them. Write everything down on paper and store it in a safe place."
 
   transaction:
     error: "Send Transaction Failed"
     sent: "Transaction Sent"
+
+  custodians:
+    already_exists: 'Custodian already exists'
 
 actions:
   change_language: 'Change Language'
@@ -97,6 +100,19 @@ labels:
   wallet:
     contract: 'Contract to deploy'
     word_count: 'Words Count'
+  keys:
+    public: 'Public Key'
+    secret: 'Secret Key'
+    pair: 'Keys Pair'
+  custodians:
+    plural: 'Custodians'
+    add: 'Add Custodian'
+    set:
+      public_key: 'Public Key only (Address)'
+      keys: 'Add Key Pair'
+      phrase: 'Add Master Password'
+  multisig:
+    min_confirms: 'Min. confirms for transaction'
 
 common:
   or: "or"

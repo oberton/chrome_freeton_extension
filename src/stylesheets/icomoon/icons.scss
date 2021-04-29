@@ -1,3 +1,28 @@
+.#{$icomoon-prefix}-keys-pair { 
+  &:before {
+    content: $icon-keys-pair;
+  }
+}
+.#{$icomoon-prefix}-passkey { 
+  &:before {
+    content: $icon-passkey;
+  }
+}
+.#{$icomoon-prefix}-car-key { 
+  &:before {
+    content: $icon-car-key;
+  }
+}
+.#{$icomoon-prefix}-gems { 
+  &:before {
+    content: $icon-gems;
+  }
+}
+.#{$icomoon-prefix}-gem { 
+  &:before {
+    content: $icon-gem;
+  }
+}
 .#{$icomoon-prefix}-loop { 
   &:before {
     content: $icon-loop;
@@ -33,6 +58,11 @@
     content: $icon-add;
   }
 }
+.#{$icomoon-prefix}-cog { 
+  &:before {
+    content: $icon-cog;
+  }
+}
 .#{$icomoon-prefix}-paste { 
   &:before {
     content: $icon-paste;
@@ -48,11 +78,6 @@
     content: $icon-download;
   }
 }
-.#{$icomoon-prefix}-cog { 
-  &:before {
-    content: $icon-cog;
-  }
-}
 .#{$icomoon-prefix}-logout { 
   &:before {
     content: $icon-logout;
@@ -66,16 +91,6 @@
 .#{$icomoon-prefix}-delete { 
   &:before {
     content: $icon-delete;
-  }
-}
-.#{$icomoon-prefix}-gems { 
-  &:before {
-    content: $icon-gems;
-  }
-}
-.#{$icomoon-prefix}-gem { 
-  &:before {
-    content: $icon-gem;
   }
 }
 .#{$icomoon-prefix}-wallet { 

@@ -17,6 +17,13 @@ function tooltip(node) {
     hideAll();
     activeTooltip = document.createElement('div');
     activeTooltip.classList.add('tooltip');
+
+    const tooltipClass = _.get(node, 'attributes.data-tooltip-class.value');
+
+    if (tooltipClass) {
+      activeTooltip.classList.add(tooltipClass);
+    }
+
     activeTooltip.innerText = text;
     document.body.appendChild(activeTooltip);
     activeTooltip.__popperInstance = createPopper(node, activeTooltip, {

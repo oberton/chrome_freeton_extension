@@ -36,10 +36,18 @@
     currentBlock.classList.remove('shown');
     setTimeout(() => {
       dispatch('close', true);
+      setTimeout(() => {
+        if (document.querySelector('.modals-container') && !document.querySelector('.modal-dialog')) {
+          document.querySelector('.modals-container').remove()
+        }
+      });
     }, 100);
   }
 
   function onDialogClick(e) {
+    if (!e.target.closest('body')) {
+      return;
+    }
     if (e.target.closest('.modal-dialog-content')) {
       return;
     }
@@ -49,10 +57,27 @@
 	svelte.onMount(async () => {
     dispatch('open', true);
     currentBlock.parentElement.removeChild(currentBlock);
-    document.body.appendChild(currentBlock);
+
+    if (!document.querySelector('.modals-container')) {
+      const container = document.createElement('div');
+      container.classList.add('modals-container');
+      document.body.appendChild(container);
+    }
+
+    document.querySelector('.modals-container').appendChild(currentBlock);
+
     setTimeout(() => {
       currentBlock.classList.add('shown');
     }, 100);
 	});
+
+  svelte.onDestroy(() => {
+    if (currentBlock) {
+      hide();
+      setTimeout(() => {
+        currentBlock.remove();
+      });
+    }
+  });
 
 </script>

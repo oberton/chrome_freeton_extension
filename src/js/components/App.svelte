@@ -165,7 +165,12 @@
       step = 'login';
     }
 
-    conf.myPin = '222222';
-    step = 'main';
+    if (NODE_ENV !== 'production' && conf.devAutopin) {
+      const phrasesEncrypted = await utils.storage.get('myPhrases');
+      if (phrasesEncrypted.myPhrases) {
+        conf.myPin = conf.devAutopin;
+        step = 'main';
+      }
+    }
   });
 </script>

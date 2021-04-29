@@ -4,6 +4,8 @@ function tooltipMenu(node) {
   let shown = false;
   let popper;
 
+  let onDocumentClick;
+
   const parentElement = node.parentElement;
 
   const tooltip = parentElement.querySelector('.tooltip-menu');
@@ -13,15 +15,12 @@ function tooltipMenu(node) {
 
   tooltip.style.display = 'none';
 
-  const onDocumentClick = (e) => {
-    if (e.target.closest('[close-tooltip]')) {
-      hide();
-      return;
-    }
-    if (tooltip.contains(e.target) || node.contains(e.target)) {
-      return;
-    }
-    hide();
+  const hide = () => {
+    document.body.removeChild(tooltip);
+    popper.destroy();
+    tooltip.style.display = 'none';
+    document.removeEventListener('click', onDocumentClick);
+    shown = false;
   };
 
   const show = () => {
@@ -34,15 +33,11 @@ function tooltipMenu(node) {
 
     document.addEventListener('click', onDocumentClick);
 
-    shown = true;
-  };
+    if (!tooltip.__hideTooltip) {
+      tooltip.__hideTooltip = hide;
+    }
 
-  const hide = () => {
-    document.body.removeChild(tooltip);
-    popper.destroy();
-    tooltip.style.display = 'none';
-    document.removeEventListener('click', onDocumentClick);
-    shown = false;
+    shown = true;
   };
 
   const onClick = () => {
@@ -51,6 +46,17 @@ function tooltipMenu(node) {
     } else {
       show();
     }
+  };
+
+  onDocumentClick = (e) => {
+    if (e.target.closest('[close-tooltip]')) {
+      hide();
+      return;
+    }
+    if (tooltip.contains(e.target) || node.contains(e.target)) {
+      return;
+    }
+    hide();
   };
 
   node.addEventListener('click', onClick);

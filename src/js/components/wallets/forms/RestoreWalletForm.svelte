@@ -9,16 +9,35 @@
   <button class="btn-blue font-bold full-width text-md" on:click={restoreWallet}>
     {$$props.submitLabel || t('actions.wallet.restore')}
   </button>
+
+  {#if $flag.contractPrefsDialog}
+    <ContractPrefsDialog
+      payload={newWalletPayload}
+      label={$$props.submitLabel || t('actions.wallet.restore')}
+      on:close={toggleFlag.contractPrefsDialog}>
+    </ContractPrefsDialog>
+  {/if}
 </div>
 
 <script>
+  const { flag, toggleFlag } = utils.initFlags([
+    'contractPrefsDialog',
+  ]);
+
   const dispatch = svelte.createEventDispatcher();
 
   let phrase = '';
   let phraseContract = conf.contracts[0].file;
 
+  let newWalletPayload;
+
   async function restoreWallet() {
     if (!phrase) {
+      return;
+    }
+
+    if (!tonMethods.isValidPhrase(phrase)) {
+      utils.toast.error(t('info.phrase.invalid'));
       return;
     }
 
@@ -37,12 +56,31 @@
       return;
     }
 
-    const payload = { phrase, network };
+    newWalletPayload = { phrase, network };
 
     if (phraseContract && phraseContract !== conf.contracts[0].file) {
-      payload.contract = phraseContract;
+      newWalletPayload.contract = phraseContract;
     }
 
-    dispatch('restore', payload);
+    if (newWalletPayload.contract && newWalletPayload.contract !== conf.contracts[0].file) {
+      toggleFlag.contractPrefsDialog();
+      return;
+    }
+
+    dispatch('restore', newWalletPayload);
   }
+
+  function saveContractPrefs(params) {
+    debugger
+  }
+
+
+  svelte.onMount(() => {
+    utils.eventBus.on('set-contract-details', saveContractPrefs);
+  });
+
+  svelte.onDestroy(() => {
+    utils.eventBus.off('set-contract-details', saveContractPrefs);
+  });
+
 </script>

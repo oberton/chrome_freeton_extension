@@ -13,7 +13,13 @@
   white-space: nowrap;
   color: white;
   opacity: 0;
+  max-width: calc(100% - 30px);
+  z-index: 2000;
   &.shown {
     opacity: 1;
+  }
+  &.break {
+    white-space: initial;
+    word-break: break-word;
   }
 }

@@ -26,22 +26,50 @@
       {t('actions.wallet.create')}
     </button>
   </div>
+
+  {#if $flag.contractPrefsDialog}
+    <ContractPrefsDialog
+      payload={newWalletPayload}
+      label={t('actions.wallet.create')}
+      on:set={setContractPrefs}
+      on:close={() => toggleFlag.contractPrefsDialog(false)}>
+    </ContractPrefsDialog>
+  {/if}
 </form>
 
 <script>
   const dispatch = svelte.createEventDispatcher();
 
+  const { flag, toggleFlag } = utils.initFlags([
+    'contractPrefsDialog',
+  ]);
+
   let contract = conf.contracts[0].file;
+  let newWalletPayload;
 
   async function generateWallet(e) {
     const params = _.fromPairs(Array.from(new FormData(e.target)));
     const word_count = parseInt(params.word_count || 12, 10);
     const { phrase } = await tonMethods.getWalletData(null, true, { word_count }, contract);
-    const payload = { phrase };
+    newWalletPayload = { phrase };
 
     if (contract && contract !== conf.contracts[0].file) {
-      payload.contract = contract;
+      newWalletPayload.contract = contract;
     }
-    dispatch('walletAdded', payload);
+
+    if (newWalletPayload.contract && newWalletPayload.contract !== conf.contracts[0].file) {
+      toggleFlag.contractPrefsDialog();
+      return;
+    }
+
+    dispatch('walletAdded', newWalletPayload);
+  }
+
+  function setContractPrefs(e) {
+    toggleFlag.contractPrefsDialog(false);
+    newWalletPayload[newWalletPayload.contract] = e.detail;
+    setTimeout(() => {
+      dispatch('walletAdded', newWalletPayload);
+    });
   }
 </script>

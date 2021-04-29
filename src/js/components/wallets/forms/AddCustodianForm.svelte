@@ -1,0 +1,160 @@
+<form on:submit|preventDefault={addCustodian}>
+  <div class='text-xs upcase color-label gtr-b-sm'>
+    {t('labels.custodians.add')}
+  </div>
+
+  <div class='text-line text-center'>
+    {#each tabs as tab}
+      <div
+        class='{"keys-btn pointer" + (formData.tab === tab.key ? " active" : "")}'
+        on:click={() => formData.tab = tab.key}
+        use:tooltip data-tooltip={tab.tooltip}>
+        <span class={tab.icon}></span>
+      </div>
+    {/each}
+  </div>
+
+  {#if formData.tab === 'publicKey'}
+    <FormControl
+      bind:value={formData.publicKey}
+      label={t('labels.keys.public')}
+      required={true}
+      type='text'>
+    </FormControl>
+  {/if}
+
+  {#if formData.tab === 'phrase'}
+    <PhraseArea
+      bind:phrase={formData.phrase}
+      placeholder={t('labels.master_password')}>
+    </PhraseArea>
+  {/if}
+
+  {#if formData.tab === 'keys'}
+    <div>
+      {#each ['public', 'secret'] as type}
+        <FormControl
+          required={true}
+          type='text'
+          bind:value={formData.keys[type]}
+          label={t('labels.keys.' + type)} />
+      {/each}
+
+      <div class="gtr-t-sm row-l-sm text-right">
+        <label class="btn-blue-light btn-round" use:tooltip data-tooltip={t('actions.wallet.upload_keys')}>
+          <input on:change={fileAttached} id='{uploadFileInputId}' type='file' style='position: absolute; left: -999em' />
+          <span class="icon-upload text-lg"></span>
+        </label>
+      </div>
+    </div>
+  {/if}
+
+  <div class='gtr-t'>
+    <button class="btn-blue font-bold full-width text-md">
+      {t('labels.custodians.add')}
+    </button>
+  </div>
+
+</form>
+
+<script>
+  export let custodians;
+
+  const dispatch = svelte.createEventDispatcher();
+
+  let formData = {};
+
+  const uploadFileInputId = `import-file-${utils.tmpId()}`;
+
+  function addCustodian(e) {
+    if (formData.tab === 'phrase') {
+      if (!tonMethods.isValidPhrase(formData.phrase)) {
+        utils.toast.error(t('info.phrase.invalid'));
+        return;
+      }
+    } else if (formData.tab === 'publicKey') {
+      formData.publicKey = formData.publicKey.replace(/^0:/, '');
+
+      if (!tonMethods.isValidKey(formData.publicKey)) {
+        utils.toast.error(t('info.keys.invalid.public'));
+        return;
+      }
+    } else if (formData.tab === 'keys') {
+      if (!tonMethods.isValidKey(formData.keys.public)) {
+        utils.toast.error(t('info.keys.invalid.public'));
+        return;
+      }
+      if (!tonMethods.isValidKey(formData.keys.secret)) {
+        utils.toast.error(t('info.keys.invalid.secret'));
+        return;
+      }
+    }
+
+    const payload = _.pick(formData, formData.tab);
+
+    const copyFound = _.find(custodians, c => _.isEqual(c, payload));
+
+    if (copyFound) {
+      utils.toast.error(t('info.custodians.already_exists'));
+      return;
+    }
+
+    const tooltip = e.target.closest('.tooltip-menu');
+    tooltip.__hideTooltip();
+
+    dispatch('add', payload);
+  }
+
+  function fileAttached() {
+    const fileInput = document.getElementById(uploadFileInputId);
+    const file = fileInput.files[0];
+    if (file.size > 1024) {
+      utils.toast.error(t('info.file.too_big'));
+      return;
+    }
+
+    const fr = new window.FileReader();
+
+    fr.onload = () => {
+      const keysData = fr.result.split("\n").filter(tonMethods.isValidKey);
+
+      if (keysData.length !== 2) {
+        utils.toast.error(t('info.upload.invalid_keys'));
+        return;
+      }
+
+      formData.keys = {
+        public: keysData[0],
+        secret: keysData[1],
+      };
+    };
+
+    fr.readAsText(file);
+  }
+
+  const tabs = [{
+    key: 'publicKey',
+    tooltip: t('labels.custodians.set.public_key'),
+    icon: 'icon-car-key text-sm',
+  }, {
+    key: 'phrase',
+    tooltip: t('labels.custodians.set.phrase'),
+    icon: 'icon-passkey text-md',
+  }, {
+    key: 'keys',
+    tooltip: t('labels.custodians.set.keys'),
+    icon: 'icon-keys-pair',
+  }];
+
+  svelte.onMount(() => {
+    formData = {
+      tab: 'publicKey',
+      publicKey: '',
+      phrase: '',
+      keys: {
+        public: '',
+        secret: '',
+      },
+    };
+  });
+</script>

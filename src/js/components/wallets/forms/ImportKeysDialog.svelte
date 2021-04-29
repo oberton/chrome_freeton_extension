@@ -12,7 +12,7 @@
 
         <div class="gtr-ver text-right row-r-sm">
           <label class="btn-blue-light btn-round" use:tooltip data-tooltip={t('actions.wallet.upload_keys')}>
-            <input on:change={fileAttached} id='import-file-input' type='file' style='position: absolute; left: -999em' />
+            <input on:change={fileAttached} id='{uploadFileInputId}' type='file' style='position: absolute; left: -999em' />
             <span class="icon-upload text-lg"></span>
           </label>
         </div>
@@ -28,11 +28,25 @@
       </form>
     </ModalDialog>
   {/if}
+
+  {#if $flag.contractPrefsDialog}
+    <ContractPrefsDialog
+      label={t('actions.wallet.import_keys')}
+      payload={newWalletPayload}
+      on:close={toggleFlag.contractPrefsDialog}>
+    </ContractPrefsDialog>
+  {/if}
 </div>
 
 <script>
 
   const dispatch = svelte.createEventDispatcher();
+  const uploadFileInputId = `import-file-${utils.tmpId()}`;
+  let newWalletPayload;
+
+  const { flag, toggleFlag } = utils.initFlags([
+    'contractPrefsDialog',
+  ]);
 
   let keys = {
     public: '',
@@ -41,12 +55,8 @@
 
   let contract = conf.contracts[0].file;
 
-  function isValidKey(str) {
-    return str.split('').length === 64;
-  }
-
   function fileAttached() {
-    const fileInput = document.getElementById('import-file-input');
+    const fileInput = document.getElementById(uploadFileInputId);
     const file = fileInput.files[0];
     if (file.size > 1024) {
       utils.toast.error(t('info.file.too_big'));
@@ -56,7 +66,7 @@
     const fr = new window.FileReader();
 
     fr.onload = () => {
-      const keysData = fr.result.split("\n").filter(isValidKey);
+      const keysData = fr.result.split("\n").filter(tonMethods.isValidKey);
 
       if (keysData.length !== 2) {
         utils.toast.error(t('info.upload.invalid_keys'));
@@ -73,12 +83,12 @@
   }
 
   async function importKeys() {
-    if (!isValidKey(keys.public)) {
+    if (!tonMethods.isValidKey(keys.public)) {
       utils.toast.error(t('info.keys.invalid.public'));
       return;
     }
 
-    if (!isValidKey(keys.secret)) {
+    if (!tonMethods.isValidKey(keys.secret)) {
       utils.toast.error(t('info.keys.invalid.secret'));
       return;
     }
@@ -93,7 +103,15 @@
       utils.toast.error(t('info.keys.invalid.secret'));
       return;
     }
-    dispatch('add-keys', {keys, contract});
+
+    newWalletPayload = { keys, contract };
+
+    if (newWalletPayload.contract && newWalletPayload.contract !== conf.contracts[0].file) {
+      toggleFlag.contractPrefsDialog();
+      return;
+    }
+
+    dispatch('add-keys', newWalletPayload);
   }
 
 </script>

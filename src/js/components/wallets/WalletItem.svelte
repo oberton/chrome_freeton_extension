@@ -11,9 +11,9 @@
         <div class='row-r-sm row-t-sm'>
           <div class='tbl' style='table-layout: fixed;'>
             <div class='tbl-cell text-xs alg-m'>
-              <div class='ellipsis'>
-                {address}
-              </div>
+              {#if address}
+                <AddressEllipsis address={address}></AddressEllipsis>
+              {/if}
             </div>
             <div class='tbl-cell alg-m' style='width: 3.5rem;'>
               <CopyTextBtn
