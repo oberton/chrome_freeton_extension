@@ -440,6 +440,55 @@ async function confirmAllTransactions(walletAddr, abiWalletDir, custodianKeys) {
 }
 
 
+// получить кол-во транзакций для аккаунта
+async function getTransactionsCount(accountAddr) {
+
+  let fetch = await conf.tonClient.net.aggregate_collection({
+      collection: 'transactions',
+      filter: { 
+        account_addr: { 
+          eq: accountAddr
+        } 
+      }
+      // ,
+      // fields: [
+      //   {fn: 'COUNT'}
+      // ],
+      // result: ''
+  })
+
+  return Number(fetch.values[0]);
+}
+
+// получить список транзакций по аккаунту, игнорируя транзакции по id из массива ignoreIds. Максимум записей - 50шт
+async function getTransactionList(accountAddr, limit=50, ignoreIds=[]) {
+
+  let filter = {
+    account_addr: { 
+      eq: accountAddr
+    } 
+  };
+
+  if (ignoreIds) {
+    filter.id = {
+      notIn: ignoreIds
+    }
+  }
+
+  let fetch = await conf.tonClient.net.query_collection({
+      collection: 'transactions',
+      filter: filter,
+      order:[
+        {path: 'lt', direction: 'DESC'},
+      ],
+      limit: limit,
+      // result: 'id balance(format: DEC) code_hash acc_type_name'
+      result: 'id lt(format: DEC) aborted account_addr in_message{id src dst msg_type_name value(format: DEC) created_at} now total_fees(format: DEC)'
+  })
+
+  return fetch.result;
+}
+
 
 
 
@@ -474,7 +523,13 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
   console.log("DEV TOOL");
   console.log(walletAddr);
   console.log(keys);
+
+  let transactionsCount = await getTransactionsCount(walletAddr);
+  console.log(transactionsCount);
   
+  let output = await getTransactionList(walletAddr, 50, []);
+  console.log(output);
+
   // let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
   // console.log(output);
 
