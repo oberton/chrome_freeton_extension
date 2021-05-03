@@ -1,3 +1,18 @@
+.#{$icomoon-prefix}-magic-wand { 
+  &:before {
+    content: $icon-magic-wand;
+  }
+}
+.#{$icomoon-prefix}-telegram { 
+  &:before {
+    content: $icon-telegram;
+  }
+}
+.#{$icomoon-prefix}-add { 
+  &:before {
+    content: $icon-add;
+  }
+}
 .#{$icomoon-prefix}-keys-pair { 
   &:before {
     content: $icon-keys-pair;
@@ -46,16 +61,6 @@
 .#{$icomoon-prefix}-caret-down { 
   &:before {
     content: $icon-caret-down;
-  }
-}
-.#{$icomoon-prefix}-telegram { 
-  &:before {
-    content: $icon-telegram;
-  }
-}
-.#{$icomoon-prefix}-add { 
-  &:before {
-    content: $icon-add;
   }
 }
 .#{$icomoon-prefix}-cog { 

@@ -11,7 +11,7 @@
         </div>
       {/if}
       <div class='tbl-cell text-xs gtr-l-sm alg-m gtr-t-xxs'>
-        <AddressEllipsis take={12} address={address}></AddressEllipsis>
+        <AddressEllipsis take={12} address={publicKey}></AddressEllipsis>
       </div>
       <div class='tbl-cell cell-gtr alg-m'>
         <button
@@ -33,7 +33,7 @@
   const dispatch = svelte.createEventDispatcher();
 
   let type = '';
-  let address = '';
+  let publicKey = '';
   let ready = false;
 
   function removeItem() {
@@ -61,14 +61,14 @@
     }
     if (custodian.publicKey) {
       type = 'publicKey',
-      address = custodian.publicKey;
+      publicKey = custodian.publicKey;
     } else if (custodian.keys) {
       type = 'keys';
-      address = custodian.keys.public;
+      publicKey = custodian.keys.public;
     } else if (custodian.phrase) {
       type = 'phrase';
-      const result = await tonMethods.getWalletData(custodian.phrase, false, {}, conf.contracts[1].file);
-      address = _.get(result, 'keys.public', '-');
+      const result = await tonMethods.phraseToKeys(custodian.phrase);
+      publicKey = _.get(result, 'public', '-');
     }
     ready = true;
   });

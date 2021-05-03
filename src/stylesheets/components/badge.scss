@@ -1,0 +1,13 @@
+.badge {
+  position: absolute;
+  top: -0.5em;
+  left: 1em;
+  background: #F44336;
+  border-radius: 1em;
+  padding: 0 0.6em;
+  color: white;
+  font-weight: $fw-bold;
+  height: 1.3em;
+  line-height: 1.3em;
+  font-size: 11px;
+}

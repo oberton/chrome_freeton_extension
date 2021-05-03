@@ -47,10 +47,15 @@
   let contract = conf.contracts[0].file;
   let newWalletPayload;
 
+  async function walletAdded() {
+    await tonMethods.addNewWallet(newWalletPayload);
+    dispatch('walletAdded', newWalletPayload);
+  }
+
   async function generateWallet(e) {
     const params = _.fromPairs(Array.from(new FormData(e.target)));
     const word_count = parseInt(params.word_count || 12, 10);
-    const { phrase } = await tonMethods.getWalletData(null, true, { word_count }, contract);
+    const { phrase } = await tonMethods.getWalletData(null, false, { word_count }, contract);
     newWalletPayload = { phrase };
 
     if (contract && contract !== conf.contracts[0].file) {
@@ -61,15 +66,12 @@
       toggleFlag.contractPrefsDialog();
       return;
     }
-
-    dispatch('walletAdded', newWalletPayload);
+    walletAdded();
   }
 
   function setContractPrefs(e) {
     toggleFlag.contractPrefsDialog(false);
     newWalletPayload[newWalletPayload.contract] = e.detail;
-    setTimeout(() => {
-      dispatch('walletAdded', newWalletPayload);
-    });
+    setTimeout(walletAdded);
   }
 </script>

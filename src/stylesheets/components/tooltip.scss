@@ -10,16 +10,13 @@
   left: 0;
   overflow: hidden;
   transition: opacity 300ms ease-in;
-  white-space: nowrap;
   color: white;
   opacity: 0;
   max-width: calc(100% - 30px);
   z-index: 2000;
+  white-space: initial;
+  word-break: break-word;
   &.shown {
     opacity: 1;
-  }
-  &.break {
-    white-space: initial;
-    word-break: break-word;
   }
 }

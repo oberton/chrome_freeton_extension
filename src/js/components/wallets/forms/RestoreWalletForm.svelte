@@ -14,7 +14,7 @@
     <ContractPrefsDialog
       payload={newWalletPayload}
       label={$$props.submitLabel || t('actions.wallet.restore')}
-      on:close={toggleFlag.contractPrefsDialog}>
+      on:close={() => toggleFlag.contractPrefsDialog(false)}>
     </ContractPrefsDialog>
   {/if}
 </div>

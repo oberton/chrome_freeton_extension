@@ -1,5 +1,4 @@
 const events = {};
-window.eee = events;
 
 function on(eventName, cb) {
   if (!events[eventName]) {
@@ -25,4 +24,4 @@ function off(eventName, fn) {
   });
 }
 
-export default { on, trigger, off };
+export default { on, trigger, off, __events: events };

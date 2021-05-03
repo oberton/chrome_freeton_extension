@@ -1,13 +1,18 @@
 <form on:submit|preventDefault={addCustodian}>
-  <div class='text-xs upcase color-label gtr-b-sm'>
+
+  <div class='text-line'>
     {t('labels.custodians.add')}
+  </div>
+
+  <div class='text-xs upcase color-label gtr-b-sm'>
+    {t('labels.choose_one')}
   </div>
 
   <div class='text-line text-center'>
     {#each tabs as tab}
       <div
         class='{"keys-btn pointer" + (formData.tab === tab.key ? " active" : "")}'
-        on:click={() => formData.tab = tab.key}
+        on:click={() => setTab(tab.key)}
         use:tooltip data-tooltip={tab.tooltip}>
         <span class={tab.icon}></span>
       </div>
@@ -24,10 +29,24 @@
   {/if}
 
   {#if formData.tab === 'phrase'}
-    <PhraseArea
-      bind:phrase={formData.phrase}
-      placeholder={t('labels.master_password')}>
-    </PhraseArea>
+    <div class='tbl fixed'>
+      <div class='tbl-cell alg-m gtr-r'>
+        <PhraseArea
+          bind:phrase={formData.phrase}
+          placeholder={t('labels.master_password')}>
+        </PhraseArea>
+      </div>
+      <div class='tbl-cell alg-m cell-gtr'>
+        <button
+          type='button'
+          use:tooltip
+          data-tooltip={t('actions.phrase.generate')}
+          on:click={generateNewPhrase}
+          class='btn-blue-glass btn-round'>
+          <span class='icon-magic-wand'></span>
+        </button>
+      </div>
+    </div>
   {/if}
 
   {#if formData.tab === 'keys'}
@@ -65,6 +84,18 @@
   let formData = {};
 
   const uploadFileInputId = `import-file-${utils.tmpId()}`;
+
+  async function generateNewPhrase() {
+    const word_count = (formData.phrase || '').split(' ').length === 12 ? 24 : 12;
+
+    const { phrase } = await conf.tonClient.crypto.mnemonic_from_random({
+      dictionary: 1,
+      word_count,
+    });
+
+    formData.phrase = phrase;
+    utils.eventBus.trigger('area-change', document.querySelector('.c-phrase-area textarea').id);
+  }
 
   function addCustodian(e) {
     if (formData.tab === 'phrase') {
@@ -132,6 +163,18 @@
     fr.readAsText(file);
   }
 
+  function setTab(tab) {
+    formData = {
+      publicKey: '',
+      phrase: '',
+      keys: {
+        public: '',
+        secret: '',
+      },
+      tab,
+    };
+  }
+
   const tabs = [{
     key: 'publicKey',
     tooltip: t('labels.custodians.set.public_key'),
@@ -147,14 +190,6 @@
   }];
 
   svelte.onMount(() => {
-    formData = {
-      tab: 'publicKey',
-      publicKey: '',
-      phrase: '',
-      keys: {
-        public: '',
-        secret: '',
-      },
-    };
+    setTab('publicKey');
   });
 </script>
