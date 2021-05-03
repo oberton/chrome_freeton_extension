@@ -2,6 +2,7 @@
   <textarea
     rows='1'
     bind:value={value}
+    id={areaId}
     on:keydown={onAreaKeydown}
     class={`form-control ${value ? "" : "empty"}`}
     required={$$props.required ? true : false}></textarea>
@@ -15,6 +16,17 @@
   const dispatch = svelte.createEventDispatcher();
 
   export let value;
+
+  let areaId;
+
+  function setAreaStyle() {
+    const target = document.getElementById(areaId);
+    const styles = window.getComputedStyle(target);
+    const paddings = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+    target.style.height = 'auto';
+    target.style.height =  `${target.scrollHeight + 2}px`;
+    dispatch('keydown', {target});
+  }
 
   function onAreaKeydown(e) {
 
@@ -32,12 +44,22 @@
       }
     }
 
-    setTimeout(() => {
-      const styles = window.getComputedStyle(target);
-      const paddings = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
-      target.style.height = 'auto';
-      target.style.height =  `${target.scrollHeight + 2}px`;
-      dispatch('keydown', e);
-    });
+    setTimeout(setAreaStyle);
   }
+
+  function onAreaChange(id) {
+    if (id !== areaId) {
+      return;
+    }
+    setTimeout(setAreaStyle);
+  }
+
+  svelte.onMount(() => {
+    areaId = `area-${utils.tmpId()}`;
+    utils.eventBus.on('area-change', onAreaChange);
+  });
+
+  svelte.onDestroy(() => {
+    utils.eventBus.off('area-change', onAreaChange);
+  });
 </script>

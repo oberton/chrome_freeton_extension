@@ -1,4 +1,4 @@
-<div class='smile cell-12' use:tooltip data-tooltip={address} data-tooltip-class='break' style='font-family: monospace;'>
+<div class='smile cell-12' use:tooltip data-tooltip={address} style='font-family: monospace;'>
   {addressToShow}
 </div>
 

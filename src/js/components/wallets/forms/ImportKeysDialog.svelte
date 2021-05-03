@@ -33,7 +33,7 @@
     <ContractPrefsDialog
       label={t('actions.wallet.import_keys')}
       payload={newWalletPayload}
-      on:close={toggleFlag.contractPrefsDialog}>
+      on:close={() => toggleFlag.contractPrefsDialog(false)}>
     </ContractPrefsDialog>
   {/if}
 </div>

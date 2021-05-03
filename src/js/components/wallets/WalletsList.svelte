@@ -3,7 +3,11 @@
     <div class='main-scrollable'>
       {#each wallets as wallet (wallet.tmpId)}
         <div class='hoverable gtr-hor-sm gtr-t-xxs gtr-b-xs row-hor-sm row-ver-sm'>
-          <WalletItem wallet={wallet} on:removeWallet={() => removeWallet(wallet)}/>
+          <WalletItem
+            wallet={wallet}
+            on:open={() => showWallet(wallet)}
+            on:removeWallet={() => removeWallet(wallet)}>
+          </WalletItem>
         </div>
       {/each}
     </div>
@@ -72,7 +76,7 @@
   </div>
 
   {#if $flag.restoreWalletDialog }
-    <ModalDialog on:close={toggleFlag.restoreWalletDialog} headline={t('actions.wallet.restore')}>
+    <ModalDialog on:close={() => toggleFlag.restoreWalletDialog(false)} headline={t('actions.wallet.restore')}>
       <RestoreWalletForm on:restore={restoreWallet}></RestoreWalletForm>
     </ModalDialog>
   {/if}
@@ -84,7 +88,7 @@
   {/if}
 
   <ImportKeysDialog
-    on:close={toggleFlag.importKeysDialog}
+    on:close={() => toggleFlag.importKeysDialog(false)}
     on:add-keys={importKeys}
     shown={$flag.importKeysDialog}>
   </ImportKeysDialog>
@@ -93,6 +97,8 @@
 <script>
 
   export let currentNetwork;
+
+  const dispatch = svelte.createEventDispatcher();
 
   const telegramLink = conf.telegramLink;
 
@@ -106,6 +112,10 @@
   let allWallets;
 
   const contracts = conf.contracts;
+
+  function showWallet(wallet) {
+    dispatch('open-wallet-details', wallet); 
+  }
 
   async function refreshWallets(force = false) {
     if (force) {

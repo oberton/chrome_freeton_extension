@@ -1,6 +1,15 @@
 import getWalletByKeys from './getWalletByKeys';
+import phraseToKeys from './phraseToKeys';
+import addNewWallet from './addNewWallet';
 
-async function createWallet(_phrase, isNew, _options = {}, contract = null) {
+/**
+  * @param {String} master phrase
+  * @param {Boolean} push to storage or not
+  * @param {Object} phrase options[dictionary, word_count] etc
+  * @param {String} contract file name defined in conf.contracts
+  * @returns {Object} wallet data (keys, additional wallet props and phrase itself)
+  */
+async function getWalletData(_phrase, isNew, _options = {}, contract = null) {
   let phrase = _phrase;
 
   const options = _.assign({
@@ -13,24 +22,16 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
     phrase = clientPhrase.phrase;
   }
 
-  const keys = await conf.tonClient.crypto.mnemonic_derive_sign_keys({
-    phrase,
-    path: "m/44'/396'/0'/0/0",
-    ...options,
-  });
+  const keys = await phraseToKeys(phrase);
 
   if (conf.myPin && isNew) {
-    const network = conf.tonClient.config.network.server_address;
-    const payload = {
-      phrase,
-      network,
-    };
+    const payload = { phrase };
 
     if (contract && contract !== conf.contracts[0].file) {
       payload.contract = contract;
     }
 
-    await utils.storage.push('myPhrases', payload, conf.myPin);
+    await addNewWallet(payload);
   }
 
   const wallet = await getWalletByKeys(keys, contract);
@@ -42,4 +43,4 @@ async function createWallet(_phrase, isNew, _options = {}, contract = null) {
   };
 }
 
-export default createWallet;
+export default getWalletData;

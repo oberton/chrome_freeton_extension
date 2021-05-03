@@ -16,7 +16,16 @@ const transferAbi = {
   data: [],
 };
 
-// amount - размерность в TON
+/**
+  * @param {String} wallet from address
+  * @param {String} wallet to address
+  * @param {Number} amount in tons
+  * @param {String} comment for transaction
+  * @param {Boolean} force transaction, if receiver doesn't deployed yet
+  * @param {String} name of the contract defined in conf.contracts
+  * @param {String} ?
+  * @param {Object} ?
+  */
 async function sendTokens(from, to, amount, keys, comment = null, sendForce = true, _contract = null, functionName = null, parametersJSON = null) {
   let payload = '';
 

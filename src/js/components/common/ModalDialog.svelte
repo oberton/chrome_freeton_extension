@@ -75,7 +75,7 @@
     if (currentBlock) {
       hide();
       setTimeout(() => {
-        currentBlock.remove();
+        currentBlock && currentBlock.remove();
       });
     }
   });

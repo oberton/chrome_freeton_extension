@@ -1,16 +1,26 @@
 <div>
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
-      <div class='gtr-t-xs'>
+      <div class='gtr-t-xs' on:click={() => dispatch('open')}>
         <div class='text-md'>
           {#key accountType}
-            <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
+            <div class='smile pos-rel'>
+              <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
+              {#if pendingTransactions && pendingTransactions.length}
+                <div
+                  class='badge'
+                  use:tooltip
+                  data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
+                  {pendingTransactions.length}
+                </div>
+              {/if}
+            </div>
           {/key}
           {(balance || 0).toFixed(3)}
         </div>
         <div class='row-r-sm row-t-sm'>
           <div class='tbl' style='table-layout: fixed;'>
-            <div class='tbl-cell text-xs alg-m'>
+            <div class='tbl-cell text-xs alg-m' on:click={() => dispatch('open')}>
               {#if address}
                 <AddressEllipsis address={address}></AddressEllipsis>
               {/if}
@@ -59,7 +69,7 @@
     </div>
 
     {#if $flag.phraseDialog }
-      <ModalDialog on:close={toggleFlag.phraseDialog} headline='Master Password'>
+      <ModalDialog on:close={() => toggleFlag.phraseDialog(false)} headline='Master Password'>
         <div style='user-select: none;'>
           <div class='text-line'>
             {walletData.phrase}
@@ -72,13 +82,13 @@
     {/if}
 
     {#if $flag.pinFormDialog }
-      <ModalDialog on:close={toggleFlag.pinFormDialog} headline={t('actions.pin.enter')}>
+      <ModalDialog on:close={() => toggleFlag.pinFormDialog(false)} headline={t('actions.pin.enter')}>
         <PinForm pinError={pinError} on:submit={checkPin} />
       </ModalDialog>
     {/if}
 
     {#if $flag.sendCrystalFormDialog }
-      <ModalDialog on:close={toggleFlag.sendCrystalFormDialog} headline={t('actions.tokens.send')}>
+      <ModalDialog on:close={() => toggleFlag.sendCrystalFormDialog(false)} headline={t('actions.tokens.send')}>
         <SendTokensForm
           on:transactionSent={onTransactionSent}
           wallet={walletData.wallet}
@@ -90,7 +100,7 @@
 
     <BackupKeysDialog
       walletData={walletData}
-      on:close={toggleFlag.backupKeysDialog}
+      on:close={() => toggleFlag.backupKeysDialog(true)}
       shown={$flag.backupKeysDialog}>
     </BackupKeysDialog>
 
@@ -151,6 +161,7 @@
   let walletData = {};
   let address = '';
   let balance = 0;
+  let pendingTransactions;
   let accountType;
 
   let deploying = false;
@@ -175,22 +186,52 @@
     utils.toast.info(t('info.transaction.sent'));
   }
 
+  async function extractWalletOwners(wallet, keys) {
+    const customContract = wallet.contract && wallet[wallet.contract];
+    const owners = [`0x${keys.public}`];
+    if (!customContract || _.isEmpty(customContract.custodians)) {
+      return owners;
+    }
+    for (let i = 0; i < customContract.custodians.length; i += 1) {
+      const custodian = customContract.custodians[i];
+      console.log(custodian);
+      if (custodian.keys && custodian.keys.public) {
+        owners.push(`0x${custodian.keys.public}`);
+      } else if (custodian.phrase) {
+        const keys = await tonMethods.phraseToKeys(custodian.phrase);
+        owners.push(`0x${keys.public}`);
+      }
+    }
+    return owners;
+  }
+
   async function deployContract() {
     if (deploying) {
+      return;
+    }
+
+    if (_.get($$props, 'wallet.deploying')) {
       return;
     }
 
     deploying = true;
 
     const contract = $$props.wallet.contract || conf.contracts[0].file;
-
-    const [err, result] = await to(tonMethods.deployWalletContract(walletData.keys, contract, [`0x${walletData.keys.public}`], walletData.wallet.address));
+    const owners = await extractWalletOwners($$props.wallet, walletData.keys);
+    const [err, result] = await to(tonMethods.deployWalletContract(
+      walletData.keys,
+      contract,
+      owners,
+      walletData.wallet.address,
+      +_.get($$props, `wallet.${contract}.minConfirms`) || 1
+    ));
 
     if (err) {
       utils.exception(err);
       return;
     }
 
+    await utils.storage.assign('myPhrases', $$props.wallet.tmpId, {deploying: true}, conf.myPin);
     getBalance();
   }
 
@@ -213,9 +254,13 @@
       utils.exception(err);
       return;
     }
-
     if (accountType && accountType !== 'Active' && balance >= 0.5) {
       deployContract();
+    }
+
+    if (accountType === 'Active' && _.get($$props, 'wallet.contract') !== conf.contracts[0].file) {
+      pendingTransactions = await tonMethods.getPendingTransactionIds(address, $$props.wallet.contract);
+      console.log({pendingTransactions});
     }
 
     balanceTimeout = setTimeout(getBalance, 30000);

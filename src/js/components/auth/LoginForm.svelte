@@ -14,7 +14,7 @@
     <div class='text-center gtr-b-xs gtr-t-sm text-sm color-light'>
       {t('common.or')}
     </div>
-    <button on:click={toggleFlag.createWalletDialog} class='btn-blue-light font-bold full-width' type='button'>
+    <button on:click={() => toggleFlag.createWalletDialog(false)} class='btn-blue-light font-bold full-width' type='button'>
       {t('actions.wallet.create')}
     </button>
   </div>

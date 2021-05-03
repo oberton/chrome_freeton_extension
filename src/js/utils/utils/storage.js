@@ -148,6 +148,22 @@ function splice(key, index, count, pin = conf.myPin) {
   });
 }
 
+async function assign(key, id, params = {}, pin = conf.myPin) {
+  const value = await getArrayValue(key, pin);
+  const item = _.find(value, i => i.tmpId === id);
+
+  if (!item) {
+    return;
+  }
+  _.assign(item, params);
+
+  let strValue = JSON.stringify(value);
+  if (pin) {
+    strValue = crypto.encrypt(strValue, pin);
+  }
+  await set({[key]: strValue});
+}
+
 export default {
   get,
   set,
@@ -155,4 +171,5 @@ export default {
   getArrayValue,
   push,
   splice,
+  assign,
 };

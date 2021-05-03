@@ -1,9 +1,9 @@
 let localeHash = {};
 
-export function t(key, raw = false) {
-  const value = _.get(localeHash, key, key);
-  if (!_.isString(value) && !raw) {
-    return JSON.stringify(value);
+export function t(key, data = {}) {
+  let value = _.get(localeHash, key, key);
+  if (value && !_.isEmpty(data)) {
+    value = _.template(value)(data);
   }
   return value;
 }

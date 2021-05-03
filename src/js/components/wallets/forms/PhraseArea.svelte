@@ -1,4 +1,4 @@
-<div>
+<div class='c-phrase-area'>
   <FormTextArea
     required={true}
     bind:value={phrase}
@@ -34,4 +34,17 @@
   function onAreaKeydown() {
     wordsPlaceholder = getWordsPlaceholder(phrase.trim());
   }
+
+  function onAreaChange() {
+    setTimeout(onAreaKeydown);
+  }
+
+  svelte.onMount(() => {
+    utils.eventBus.on('area-change', onAreaChange);
+  });
+
+  svelte.onDestroy(() => {
+    utils.eventBus.off('area-change', onAreaChange);
+  });
+
 </script>

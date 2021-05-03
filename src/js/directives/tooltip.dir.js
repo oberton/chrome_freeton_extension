@@ -64,6 +64,12 @@ function tooltip(node) {
 
   return {
     destroy() {
+      if (activeTooltip) {
+        if (activeTooltip.__popperInstance) {
+          activeTooltip.__popperInstance.destroy();
+        }
+        activeTooltip.remove();
+      }
       node.removeEventListener('mouseenter', onHover);
       node.removeEventListener('mouseleave', hideAll);
     },

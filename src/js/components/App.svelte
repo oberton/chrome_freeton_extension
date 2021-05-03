@@ -56,7 +56,7 @@
     {/if}
 
     {#if $flag.languageDialog}
-      <ModalDialog on:close={toggleFlag.languageDialog} headline={t('actions.change_language')}>
+      <ModalDialog on:close={() => toggleFlag.languageDialog(false)} headline={t('actions.change_language')}>
         <div>
           {#each supportedLocales as locale }
             <div class='tooltip-menu-item' on:click={() => setLocale(locale[0])}>{locale[1]}</div>

@@ -8,6 +8,9 @@ info:
   copied: "Copied"
   telegram_chat_link: 'Oberton Telegram Chat'
 
+  transactions:
+    has_pending: '<%= count %> pending transactions.'
+
   upload:
     invalid_keys: 'Invalid File Input'
 
@@ -70,6 +73,7 @@ actions:
     refresh: 'Refresh Wallets'
 
   phrase:
+    generate: 'Generate New Master Password'
     backup: "Backup Master Password"
     backup_keys: 'Backup Key Pair'
 
@@ -94,6 +98,7 @@ labels:
   to: 'To'
   amount: 'Amount'
   comment: 'Comment (optional)'
+  choose_one: 'Choose an option'
   ton:
     server: "Network"
   master_password: 'Master Password'
@@ -108,9 +113,10 @@ labels:
     plural: 'Custodians'
     add: 'Add Custodian'
     set:
-      public_key: 'Public Key only (Address)'
-      keys: 'Add Key Pair'
-      phrase: 'Add Master Password'
+      public_key: 'Public Key only'
+      keys: 'Add Key Pair to be able to confirm transactions by the added custodian.'
+      phrase: 'Add Master Password to be able to confirm transactions by the added custodian.'
+
   multisig:
     min_confirms: 'Min. confirms for transaction'
 
