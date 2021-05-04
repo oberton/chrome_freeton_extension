@@ -84,8 +84,7 @@ async function getTransactionIds(address, abiWalletDir) {
     } 
   });
   
-  // return response.decoded.output.ids;
-  return response.decoded.output;
+  return response.decoded.output.ids;
 }
 
 async function getAccountType(address) {
@@ -490,22 +489,39 @@ async function getTransactionList(accountAddr, limit=50, ignoreIds=[]) {
 }
 
 
-// получить кол-во транзакций для аккаунта
-async function subscribeToTransactions(accountAddr) {
+// подписка на транзакции
+async function subscribeToTransactions(accountAddrs = [], callback = function(){}) {
 
   let result = await conf.tonClient.net.subscribe_collection(
     {
       collection: 'transactions',
       filter: { 
         account_addr: { 
-          eq: accountAddr
+          in: accountAddrs
         } 
       },
-      result: "id account_addr"
+      result: "id account_addr in_message{id src dst msg_type_name value(format: DEC) created_at} now total_fees(format: DEC)"
     },
-    function(val) {
-      console.log(val);
-    }
+    callback
+  )
+
+  return result;
+}
+
+// подписка на изменения аккаунта - баланс
+async function subscribeToAccounts(accountAddrs = [], callback = function(){}) {
+
+  let result = await conf.tonClient.net.subscribe_collection(
+    {
+      collection: 'accounts',
+      filter: { 
+        id: { 
+          in: accountAddrs
+        } 
+      },
+      result: "id balance(format: DEC)"
+    },
+    callback
   )
 
   return result;
@@ -518,8 +534,47 @@ async function unsubscribe(handle) {
   return result;
 }
 
+// инфо о транзакции
+async function getTransactionInfo(address, abiWalletDir, transactionId) {
 
+  let account = await conf.tonClient.net.query_collection({
+      collection: 'accounts',
+      filter: { id: { eq: address } },
+      result: 'boc'
+  })
 
+  let abiValue = await fetchAbi(abiWalletDir);
+
+  const message_encode_params = {
+    address: address,
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    },
+    call_set: {
+      function_name: 'getTransaction',
+      input: {
+        transactionId: transactionId
+      }
+    },
+    signer: {
+      type: 'None'
+    }
+  };
+
+  let encoded_message = await conf.tonClient.abi.encode_message(message_encode_params);
+  
+  let response = await conf.tonClient.tvm.run_tvm({ 
+    message: encoded_message.message, 
+    account: account.result[0].boc, 
+    abi: {
+      type: 'Serialized',
+      value: abiValue,
+    } 
+  });
+  
+  return response.decoded.output;
+}
 
 
 
@@ -549,10 +604,16 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
   console.log(walletAddr);
   console.log(keys);
 
-  // let subscribeResult = await subscribeToTransactions(walletAddr);
-  // console.log(subscribeResult);
-  // let handle = subscribeResult.handle;
-  // console.log(handle);
+
+  // TEST SUBSCRIBE
+  let subscribeResult = await subscribeToTransactions([walletAddr], function(val) { console.log(val) });
+  let subscribeResult2 = await subscribeToAccounts([walletAddr], function(val) { console.log(val) });
+  console.log(subscribeResult);
+  console.log(subscribeResult2);
+  let handle = subscribeResult.handle;
+  let handle2 = subscribeResult2.handle;
+  console.log(handle);
+  console.log(handle2);
   // let unsubscribeHandle = await unsubscribe(handle);
   // console.log(unsubscribeHandle);
 
@@ -564,9 +625,11 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
   // let output = await getTransactionList(walletAddr, 50, []);
   // console.log(output);
 
-  let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
-  console.log(output);
+  // let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
+  // console.log(output);
 
+  // let output = await getTransactionInfo(walletAddr, abiSafeWalletDir, "6958226000927295873");
+  // console.log(output);
   
   
   
