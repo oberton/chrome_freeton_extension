@@ -2,7 +2,7 @@
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
       <div class='gtr-t-xs'>
-        <div class='text-md' on:click={() => dispatch('open')}>
+        <div class='text-md pointer' on:click={() => dispatch('open')}>
           {#key accountType}
             <div class='smile pos-rel'>
               <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
@@ -20,7 +20,7 @@
         </div>
         <div class='row-r-sm row-t-sm'>
           <div class='tbl' style='table-layout: fixed;'>
-            <div class='tbl-cell text-xs alg-m' on:click={() => dispatch('open')}>
+            <div class='tbl-cell text-xs alg-m pointer' on:click={() => dispatch('open')}>
               {#if address}
                 <AddressEllipsis address={address}></AddressEllipsis>
               {/if}
