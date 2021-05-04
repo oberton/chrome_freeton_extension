@@ -84,7 +84,8 @@ async function getTransactionIds(address, abiWalletDir) {
     } 
   });
   
-  return response.decoded.output.ids;
+  // return response.decoded.output.ids;
+  return response.decoded.output;
 }
 
 async function getAccountType(address) {
@@ -482,7 +483,6 @@ async function getTransactionList(accountAddr, limit=50, ignoreIds=[]) {
         {path: 'lt', direction: 'DESC'},
       ],
       limit: limit,
-      // result: 'id balance(format: DEC) code_hash acc_type_name'
       result: 'id lt(format: DEC) aborted account_addr in_message{id src dst msg_type_name value(format: DEC) created_at} now total_fees(format: DEC)'
   })
 
@@ -490,8 +490,33 @@ async function getTransactionList(accountAddr, limit=50, ignoreIds=[]) {
 }
 
 
+// получить кол-во транзакций для аккаунта
+async function subscribeToTransactions(accountAddr) {
+
+  let result = await conf.tonClient.net.subscribe_collection(
+    {
+      collection: 'transactions',
+      filter: { 
+        account_addr: { 
+          eq: accountAddr
+        } 
+      },
+      result: "id account_addr"
+    },
+    function(val) {
+      console.log(val);
+    }
+  )
+
+  return result;
+}
 
 
+// получить кол-во транзакций для аккаунта
+async function unsubscribe(handle) {
+  let result = await conf.tonClient.net.unsubscribe({handle: handle});
+  return result;
+}
 
 
 
@@ -524,14 +549,23 @@ async function stakeNow(walletAddr, keys, depoolAddr, abiDepoolDir, abiWalletDir
   console.log(walletAddr);
   console.log(keys);
 
-  let transactionsCount = await getTransactionsCount(walletAddr);
-  console.log(transactionsCount);
-  
-  let output = await getTransactionList(walletAddr, 50, []);
-  console.log(output);
+  // let subscribeResult = await subscribeToTransactions(walletAddr);
+  // console.log(subscribeResult);
+  // let handle = subscribeResult.handle;
+  // console.log(handle);
+  // let unsubscribeHandle = await unsubscribe(handle);
+  // console.log(unsubscribeHandle);
 
-  // let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
+  // getTransactionIds(address, abiWalletDir)
+
+  // let transactionsCount = await getTransactionsCount(walletAddr);
+  // console.log(transactionsCount);
+  
+  // let output = await getTransactionList(walletAddr, 50, []);
   // console.log(output);
+
+  let output = await getTransactionIds(walletAddr, abiSafeWalletDir);
+  console.log(output);
 
   
   

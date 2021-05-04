@@ -1,8 +1,8 @@
 <div>
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
-      <div class='gtr-t-xs' on:click={() => dispatch('open')}>
-        <div class='text-md'>
+      <div class='gtr-t-xs'>
+        <div class='text-md' on:click={() => dispatch('open')}>
           {#key accountType}
             <div class='smile pos-rel'>
               <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
