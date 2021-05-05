@@ -6,7 +6,7 @@
       style='height: 45px; margin-bottom: -45px; display: block;'>
       <button
         type="button"
-        class="btn-blue-light btn-round"
+        class="btn-dim-light btn-round"
         use:tooltipMenu
         title={t('actions.logout')}>
           <span class="icon-cog text-lg"></span>

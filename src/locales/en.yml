@@ -5,6 +5,10 @@ main:
     stakes: "MyStakes"
 
 info:
+  account_type:
+    active: 'Active'
+    inactive: 'Inactive'
+
   copied: "Copied"
   telegram_chat_link: 'Oberton Telegram Chat'
 
@@ -42,11 +46,23 @@ info:
   transaction:
     error: "Send Transaction Failed"
     sent: "Transaction Sent"
+    pending:
+      one: 'There is 1 transaction is waiting for confirmation.'
+      many: 'There are <%= count %> transactions are waiting for confirmation.'
 
   custodians:
     already_exists: 'Custodian already exists'
 
+confirm:
+  selected: 'Confirm Selected'
+  transactions: 'Confirm Transactions'
+  download_transaction_info: 'Download transaction JSON'
+
 actions:
+  go_back: 'Go Back'
+  select_all: 'Select All'
+  deselect_all: 'Deselect All'
+
   change_language: 'Change Language'
   logout: "Logout"
 

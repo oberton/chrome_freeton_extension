@@ -2,7 +2,7 @@
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
       <div class='gtr-t-xs'>
-        <div class='text-md' on:click={() => dispatch('open')}>
+        <div class='text-md pointer' on:click={() => dispatch('open')}>
           {#key accountType}
             <div class='smile pos-rel'>
               <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
@@ -20,7 +20,7 @@
         </div>
         <div class='row-r-sm row-t-sm'>
           <div class='tbl' style='table-layout: fixed;'>
-            <div class='tbl-cell text-xs alg-m' on:click={() => dispatch('open')}>
+            <div class='tbl-cell text-xs alg-m pointer' on:click={() => dispatch('open')}>
               {#if address}
                 <AddressEllipsis address={address}></AddressEllipsis>
               {/if}
@@ -194,7 +194,6 @@
     }
     for (let i = 0; i < customContract.custodians.length; i += 1) {
       const custodian = customContract.custodians[i];
-      console.log(custodian);
       if (custodian.keys && custodian.keys.public) {
         owners.push(`0x${custodian.keys.public}`);
       } else if (custodian.phrase) {
@@ -258,9 +257,12 @@
       deployContract();
     }
 
+    if (!accountType) {
+      accountType = 'Inactive';
+    }
+
     if (accountType === 'Active' && _.get($$props, 'wallet.contract') !== conf.contracts[0].file) {
       pendingTransactions = await tonMethods.getPendingTransactionIds(address, $$props.wallet.contract);
-      console.log({pendingTransactions});
     }
 
     balanceTimeout = setTimeout(getBalance, 30000);

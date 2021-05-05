@@ -1,0 +1,9 @@
+.alert {
+  padding: 1em;
+  background: #fff7e7;
+  color: #FF9800;
+  transition-duration: 200ms;
+  &:hover {
+    box-shadow: rgba(20, 28, 98, 0.1) 0px 5px 20px;
+  }
+}
