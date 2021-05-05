@@ -16,6 +16,7 @@
       </WalletsList>
     {:else if activeTab === 'walletDetails'}
       <WalletItemMain
+        on:close={() => activeTab = t('main.tabs.wallets')}
         wallet={activeWallet}>
       </WalletItemMain>
     {:else if activeTab === t('main.tabs.depools') }

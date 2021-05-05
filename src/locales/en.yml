@@ -5,6 +5,10 @@ main:
     stakes: "MyStakes"
 
 info:
+  account_type:
+    active: 'Active'
+    inactive: 'Inactive'
+
   copied: "Copied"
   telegram_chat_link: 'Oberton Telegram Chat'
 
@@ -55,6 +59,7 @@ confirm:
   download_transaction_info: 'Download transaction JSON'
 
 actions:
+  go_back: 'Go Back'
   select_all: 'Select All'
   deselect_all: 'Deselect All'
 

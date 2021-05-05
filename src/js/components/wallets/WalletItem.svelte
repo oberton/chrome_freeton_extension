@@ -257,6 +257,10 @@
       deployContract();
     }
 
+    if (!accountType) {
+      accountType = 'Inactive';
+    }
+
     if (accountType === 'Active' && _.get($$props, 'wallet.contract') !== conf.contracts[0].file) {
       pendingTransactions = await tonMethods.getPendingTransactionIds(address, $$props.wallet.contract);
     }

@@ -1,24 +1,46 @@
 <div>
-  {#if address}
-    <div class='gtr-r-2x text-line gtr-t-sm'>
-      <div class='tbl fixed gtr-r-sm'>
-        <div class='tbl-cell alg-m cell-gtr'>
-          {#key accountType}
-            <div class='smile pos-rel'>
-              <WalletGemIcon accountType={accountType} contract={wallet.contract}></WalletGemIcon>
-              {#if pendingTransactions && pendingTransactions.length}
-                <div
-                  class='badge'
-                  use:tooltip
-                  data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
-                  {pendingTransactions.length}
-                </div>
-              {/if}
+
+  <div>
+    <button
+      type="button"
+      class="btn-dim-light btn-round"
+      on:click={() => dispatch('close')}
+      use:tooltip
+      data-tooltip={t('actions.go_back')}>
+      <span class="text-md icon-arrow-left" style='color: #444;'></span>
+    </button>
+
+    <div class='smile alg-m text-lg'>
+      {#key accountType}
+        <div class='smile pos-rel'>
+          <WalletGemIcon accountType={accountType} contract={wallet.contract}></WalletGemIcon>
+          {#if pendingTransactions && pendingTransactions.length}
+            <div
+              class='badge'
+              use:tooltip
+              data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
+              {pendingTransactions.length}
             </div>
-          {/key}
+          {/if}
         </div>
+      {/key}
+    </div>
+    <div class='text-md smile alg-m gtr-l-xs'>
+      {balance.toFixed(3)}
+    </div>
+  </div>
+  {#if address && accountType}
+    <div class='text-line gtr-hor-2x text-xs'>
+      {#key accountType}
+        <div class={'label-' + (accountType === 'Active' ? 'green' : 'dim')}>
+          {t('info.account_type.' + accountType.toLowerCase())}
+        </div>
+      {/key}
+    </div>
+    <div class='text-line'>
+      <div class='tbl fixed'>
         <div class='tbl-cell alg-m text-sm gtr-l'>
-          <AddressEllipsis take='9' address={address}></AddressEllipsis>
+          <AddressEllipsis take='13' address={address}></AddressEllipsis>
         </div>
         <div class='tbl-cell alg-m cell-gtr'>
           <CopyTextBtn
@@ -61,13 +83,16 @@
     'confirmPendingsDialog',
   ]);
 
+  const dispatch = svelte.createEventDispatcher();
+
   let walletData;
   let pendingTransactions;
-  let accountType;
+  let accountType = '';
   let err;
 
   let address;
   let contract;
+  let balance = 0;
 
   async function loadPendingTransactions() {
     pendingTransactions = await tonMethods.getPendingTransactionIds(address, contract);
@@ -76,6 +101,16 @@
   function onTransactionConfirmed() {
     loadPendingTransactions();
     toggleFlag.confirmPendingsDialog(false);
+  }
+
+  async function getBalance() {
+    const [err, data] = await to(tonMethods.getBalance(address));
+
+    if (err) {
+      utils.exception(err);
+    }
+
+    balance = _.get(data, 'result.balance', 0) / 1000000000;
   }
 
   svelte.onMount(async () => {
@@ -96,9 +131,15 @@
       }
     }
 
-    address = _.get(walletData, 'wallet.address');
+    address = _.get(walletData, 'wallet.address') || walletData.address;
+
+    await getBalance();
 
     [err, accountType] = await to(tonMethods.getAccountType(address));
+
+    if (!accountType) {
+      accountType = 'Inactive';
+    }
 
     if (err) {
       utils.exception(err);

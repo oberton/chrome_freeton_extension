@@ -1,6 +1,6 @@
 <button
   type='button'
-  class='btn-blue-light btn-round'
+  class='btn-dim-light btn-round'
   use:tooltip
   data-tooltip={copying ? t('info.copied') : $$props.label}
   on:click={copyValue}>

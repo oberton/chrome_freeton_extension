@@ -1,0 +1,17 @@
+%label-base {
+  display: inline-block;
+  padding: 0.2em 0.8em;
+  border-radius: 1em;
+  border: 1px solid;
+}
+
+.label {
+  @each $color in $ui-colors {
+    &-#{nth($color, 1)} {
+      @extend %label-base;
+      color: nth($color, 2);
+      border-color: rgba(nth($color, 2), 0.5);
+      background-color: rgba(nth($color, 2), 0.1);
+    }
+  }
+}
