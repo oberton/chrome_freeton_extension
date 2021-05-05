@@ -66,4 +66,38 @@
     transition-property: color,bottom,transform;
     pointer-events: none;
   }
+
+
+  &-checkbox {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    input {
+      position: absolute;
+      left: -999em;
+      + span {
+        width: 1em;
+        height: 1em;
+        position: relative;
+        display: block;
+        background: white;
+        box-shadow: 0 0 0 2px #ddd;
+        border-radius: 2px;
+        line-height: 1;
+      }
+      &:checked {
+        + span {
+          background: #0083e0;
+          color: white;
+          box-shadow: 0 0 0 2px #0083e0;
+          &:before {
+            @include icon-pseudo($icon-check);
+          }
+        }
+      }
+    }
+    &.indeterminated input:checked + span:before {
+      @include icon-pseudo($icon-minus);
+    }
+  }
 }

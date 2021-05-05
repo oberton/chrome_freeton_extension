@@ -194,7 +194,6 @@
     }
     for (let i = 0; i < customContract.custodians.length; i += 1) {
       const custodian = customContract.custodians[i];
-      console.log(custodian);
       if (custodian.keys && custodian.keys.public) {
         owners.push(`0x${custodian.keys.public}`);
       } else if (custodian.phrase) {
@@ -260,7 +259,6 @@
 
     if (accountType === 'Active' && _.get($$props, 'wallet.contract') !== conf.contracts[0].file) {
       pendingTransactions = await tonMethods.getPendingTransactionIds(address, $$props.wallet.contract);
-      console.log({pendingTransactions});
     }
 
     balanceTimeout = setTimeout(getBalance, 30000);

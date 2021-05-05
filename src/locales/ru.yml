@@ -43,8 +43,17 @@ info:
     error: "Отправка транзакции не удалась"
     sent: "Транзакция отправлена"
 
+    pending:
+      one: 'Одна транзакция нуждается в подтверждении.'
+      many: 'Несколько транзакций (<%= count %>) нуждаются в подтверждении.'
+
   custodians:
     already_exists: 'Кастодиан уже существует'
+
+confirm:
+  selected: 'Подтвердить выбранные'
+  transactions: 'Подтвердить транзакции'
+  download_transaction_info: 'Посмотреть JSON транзакции'
 
 actions:
   change_language: 'Сменить язык'
