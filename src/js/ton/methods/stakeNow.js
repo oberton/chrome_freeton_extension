@@ -534,7 +534,7 @@ async function unsubscribe(handle) {
   return result;
 }
 
-// инфо о транзакции
+// инфо о пендинг транзакции
 async function getTransactionInfo(address, abiWalletDir, transactionId) {
 
   let account = await conf.tonClient.net.query_collection({
