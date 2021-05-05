@@ -55,6 +55,9 @@ confirm:
   download_transaction_info: 'Download transaction JSON'
 
 actions:
+  select_all: 'Select All'
+  deselect_all: 'Deselect All'
+
   change_language: 'Change Language'
   logout: "Logout"
 

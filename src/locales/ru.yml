@@ -56,6 +56,9 @@ confirm:
   download_transaction_info: 'Посмотреть JSON транзакции'
 
 actions:
+  select_all: 'Выбрать все'
+  deselect_all: 'Снять выбор'
+
   change_language: 'Сменить язык'
   logout: "Выход"
 
