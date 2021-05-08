@@ -78,7 +78,7 @@
 
   async function setLocale(locale) {
     toggleFlag.languageDialog();
-    await utils.changeLocale(locale);
+    await utils.changeLocale(locale, true);
     currentLocale = locale;
   }
 

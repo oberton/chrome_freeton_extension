@@ -111,6 +111,9 @@ actions:
   transaction:
     copy_id: 'Copy Transaction ID'
 
+  message:
+    copy_id: 'Copy Message ID'
+
 labels:
   advanced: 'Advanced'
   from: 'From'
@@ -145,6 +148,8 @@ labels:
   transaction:
     id: 'Transaction ID'
 
+  message:
+    id: 'Message ID'
 
 common:
   or: "or"

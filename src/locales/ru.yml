@@ -99,7 +99,7 @@ actions:
     with_phrase: "Войти с помощью мастер-пароля"
 
   common:
-    delete_item: "Удалить" 
+    delete_item: "Удалить"
   copy_key:
     public: 'Скопировать публичный ключ'
     secret: 'Скопировать секретный ключ'
@@ -110,6 +110,9 @@ actions:
 
   transaction:
     copy_id: 'Копировать ID транзакции'
+
+  message:
+    copy_id: 'Копировать ID сообщения'
 
 labels:
   advanced: 'Дополнительно'
@@ -143,6 +146,9 @@ labels:
 
   transaction:
     id: 'ID тразакции'
+
+  message:
+    id: 'ID сообщения'
 
 common:
   or: "или"
