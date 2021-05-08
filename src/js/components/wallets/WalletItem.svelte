@@ -2,7 +2,7 @@
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
       <div class='gtr-t-xs'>
-        <div class='text-md pointer' on:click={() => dispatch('open')}>
+        <div class={'text-md' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
           {#key accountType}
             <div class='smile pos-rel'>
               <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
@@ -20,7 +20,7 @@
         </div>
         <div class='row-r-sm row-t-sm'>
           <div class='tbl' style='table-layout: fixed;'>
-            <div class='tbl-cell text-xs alg-m pointer' on:click={() => dispatch('open')}>
+              <div class={'tbl-cell text-xs alg-m' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
               {#if address}
                 <AddressEllipsis address={address}></AddressEllipsis>
               {/if}
@@ -130,6 +130,8 @@
 
 <script>
 
+  // FIXME <debug vars>
+
   let stakeForm = {
     address: '',
     summ: 0,
@@ -149,6 +151,9 @@
   }
 
   const showDevTool = NODE_ENV !== 'production' && conf.showDevTool;
+
+  // FIXME </debug vars>
+
   const { flag, toggleFlag } = utils.initFlags([
     'phraseDialog',
     'pinFormDialog',
@@ -232,6 +237,13 @@
 
     await utils.storage.assign('myPhrases', $$props.wallet.tmpId, {deploying: true}, conf.myPin);
     getBalance();
+  }
+
+  function openWallet() {
+    if (!accountType || accountType !== 'Active') {
+      return;
+    }
+    dispatch('open');
   }
 
   async function getBalance() {

@@ -108,6 +108,9 @@ actions:
     public: 'Paste Public Key'
     secret: 'Paste Secret Key'
 
+  transaction:
+    copy_id: 'Copy Transaction ID'
+
 labels:
   advanced: 'Advanced'
   from: 'From'
@@ -121,6 +124,9 @@ labels:
   wallet:
     contract: 'Contract to deploy'
     word_count: 'Words Count'
+    messages: 'Messages'
+    transactions: 'Transactions'
+
   keys:
     public: 'Public Key'
     secret: 'Secret Key'
@@ -135,6 +141,10 @@ labels:
 
   multisig:
     min_confirms: 'Min. confirms for transaction'
+
+  transaction:
+    id: 'Transaction ID'
+
 
 common:
   or: "or"

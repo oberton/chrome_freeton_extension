@@ -108,6 +108,9 @@ actions:
     public: 'Вставить публичный ключ'
     secret: 'Вставить секретный ключ'
 
+  transaction:
+    copy_id: 'Копировать ID транзакции'
+
 labels:
   advanced: 'Дополнительно'
   from: 'От'
@@ -121,6 +124,9 @@ labels:
   wallet:
     contract: 'Применить контракт'
     word_count: 'Количество слов'
+    messages: 'Сообщения'
+    transactions: 'Транзакции'
+
   keys:
     public: 'Публичный Ключ'
     secret: 'Секретный Ключ'
@@ -134,6 +140,9 @@ labels:
 
   multisig:
     min_confirms: 'Мин. подтверждений транзакции'
+
+  transaction:
+    id: 'ID тразакции'
 
 common:
   or: "или"

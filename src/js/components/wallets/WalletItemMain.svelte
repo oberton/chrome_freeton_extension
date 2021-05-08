@@ -1,4 +1,4 @@
-<div>
+<div class='gtr-t-xs'>
 
   <div>
     <button
@@ -29,39 +29,45 @@
       {balance.toFixed(3)}
     </div>
   </div>
-  {#if address && accountType}
-    <div class='text-line gtr-hor-2x text-xs'>
-      {#key accountType}
-        <div class={'label-' + (accountType === 'Active' ? 'green' : 'dim')}>
-          {t('info.account_type.' + accountType.toLowerCase())}
-        </div>
-      {/key}
-    </div>
-    <div class='text-line'>
-      <div class='tbl fixed'>
-        <div class='tbl-cell alg-m text-sm gtr-l'>
-          <AddressEllipsis take='13' address={address}></AddressEllipsis>
-        </div>
-        <div class='tbl-cell alg-m cell-gtr'>
-          <CopyTextBtn
-            label={t('actions.address.copy')}
-            value={address}>
-          </CopyTextBtn>
-        </div>
+
+  {#if pendingTransactions && pendingTransactions.length}
+    <div class='gtr-ver-sm'>
+      <div class='alert alert-warning pointer' on:click={toggleFlag.confirmPendingsDialog}>
+        {#if pendingTransactions.length === 1}
+          {t('info.transaction.pending.one')}
+        {:else}
+          {t('info.transaction.pending.many', {count: pendingTransactions.length})}
+        {/if}
       </div>
     </div>
   {/if}
 
-  {#if pendingTransactions && pendingTransactions.length}
-    <div class='alert alert-warning pointer' on:click={toggleFlag.confirmPendingsDialog}>
-      {#if pendingTransactions.length === 1}
-        {t('info.transaction.pending.one')}
-      {:else}
-        {t('info.transaction.pending.many', {count: pendingTransactions.length})}
-      {/if}
-    </div>
-  {/if}
+  {#if address && accountType}
 
+    <div class='text-line'>
+      <div class='tabs'>
+        {#each ['messages', 'transactions'] as tab}
+          <div
+            class={"tabs-item cell-6" + (activeTab === tab ? " active" : "")}
+            on:click={() => activeTab = tab}>
+            {t('labels.wallet.' + tab)}
+          </div>
+        {/each}
+      </div>
+    </div>
+
+    {#if activeTab === 'messages'}
+      <AddressMessagesList
+        hasAlert={pendingTransactions && pendingTransactions.length}
+        address={address}>
+      </AddressMessagesList>
+    {:else if activeTab === 'transactions'}
+      <AddressTransactionsList
+        hasAlert={pendingTransactions && pendingTransactions.length}
+        address={address}>
+      </AddressTransactionsList>
+    {/if}
+  {/if}
 
   {#if $flag.confirmPendingsDialog}
     <ModalDialog on:close={() => toggleFlag.confirmPendingsDialog(false)} headline={t('confirm.transactions')}>
@@ -89,6 +95,7 @@
   let pendingTransactions;
   let accountType = '';
   let err;
+  let activeTab = 'messages';
 
   let address;
   let contract;

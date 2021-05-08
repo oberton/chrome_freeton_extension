@@ -25,8 +25,7 @@
           </div>
           <div class='tbl-cell cell-9 alg-m'>
             <div class='smile' use:tooltip data-tooltip={t('labels.amount')}>
-              <span class='smile alg-m gtr-r-xs icon-gem color-blue'></span>
-              {(transaction.value / 1_000_000_000).toFixed(3)}
+              <TonAmount value={transaction.value}></TonAmount>
             </div>
             <div>
               <div class='tbl fixed'>

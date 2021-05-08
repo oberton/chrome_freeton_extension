@@ -1,12 +1,14 @@
 $blue-base: #0083e0;
 $red-base: #e71717;
 $color-label: #8c96a7;
+$green-base: #59a909;
 
 $text-colors: (
   ('label', $color-label),
   ('dim', #666),
   ('blue', $blue-base),
   ('red', $red-base),
+  ('green', $green-base),
   ('light', #bbb),
 );
 
@@ -14,5 +16,5 @@ $ui-colors: (
   ('red', $red-base),
   ('blue', $blue-base),
   ('dim', #8c96a7),
-  ('green', #59a909),
+  ('green', $green-base),
 );

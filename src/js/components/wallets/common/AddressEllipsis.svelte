@@ -1,10 +1,11 @@
-<div class='smile cell-12' use:tooltip data-tooltip={address} style='font-family: monospace;'>
+<div class='smile cell-12' use:tooltip data-tooltip={(label ? label + ': ' : '') + address} style='font-family: monospace;'>
   {addressToShow}
 </div>
 
 <script>
   export let address;
   export let take;
+  export let label;
 
   let addressToShow;
 

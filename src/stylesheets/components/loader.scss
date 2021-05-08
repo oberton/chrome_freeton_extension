@@ -93,3 +93,11 @@
   right: 0;
   z-index: 100;
 }
+
+.list-loader {
+  position: relative;
+  background-image: url('/images/loader.gif');
+  background-color: #f5f6f7;
+  background-repeat: repeat-y;
+  background-size: 100% 1px;
+}
