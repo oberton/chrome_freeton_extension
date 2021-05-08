@@ -1,6 +1,6 @@
 <div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 266 : 350) + "px"}>
-    {#each messages as message}
+  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 263 : 350) + "px"}>
+    {#each messages as message (message.id)}
       <div class='gtr-b-xxs'>
         <div class='tbl fixed hover-parent'>
           <div class='tbl-cell'>
@@ -74,19 +74,22 @@
   let messagesCount;
   let loading = false;
 
+  let subscribeHandleIn;
+  let subscribeHandleOut;
+
   function decorateMessage(message) {
     message.createdAt = new Date(+`${message.created_at}000`);
     message.msgType = msgTypes[message.msg_type];
     return message;
   }
 
-  const filter1 = {
+  const filterOut = {
     src: {
       eq: address,
     },
   };
 
-  const filter2 = {
+  const filterIn = {
     dst: {
       eq: address,
     },
@@ -101,33 +104,33 @@
 
     loading = true;
 
-    const [err1, response1 ] = await to(tonMethods.getMessagesList(address, 15, filter1));
+    const [errOut, responseOut ] = await to(tonMethods.getMessagesList(address, 15, filterOut));
 
-    if (err1) {
-      utils.exception(err1);
+    if (errOut) {
+      utils.exception(errOut);
       return;
     }
 
-    const [err2, response2 ] = await to(tonMethods.getMessagesList(address, 15, filter2));
+    const [errIn, responseIn ] = await to(tonMethods.getMessagesList(address, 15, filterIn));
 
-    if (err2) {
-      utils.exception(err2);
+    if (errIn) {
+      utils.exception(errIn);
       return;
     }
 
-    _.assign(filter1, {
+    _.assign(filterOut, {
       created_at: {
-        le: _.last(response1).created_at,
+        le: _.last(responseOut).created_at,
       },
     });
 
-    _.assign(filter2, {
+    _.assign(filterIn, {
       created_at: {
-        le: _.last(response2).created_at,
+        le: _.last(responseIn).created_at,
       },
     });
 
-    const result = _([...response1, ...response2])
+    const result = _([...responseIn, ...responseOut])
       .map(decorateMessage)
       .sortBy('createdAt')
       .reverse()
@@ -138,6 +141,11 @@
     messages = [...messages, ...result];
   }
 
+  function onNewMessage(data) {
+    messages = [decorateMessage(data.result), ...messages];
+    messagesCount += 1;
+  }
+
   svelte.onMount(async () => {
     const [err, response] = await to(tonMethods.getMessagesCount(address));
     if (err) {
@@ -146,5 +154,17 @@
     }
     messagesCount = response;
     loadMore();
+
+    subscribeHandleIn = await tonMethods.subscribeForMessages(filterIn, onNewMessage);
+    subscribeHandleOut = await tonMethods.subscribeForMessages(filterOut, onNewMessage);
+  });
+
+  svelte.onDestroy(async () => {
+    if (subscribeHandleIn) {
+      await tonMethods.unsubscribe(subscribeHandleIn);
+    }
+    if (subscribeHandleOut) {
+      await tonMethods.unsubscribe(subscribeHandleOut);
+    }
   });
 </script>

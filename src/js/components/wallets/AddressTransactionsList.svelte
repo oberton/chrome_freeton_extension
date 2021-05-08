@@ -1,7 +1,7 @@
 <div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 266 : 350) + "px"}>
-    {#each transactions as transaction}
-      <div class='gtr-b-xxs'>
+  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 263 : 350) + "px"}>
+    {#each transactions as transaction (transaction.id)}
+      <div class='gtr-b-xxs fadeIn'>
         <div class='tbl fixed hover-parent'>
           <div class='tbl-cell'>
             <div>
@@ -51,6 +51,7 @@
   let transactions = [];
   let transactionsCount;
   let loading = false;
+  let subscribeHandle;
 
   function decorateTransaction(transaction) {
 
@@ -60,6 +61,11 @@
     });
 
     return transaction;
+  }
+
+  function onNewTransaction(data) {
+    transactions = [decorateTransaction(data.result), ...transactions];
+    transactionsCount += 1;
   }
 
   async function loadMore() {
@@ -94,5 +100,12 @@
     }
     transactionsCount = response;
     loadMore();
+    subscribeHandle = await tonMethods.subscribeForTransactions([address], onNewTransaction);
+  });
+
+  svelte.onDestroy(async () => {
+    if (subscribeHandle) {
+      await tonMethods.unsubscribe(subscribeHandle);
+    }
   });
 </script>

@@ -170,9 +170,9 @@
   let accountType;
 
   let deploying = false;
-  let balanceTimeout;
-
   let pinError = false;
+
+  let subscribeHandle;
 
   function checkPin(pin) {
     if (pin.detail !== conf.myPin) {
@@ -246,25 +246,20 @@
     dispatch('open');
   }
 
-  async function getBalance() {
-    clearTimeout(balanceTimeout);
+  async function setBalance(_balance) {
+    balance = _balance / 1_000_000_000;
 
-    let err, data;
+    let err;
 
-    [err, data] = await to(tonMethods.getBalance(address));
+    if (!accountType) {
+      [err, accountType] = await to(tonMethods.getAccountType(walletData.wallet.address));
 
-    if (err) {
-      utils.exception(err);
+      if (err) {
+        utils.exception(err);
+        return;
+      }
     }
 
-    balance = _.get(data, 'result.balance', 0) / 1000000000;
-
-    [err, accountType] = await to(tonMethods.getAccountType(walletData.wallet.address));
-
-    if (err) {
-      utils.exception(err);
-      return;
-    }
     if (accountType && accountType !== 'Active' && balance >= 0.5) {
       deployContract();
     }
@@ -276,8 +271,20 @@
     if (accountType === 'Active' && _.get($$props, 'wallet.contract') !== conf.contracts[0].file) {
       pendingTransactions = await tonMethods.getPendingTransactionIds(address, $$props.wallet.contract);
     }
+  }
 
-    balanceTimeout = setTimeout(getBalance, 30000);
+  async function getBalance() {
+    const [err, data] = await to(tonMethods.getBalance(address));
+
+    if (err) {
+      utils.exception(err);
+    }
+
+    setBalance(_.get(data, 'result.balance'));
+  }
+
+  function onBalanceChangeCallback(data) {
+    setBalance(parseInt(_.get(data, 'result.balance')));
   }
 
 	svelte.onMount(async () => {
@@ -293,5 +300,12 @@
     }
     address = _.get(walletData, 'wallet.address');
     getBalance();
+    subscribeHandle = await tonMethods.subscribeForBalance([walletData.wallet.address], onBalanceChangeCallback);
+  });
+
+  svelte.onDestroy(async () => {
+    if (subscribeHandle) {
+      await tonMethods.unsubscribe(subscribeHandle);
+    }
   });
 </script>

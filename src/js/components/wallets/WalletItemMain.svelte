@@ -100,6 +100,7 @@
   let address;
   let contract;
   let balance = 0;
+  let subscribeHandle;
 
   async function loadPendingTransactions() {
     pendingTransactions = await tonMethods.getPendingTransactionIds(address, contract);
@@ -110,14 +111,21 @@
     toggleFlag.confirmPendingsDialog(false);
   }
 
+  function setBalance(_balance) {
+    balance = _balance / 1000000000;
+  }
+
   async function getBalance() {
     const [err, data] = await to(tonMethods.getBalance(address));
 
     if (err) {
       utils.exception(err);
     }
+    setBalance(_.get(data, 'result.balance', 0));
+  }
 
-    balance = _.get(data, 'result.balance', 0) / 1000000000;
+  function onBalanceChangeCallback(data) {
+    setBalance(parseInt(_.get(data, 'result.balance')));
   }
 
   svelte.onMount(async () => {
@@ -156,6 +164,12 @@
     if (accountType === 'Active' && contract !== conf.contracts[0].file) {
       loadPendingTransactions();
     }
+    subscribeHandle = await tonMethods.subscribeForBalance([address], onBalanceChangeCallback);
+  });
 
+  svelte.onDestroy(async() => {
+    if (subscribeHandle) {
+      await tonMethods.unsubscribe(subscribeHandle);
+    }
   });
 </script>
