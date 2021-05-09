@@ -48,13 +48,15 @@
     {/each}
 
     {#if loading}
-      <ListLoader times={10}>
-        <div>
-          <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
-          <div style="height: 12px;width: 100%; background: white;"></div>
-          <div style="height: 11px;width: 30%; background: white; margin-left: 52%;"></div>
-        </div>
-      </ListLoader>
+      <div class='gtr-hor'>
+        <ListLoader times={10}>
+          <div>
+            <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
+            <div style="height: 12px;width: 100%; background: white;"></div>
+            <div style="height: 11px;width: 30%; background: white; margin-left: 52%;"></div>
+          </div>
+        </ListLoader>
+      </div>
     {/if}
 
   </div>
