@@ -120,7 +120,7 @@
       return;
     }
 
-    const outLastTime = _.get(_.last(responseOut).created_at);
+    const outLastTime = _.get(_.last(responseOut), 'created_at');
 
     if (outLastTime) {
       _.assign(filterOut, {
@@ -130,7 +130,7 @@
       });
     }
 
-    const inLastTime = _.get(_.last(responseIn).created_at);
+    const inLastTime = _.get(_.last(responseIn), 'created_at');
 
     if (inLastTime) {
       _.assign(filterIn, {
