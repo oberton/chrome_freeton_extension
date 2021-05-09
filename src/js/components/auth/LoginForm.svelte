@@ -1,4 +1,4 @@
-<div class='gtr-t gtr-hor-sm'>
+<div class='gtr-t-xs gtr-hor-sm'>
   <div id='phrase-form'>
     <div class='phrase-form-container'>
       <div class='text-md text-row'>

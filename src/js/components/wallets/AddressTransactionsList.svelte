@@ -1,28 +1,30 @@
 <div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 263 : 350) + "px"}>
+  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 287 : 374) + "px"}>
     {#each transactions as transaction (transaction.id)}
-      <div class='gtr-b-xxs fadeIn'>
-        <div class='tbl fixed hover-parent'>
-          <div class='tbl-cell'>
-            <div>
-              <div class='smile alg-m'>
-                <AddressEllipsis label={t('labels.transaction.id')} take={4} address={transaction.id}></AddressEllipsis>
+      <div class='gtr-b-xxs fadeIn gtr-hor-sm'>
+        <div class='gtr-hor-sm'>
+          <div class='tbl fixed hover-parent'>
+            <div class='tbl-cell'>
+              <div>
+                <div class='smile alg-m'>
+                  <AddressEllipsis label={t('labels.transaction.id')} take={4} address={transaction.id}></AddressEllipsis>
+                </div>
+                <div class='smile alg-m hover-parent-show'>
+                  <CopyTextBtn
+                    label={t('actions.transaction.copy_id')}
+                    value={transaction.id}>
+                  </CopyTextBtn>
+                </div>
               </div>
-              <div class='smile alg-m hover-parent-show'>
-                <CopyTextBtn
-                  label={t('actions.transaction.copy_id')}
-                  value={transaction.id}>
-                </CopyTextBtn>
+              <div class='color-light text-xs'>
+                {transaction.createdAt.toLocaleTimeString()} - {transaction.createdAt.toLocaleDateString()}
               </div>
             </div>
-            <div class='color-light text-xs'>
-              {transaction.createdAt.toLocaleTimeString()} - {transaction.createdAt.toLocaleDateString()}
-            </div>
-          </div>
-          <div class='tbl-cell text-right alg-m'>
-            <div>
-              <div class='text-md' style='height: 39px; line-height: 39px;'>
-                <TonAmount gemPos='right' value={transaction.value}></TonAmount>
+            <div class='tbl-cell text-right alg-m'>
+              <div>
+                <div class='text-md' style='height: 39px; line-height: 39px;'>
+                  <TonAmount gemPos='right' value={transaction.value}></TonAmount>
+                </div>
               </div>
             </div>
           </div>

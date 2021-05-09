@@ -18,7 +18,8 @@ body {
 }
 
 #app {
-  padding: 1em;
+  padding: 5px;
+  background: white;
   height: 480px;
   overflow: auto;
 }
@@ -28,10 +29,9 @@ body {
   box-sizing: border-box;
 }
 .main-scrollable {
-  @extend .gtr-hor;
-  @extend .gtr-ver-sm;
   overflow: auto;
-  max-height: 318px;
+  max-height: 362px;
+  margin: 0 -5px;
   &::-webkit-scrollbar {
     width: 5px;
   }

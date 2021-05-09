@@ -1,7 +1,7 @@
 <div>
 
   {#if activeTab !== 'walletDetails' }
-    <div class='text-line gtr-r-3x'>
+    <div class='gtr-b-sm gtr-r-3x gtr-l-sm'>
       <div class='gtr-r-sm'>
         <NetworkSwitcher on:change={updateNetwork} />
       </div>

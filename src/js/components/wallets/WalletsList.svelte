@@ -1,13 +1,15 @@
-<div class='row-l-xs'>
+<div class=''>
   {#if wallets.length }
     <div class='main-scrollable'>
       {#each wallets as wallet (wallet.tmpId)}
-        <div class='hoverable gtr-hor-sm gtr-t-xxs gtr-b-xs row-hor-sm row-ver-sm'>
-          <WalletItem
-            wallet={wallet}
-            on:open={() => showWallet(wallet)}
-            on:removeWallet={() => removeWallet(wallet)}>
-          </WalletItem>
+        <div class='hoverable gtr-ver-xxs gtr-hor-sm'>
+          <div class='gtr-l'>
+            <WalletItem
+              wallet={wallet}
+              on:open={() => showWallet(wallet)}
+              on:removeWallet={() => removeWallet(wallet)}>
+            </WalletItem>
+          </div>
         </div>
       {/each}
     </div>
@@ -26,7 +28,7 @@
     </div>
   {/if}
 
-  <div class='text-center gtr-ver gtr-r bg-white row-r-xs' style='position: absolute; bottom: 0; left: 0; right: 0;'>
+  <div class='text-center gtr-ver-sm gtr-r bg-white' style='position: absolute; bottom: 0; left: 0; right: 0;'>
     <div class='tbl fixed'>
       <div class='tbl-cell alg-m cell-4'>
         <button
@@ -123,6 +125,7 @@
     }
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
     wallets = allWallets.filter(w => w.network === currentNetwork);
+    /* showWallet(wallets[1]); */
   }
 
   async function importKeys(e) {

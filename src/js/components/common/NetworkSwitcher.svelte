@@ -1,4 +1,4 @@
-<div class='row-t gtr-l-sm smile cell-12'>
+<div class='gtr-l-sm smile cell-12' style='margin-top: -23px;'>
   <div class='form-select form-group'>
     <select
       on:change={() => updateCurrentNetwork()}

@@ -1,8 +1,8 @@
-<div>
+<div class='gtr-ver-sm'>
   {#key currentLocale}
     <div
       id="logout-button"
-      class="text-right cell-12 gtr-t-sm"
+      class="text-right cell-12 gtr-r-sm"
       style='height: 45px; margin-bottom: -45px; display: block;'>
       <button
         type="button"

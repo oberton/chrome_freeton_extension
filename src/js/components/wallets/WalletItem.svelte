@@ -2,7 +2,7 @@
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
       <div class='gtr-t-xs'>
-        <div class={'text-md' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
+        <div class={'row-b-xs text-md' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
           {#key accountType}
             <div class='smile pos-rel'>
               <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
@@ -18,7 +18,7 @@
           {/key}
           {(balance || 0).toFixed(3)}
         </div>
-        <div class='row-r-sm row-t-sm'>
+        <div class='gtr-t-xxs'>
           <div class='tbl' style='table-layout: fixed;'>
               <div class={'tbl-cell text-xs alg-m' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
               {#if address}
@@ -26,13 +26,15 @@
               {/if}
             </div>
             <div class='tbl-cell alg-m' style='width: 3.5rem;'>
-              <CopyTextBtn
-                label={t('actions.address.copy')}
-                value={address}>
-              </CopyTextBtn>
+              <div class='smile row-t'>
+                <CopyTextBtn
+                  label={t('actions.address.copy')}
+                  value={address}>
+                </CopyTextBtn>
+              </div>
             </div>
             <div class='tbl-cell alg-m' style='width: 4.5rem'>
-              <div class='smile'>
+              <div class='smile row-t'>
 
                 <button
                   type="button"

@@ -1,8 +1,8 @@
 <div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 263 : 350) + "px"}>
+  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 287 : 374) + "px"}>
     {#each messages as message (message.id)}
-      <div class='gtr-b-xxs'>
-        <div class='tbl fixed hover-parent'>
+      <div class='gtr-b-xxs gtr-hor-sm'>
+        <div class='tbl fixed hover-parent gtr-hor-sm'>
           <div class='tbl-cell'>
             <div>
               <div class='smile alg-m'>
@@ -118,17 +118,25 @@
       return;
     }
 
-    _.assign(filterOut, {
-      created_at: {
-        le: _.last(responseOut).created_at,
-      },
-    });
+    const outLastTime = _.get(_.last(responseOut).created_at);
 
-    _.assign(filterIn, {
-      created_at: {
-        le: _.last(responseIn).created_at,
-      },
-    });
+    if (outLastTime) {
+      _.assign(filterOut, {
+        created_at: {
+          le: outLastTime,
+        },
+      });
+    }
+
+    const inLastTime = _.get(_.last(responseIn).created_at);
+
+    if (inLastTime) {
+      _.assign(filterIn, {
+        created_at: {
+          le: inLastTime,
+        },
+      });
+    }
 
     const result = _([...responseIn, ...responseOut])
       .map(decorateMessage)

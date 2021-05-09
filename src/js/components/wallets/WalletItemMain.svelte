@@ -1,6 +1,6 @@
-<div class='gtr-t-xs'>
+<div>
 
-  <div>
+  <div classs='gtr-hor-xs'>
     <button
       type="button"
       class="btn-dim-light btn-round"
@@ -31,7 +31,7 @@
   </div>
 
   {#if pendingTransactions && pendingTransactions.length}
-    <div class='gtr-ver-sm'>
+    <div class='gtr-hor-sm gtr-ver-sm'>
       <div class='alert alert-warning pointer' on:click={toggleFlag.confirmPendingsDialog}>
         {#if pendingTransactions.length === 1}
           {t('info.transaction.pending.one')}
@@ -44,7 +44,7 @@
 
   {#if address && accountType}
 
-    <div class='text-line'>
+    <div class='gtr-b-sm'>
       <div class='tabs'>
         {#each ['messages', 'transactions'] as tab}
           <div
@@ -57,15 +57,19 @@
     </div>
 
     {#if activeTab === 'messages'}
-      <AddressMessagesList
-        hasAlert={pendingTransactions && pendingTransactions.length}
-        address={address}>
-      </AddressMessagesList>
+      <div class='row-b-sm'>
+        <AddressMessagesList
+          hasAlert={pendingTransactions && pendingTransactions.length}
+          address={address}>
+        </AddressMessagesList>
+      </div>
     {:else if activeTab === 'transactions'}
-      <AddressTransactionsList
-        hasAlert={pendingTransactions && pendingTransactions.length}
-        address={address}>
-      </AddressTransactionsList>
+      <div class='row-b-sm'>
+        <AddressTransactionsList
+          hasAlert={pendingTransactions && pendingTransactions.length}
+          address={address}>
+        </AddressTransactionsList>
+      </div>
     {/if}
   {/if}
 
@@ -103,7 +107,7 @@
   let subscribeHandle;
 
   async function loadPendingTransactions() {
-    pendingTransactions = await tonMethods.getPendingTransactionIds(address, contract);
+    pendingTransactions = [1, 2,3];//await tonMethods.getPendingTransactionIds(address, contract);
   }
 
   function onTransactionConfirmed() {
