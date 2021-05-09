@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Stack Ton",
+  "name": "Objerton Chrome Freeton Extension",
   "version": "0.0.0.1",
 
   "permissions": [
@@ -15,7 +15,7 @@
       "128": "images/icon128.png"
     },
     "default_popup": "html/popup.html",
-    "default_title": "Oberton Chrome Extension"
+    "default_title": "Objerton Chrome Freeton Extension"
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
