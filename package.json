@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "rm -Rf ./dist && NODE_ENV=production webpack",
+    "build": "rm -Rf ./dist && NODE_ENV=production webpack && cd dist && zip ./dist.zip ./*",
     "serve": "webpack serve --host 0.0.0.0 --port 1235"
   },
   "keywords": [],
