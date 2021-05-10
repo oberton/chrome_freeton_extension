@@ -1,21 +1,3 @@
-import hex from 'js/utils/utils/hex';
-import fetchAbi from './fetchAbi';
-
-const transferAbi = {
-  "ABI version": 2,
-  functions: [{
-    id: "0x00000000",
-    name: "transfer",
-    inputs: [{
-      name:"comment",
-      type:"bytes",
-    }],
-    outputs: [],
-  }],
-  events: [],
-  data: [],
-};
-
 /**
   * @param {String} wallet from address
   * @param {String} wallet to address
@@ -26,12 +8,16 @@ const transferAbi = {
   * @param {String} ?
   * @param {Object} ?
   */
-async function sendTokens(from, to, amount, keys, comment = null, sendForce = true, _contract = null) {
+
+// abiJSON (Object)
+// functionName  (String)
+// parametersJSON (Object)
+async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _contract = null, abiJSON, functionName, parametersJSON) {
   let payload = '';
 
   const contract = _contract || conf.contracts[0].file;
 
-  if (comment !== undefined && comment != null) {
+  if (functionName !== undefined && functionName != null && parametersJSON !== undefined && parametersJSON != null) {
     const signer = {
       type: 'None',
     };
@@ -39,13 +25,11 @@ async function sendTokens(from, to, amount, keys, comment = null, sendForce = tr
     payload = (await conf.tonClient.abi.encode_message_body({
       abi: {
         type: 'Serialized',
-        value: transferAbi,
+        value: abiJSON,
       },
       call_set: {
-        function_name: "transfer",
-        input: {
-          comment: hex.encode(comment || ''),
-        },
+        function_name: functionName,
+        input: parametersJSON,
       },
       is_internal: true,
       signer: signer,
@@ -87,4 +71,4 @@ async function sendTokens(from, to, amount, keys, comment = null, sendForce = tr
   return transactionInfo;
 }
 
-export default sendTokens;
+export default sendTokensWithPayload;
