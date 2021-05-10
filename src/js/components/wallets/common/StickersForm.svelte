@@ -33,7 +33,7 @@
                 </div>
               </div>
             </div>
-            {#each stickers as sticker}
+            {#each stickers as sticker (sticker.id)}
               <div class='gtr-b-xxs'>
                 <StickerItem
                   on:submit={saveStickers}
