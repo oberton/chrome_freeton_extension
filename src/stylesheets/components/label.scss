@@ -15,3 +15,55 @@
     }
   }
 }
+
+.tag {
+  font-weight: $fw-semi;
+  padding: 0.4em 1em;
+  position: relative;
+  font-weight: $fw-semi;
+  color: #eb3b5a;
+  border-style: none none none solid;
+  border-width: 4px;
+  border-color: transparent;
+  overflow: hidden;
+  &.chosen {
+    border-color: currentColor;
+  }
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    opacity: 0.1;
+  }
+  > div {
+    position: relative;
+    z-index: 1;
+  }
+  input {
+    padding: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: $fw-semi;
+    font-family: $base-font;
+    display: block;
+    width: 100%;
+    &::-webkit-input-placeholder {
+      opacity: 0.8;
+      color: currentColor;
+      font-weight: $fw-norm;
+      font-style: italic;
+    }
+    &::placeholder {
+      opacity: 0.8;
+      color: currentColor;
+      font-weight: $fw-norm;
+      font-style: italic;
+    }
+  }
+}

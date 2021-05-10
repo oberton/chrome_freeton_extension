@@ -5,6 +5,7 @@
     id={areaId}
     on:keydown={onAreaKeydown}
     class={`form-control ${value ? "" : "empty"}`}
+    autofocus={$$props.autofocus ? true : false}
     required={$$props.required ? true : false}></textarea>
 
   <label class='form-label'>

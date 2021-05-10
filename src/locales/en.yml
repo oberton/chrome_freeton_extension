@@ -62,6 +62,8 @@ actions:
   go_back: 'Go Back'
   select_all: 'Select All'
   deselect_all: 'Deselect All'
+  backup_wallets: 'Create wallets backup'
+  import_wallets: 'Import wallets backup'
 
   change_language: 'Change Language'
   logout: "Logout"
@@ -81,6 +83,8 @@ actions:
   wallet:
     add: 'Add Wallet'
     import_keys: 'Import Key Pair'
+    paste_keys: 'Public keys'
+    paste_keys_order: 'Public key then secret each on a new line'
     create: "Create Wallet"
     restore: "Restore Wallet"
     receive: "Send Crystals"
@@ -157,3 +161,10 @@ common:
 keys:
   public: "Public"
   secret: "Secret"
+
+sticker:
+  add: 'Add Sticker'
+  remove: 'Remove Sticker'
+  to_save: 'to save'
+  to_edit: 'to edit'
+  add_new_placeholder: 'Add a new sticker...'

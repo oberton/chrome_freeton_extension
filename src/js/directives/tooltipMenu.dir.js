@@ -21,6 +21,10 @@ function tooltipMenu(node) {
     tooltip.style.display = 'none';
     document.removeEventListener('click', onDocumentClick);
     shown = false;
+    node.classList.remove('hover');
+    if (node.closest('.hoverable')) {
+      node.closest('.hoverable').classList.remove('hover');
+    }
   };
 
   const show = () => {
@@ -38,6 +42,10 @@ function tooltipMenu(node) {
     }
 
     shown = true;
+    node.classList.add('hover');
+    if (node.closest('.hoverable')) {
+      node.closest('.hoverable').classList.add('hover');
+    }
   };
 
   const onClick = () => {
@@ -49,6 +57,9 @@ function tooltipMenu(node) {
   };
 
   onDocumentClick = (e) => {
+    if (e.target.closest('[ignore-tooltip]')) {
+      return;
+    }
     if (e.target.closest('[close-tooltip]')) {
       hide();
       return;

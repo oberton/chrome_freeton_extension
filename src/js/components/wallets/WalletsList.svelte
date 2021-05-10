@@ -4,11 +4,11 @@
       {#each wallets as wallet (wallet.tmpId)}
         <div class='hoverable gtr-ver-xxs gtr-hor-sm'>
           <div class='gtr-l'>
-            <WalletItem
+            <WalletListItem
               wallet={wallet}
               on:open={() => showWallet(wallet)}
               on:removeWallet={() => removeWallet(wallet)}>
-            </WalletItem>
+            </WalletListItem>
           </div>
         </div>
       {/each}

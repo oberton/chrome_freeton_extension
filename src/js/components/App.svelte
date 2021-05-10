@@ -1,76 +1,93 @@
 <div class='gtr-ver-sm'>
-  {#key currentLocale}
-    <div
-      id="logout-button"
-      class="text-right cell-12 gtr-r-sm"
-      style='height: 45px; margin-bottom: -45px; display: block;'>
-      <button
-        type="button"
-        class="btn-dim-light btn-round"
-        use:tooltipMenu
-        title={t('actions.logout')}>
-          <span class="icon-cog text-lg"></span>
-      </button>
-      <div class='tooltip-menu'>
-        <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
-          {t('actions.change_language')}
-        </div>
-        {#if loggedIn }
-          <div class='tooltip-menu-item' close-tooltip on:click={logout}>
-            {t('actions.logout')}
+  {#key initTime}
+    <div>
+      {#key currentLocale}
+        <div
+          id="logout-button"
+          class="text-right cell-12"
+          style='height: 45px; margin-bottom: -45px; display: block;'>
+          <button
+            type="button"
+            class="btn-dim-light btn-round"
+            use:tooltipMenu
+            title={t('actions.logout')}>
+              <span class="icon-cog text-lg"></span>
+          </button>
+          <div class='tooltip-menu'>
+            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
+              {t('actions.change_language')}
+            </div>
+            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showImportWalletsDialog}>
+              {t('actions.import_wallets')}
+            </div>
+            {#if loggedIn }
+              <div class='tooltip-menu-item' close-tooltip on:click={backupWallets}>
+                {t('actions.backup_wallets')}
+              </div>
+              <div class='tooltip-menu-item' close-tooltip on:click={logout}>
+                {t('actions.logout')}
+              </div>
+            {/if}
           </div>
-        {/if}
-      </div>
-    </div>
-
-    {#if step === 'pin'}
-      <PinForm
-        title={t('actions.pin.enter')}
-        pinError={pinError}
-        on:submit={checkPin} />
-    {/if}
-
-    {#if step === 'createPin'}
-      <PinForm
-        title={t('actions.pin.create')}
-        placeholder={t('info.pin.device_info')}
-        on:submit={createPin} />
-    {/if}
-
-    {#if step === 'confirmPin'}
-      <PinForm
-        title={t('actions.pin.confirm')}
-        placeholder={t('info.pin.confirm_info')}
-        canGoBack={true}
-        pinError={pinError}
-        on:back={() => step = 'createPin'}
-        on:submit={confirmPin} />
-    {/if}
-
-    {#if step === 'login'}
-      <LoginForm on:submit={signIn} />
-    {/if}
-
-    {#if step === 'main'}
-      <Main />
-    {/if}
-
-    {#if $flag.languageDialog}
-      <ModalDialog on:close={() => toggleFlag.languageDialog(false)} headline={t('actions.change_language')}>
-        <div>
-          {#each supportedLocales as locale }
-            <div class='tooltip-menu-item' on:click={() => setLocale(locale[0])}>{locale[1]}</div>
-          {/each}
         </div>
-      </ModalDialog>
-    {/if}
+
+        {#if step === 'pin'}
+          <PinForm
+            title={t('actions.pin.enter')}
+            pinError={pinError}
+            on:submit={checkPin} />
+        {/if}
+
+        {#if step === 'createPin'}
+          <PinForm
+            title={t('actions.pin.create')}
+            placeholder={t('info.pin.device_info')}
+            on:submit={createPin} />
+        {/if}
+
+        {#if step === 'confirmPin'}
+          <PinForm
+            title={t('actions.pin.confirm')}
+            placeholder={t('info.pin.confirm_info')}
+            canGoBack={true}
+            pinError={pinError}
+            on:back={() => step = 'createPin'}
+            on:submit={confirmPin} />
+        {/if}
+
+        {#if step === 'login'}
+          <LoginForm on:submit={signIn} />
+        {/if}
+
+        {#if step === 'main'}
+          <Main />
+        {/if}
+
+        {#if $flag.showImportWalletsDialog}
+          <ImportBackupForm on:restored={onBackupRestored} loggedIn={loggedIn}></ImportBackupForm>
+        {/if}
+
+        {#if $flag.languageDialog}
+          <ModalDialog on:close={() => toggleFlag.languageDialog(false)} headline={t('actions.change_language')}>
+            <div>
+              {#each supportedLocales as locale }
+                <div class='tooltip-menu-item' on:click={() => setLocale(locale[0])}>{locale[1]}</div>
+              {/each}
+            </div>
+          </ModalDialog>
+        {/if}
+      {/key}
+    </div>
   {/key}
 </div>
 
 <script>
 
+  let initTime;
+
   const { flag, toggleFlag } = utils.initFlags([
     'languageDialog',
+    'showImportWalletsDialog',
   ]);
 
   const supportedLocales = _.toPairs(conf.supportedLocales);
@@ -96,6 +113,13 @@
     setTimeout(() => {
       pinError = false;
     }, 150);
+  }
+
+  function onBackupRestored() {
+    initTime = +new Date();
+    loggedIn = true;
+    step = 'main';
+    toggleFlag.showImportWalletsDialog(false);
   }
 
   async function checkPin(e) {
@@ -154,9 +178,16 @@
     step = 'login';
   }
 
-	svelte.onMount(async () => {
+  function backupWallets() {
+    const payload = _.pick(localStorage, ['myPhrases', 'myStickers']);
+    const filename = `wallets_${(new Date()).toISOString().split('.')[0].split('T').join('_')}.json`;
+    utils.saveToFile(JSON.stringify(payload), filename);
+  }
+
+  svelte.onMount(async () => {
     const result = await utils.storage.get(['myPhrases']);
     name = result;
+    initTime = +new Date();
 
     if (result && result.myPhrases) {
       step = 'pin';

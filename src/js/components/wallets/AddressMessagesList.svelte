@@ -16,7 +16,7 @@
               </div>
             </div>
             <div class='color-light text-xs'>
-              {message.createdAt.toLocaleTimeString()} - {message.createdAt.toLocaleDateString()}
+              {formatTime(message.createdAt)} - {formatDate(message.createdAt)}
             </div>
           </div>
           <div class='tbl-cell text-right alg-m'>
@@ -65,6 +65,9 @@
 <script>
   export let address;
   export let hasAlert;
+
+  const formatTime = utils.formatTime;
+  const formatDate = utils.formatDate;
 
   const msgTypes = {
     0: 'internal',

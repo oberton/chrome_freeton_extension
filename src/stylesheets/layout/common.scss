@@ -28,6 +28,11 @@ body {
   outline: none!important;
   box-sizing: border-box;
 }
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .main-scrollable {
   overflow: auto;
   max-height: 362px;

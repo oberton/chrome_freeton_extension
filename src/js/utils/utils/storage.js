@@ -107,6 +107,17 @@ function getArrayValue(key, pin = conf.myPin) {
   });
 }
 
+function setEncrypted(key, _value, pin = conf.myPin) {
+  return new Promise((resolve, reject) => {
+    const value = _.isObject(_value) || _.isArray(_value) ? JSON.stringify(_value) : _value;
+
+    const setValue = pin ? crypto.encrypt(value, pin) : value;
+    set({[key]: setValue}).then(() => {
+      resolve(value);
+    }).catch(reject);
+  });
+}
+
 function push(key, value, pin = conf.myPin) {
   return new Promise((resolve, reject) => {
     getArrayValue(key, pin).then(arrValue => {
@@ -117,14 +128,7 @@ function push(key, value, pin = conf.myPin) {
         value.tmpId = tmpId();
       }
       arrValue.push(value);
-      let strValue = JSON.stringify(arrValue);
-      if (pin) {
-        strValue = crypto.encrypt(strValue, pin);
-      }
-      set({[key]: strValue}).then(() => {
-        resolve(arrValue);
-      });
-
+      setEncrypted(key, arrValue, pin).then(resolve).catch(reject);
     }).catch(reject);
   });
 }
@@ -169,6 +173,7 @@ export default {
   set,
   remove,
   getArrayValue,
+  setEncrypted,
   push,
   splice,
   assign,

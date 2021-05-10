@@ -13,7 +13,7 @@
   text-decoration: none;
   font-size: 1.5rem;
   &.btn-round {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     width: 3em;
     border-radius: 3em;
     text-align: center;
@@ -21,6 +21,10 @@
     padding: 0;
     text-align: center;
     line-height: 3em;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.9;
   }
 }
 
@@ -32,26 +36,32 @@
       background-color: nth($color, 2);
       color: white;
       background-image: linear-gradient(45deg, lighten(nth($color, 2), 15%), nth($color, 2));
-      &:hover {
-        color: white;
-        text-decoration: none;
-        background-image: linear-gradient(45deg, darken(lighten(nth($color, 2), 10%), 15%), darken(nth($color, 2), 10%));
+      &:hover, &.hover {
+        &:not(.disabled) {
+          color: white;
+          text-decoration: none;
+          background-image: linear-gradient(45deg, darken(lighten(nth($color, 2), 10%), 15%), darken(nth($color, 2), 10%));
+        }
       }
       &-glass {
         @extend %btn-base;
         background-color: rgba(nth($color, 2), 0.2);
         color: nth($color, 2);
-        &:hover {
-          color: white;
-          background-image: linear-gradient(45deg, lighten(nth($color, 2), 15%), nth($color, 2));
+        &:hover, &.hover {
+          &:not(.disabled) {
+            color: white;
+            background-image: linear-gradient(45deg, lighten(nth($color, 2), 15%), nth($color, 2));
+          }
         }
       }
       &-light {
         @extend %btn-base;
         background-color: transparent;
         color: nth($color, 2);
-        &:hover {
-          background-color: rgba(nth($color, 2), 0.2);
+        &:hover, &.hover {
+          &:not(.disabled) {
+            background-color: rgba(nth($color, 2), 0.2);
+          }
         }
       }
     }

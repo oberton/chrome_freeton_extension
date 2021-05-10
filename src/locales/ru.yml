@@ -63,6 +63,8 @@ actions:
   go_back: 'Назад'
   select_all: 'Выбрать все'
   deselect_all: 'Снять выбор'
+  backup_wallets: 'Создать резевную копию'
+  import_wallets: 'Импортировать резервную копию'
 
   change_language: 'Сменить язык'
   logout: "Выход"
@@ -82,6 +84,8 @@ actions:
   wallet:
     add: 'Добавить кошелёк'
     import_keys: 'Добавить пару ключей'
+    paste_keys: 'Вставьте ключи'
+    paste_keys_order: 'Публичный ключ, затем секретный с новой строки'
     create: "Создать кошелек"
     restore: "Восстановить кошелек"
     receive: "Отправить кристаллы"
@@ -156,3 +160,10 @@ common:
 keys:
   public: "Публичный"
   secret: "Секретный"
+
+sticker:
+  add: 'Добавить стикер'
+  remove: 'Удалить стикер'
+  to_save: 'сохранить'
+  to_edit: 'редактировать'
+  add_new_placeholder: 'Новый стикер...'

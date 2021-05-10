@@ -1,4 +1,7 @@
-
+textarea.form-control {
+  max-height: 150px;
+  overflow: auto;
+}
 
 .form {
   display: block;

@@ -17,7 +17,7 @@
                 </div>
               </div>
               <div class='color-light text-xs'>
-                {transaction.createdAt.toLocaleTimeString()} - {transaction.createdAt.toLocaleDateString()}
+                {formatTime(transaction.createdAt)} - {formatDate(transaction.createdAt)}
               </div>
             </div>
             <div class='tbl-cell text-right alg-m'>
@@ -56,6 +56,9 @@
   let transactionsCount;
   let loading = false;
   let subscribeHandle;
+
+  const formatTime = utils.formatTime;
+  const formatDate = utils.formatDate;
 
   function decorateTransaction(transaction) {
 

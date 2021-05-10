@@ -2,23 +2,30 @@
   <div class='tbl hover-parent'>
     <div class='tbl-cell alg-m'>
       <div class='gtr-t-xs'>
-        <div class={'row-b-xs text-md' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
-          {#key accountType}
-            <div class='smile pos-rel'>
-              <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
-              {#if pendingTransactions && pendingTransactions.length}
-                <div
-                  class='badge'
-                  use:tooltip
-                  data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
-                  {pendingTransactions.length}
+
+        <div class={'row-b-xs' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
+          <div class='smile alg-m'>
+            <div class='text-md'>
+              {#key accountType}
+                <div class='smile pos-rel'>
+                  <WalletGemIcon accountType={accountType} contract={$$props.wallet.contract}></WalletGemIcon>
+                  {#if pendingTransactions && pendingTransactions.length}
+                    <div
+                      class='badge'
+                      use:tooltip
+                      data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
+                      {pendingTransactions.length}
+                    </div>
+                  {/if}
                 </div>
-              {/if}
+              {/key}
+              {(balance || 0).toFixed(3)}
             </div>
-          {/key}
-          {(balance || 0).toFixed(3)}
+          </div>
+          <StickersForm parent={$$props.wallet}></StickersForm>
         </div>
-        <div class='gtr-t-xxs'>
+
+        <div>
           <div class='tbl' style='table-layout: fixed;'>
               <div class={'tbl-cell text-xs alg-m' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
               {#if address}
@@ -66,7 +73,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -241,7 +247,10 @@
     getBalance();
   }
 
-  function openWallet() {
+  function openWallet(e) {
+    if (e.target.closest('button')) {
+      return;
+    }
     if (!accountType || accountType !== 'Active') {
       return;
     }

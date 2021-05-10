@@ -1,3 +1,13 @@
+.#{$icomoon-prefix}-colorize { 
+  &:before {
+    content: $icon-colorize;
+  }
+}
+.#{$icomoon-prefix}-label { 
+  &:before {
+    content: $icon-label;
+  }
+}
 .#{$icomoon-prefix}-check { 
   &:before {
     content: $icon-check;

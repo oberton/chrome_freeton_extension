@@ -35,7 +35,7 @@
 
 .hoverable {
   transition: background-color 200ms ease-in;
-  &:hover {
+  &:hover, &.hover {
     background-color: #F5F6FA;
   }
 }
