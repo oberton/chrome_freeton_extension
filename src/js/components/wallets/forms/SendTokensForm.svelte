@@ -50,6 +50,11 @@
           bind:value={formData.abiJSON}
           label='ABI JSON' />
 
+        <FormControl
+          required={true}
+          bind:value={formData.functionName}
+          label={t('labels.function_name')} />
+
         <FormTextArea
           type='text'
           bind:value={formData.functionParams}
@@ -87,8 +92,9 @@
     to: '',
     amount: '',
     comment: '',
-    paramsJSON: '',
+    abiJSON: '',
     functionParams: '',
+    functionName: '',
     payload: '',
   };
 
@@ -119,7 +125,7 @@
         return;
       }
 
-      [err, result] = await to(tonMethods.sendTokensWithPayload(from, sendTo, amount, keys, true, contract, formData.paramsJSON, formData.functionParams));
+      [err, result] = await to(tonMethods.sendTokensWithPayload(from, sendTo, amount, keys, true, contract, JSON.parse(formData.abiJSON), formData.functionName, JSON.parse(formData.functionParams)));
 
     } else if (payloadType === 'payload') {
       if (_.isEmpty(formData.payload)) {
