@@ -33,8 +33,6 @@ async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _
 
   const contract = _contract || conf.contracts[0].file;
 
-  const abiValue = await fetchAbi(contract);
-
   if (functionName !== undefined && functionName != null && parametersJSON !== undefined && parametersJSON != null) {
     const signer = {
       type: 'None',
@@ -43,11 +41,11 @@ async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _
     payload = (await conf.tonClient.abi.encode_message_body({
       abi: {
         type: 'Serialized',
-        value: parametersJSON,
+        value: abiJSON,
       },
       call_set: {
         function_name: functionName,
-        input: abiJSON,
+        input: parametersJSON,
       },
       is_internal: true,
       signer: signer,
@@ -57,6 +55,8 @@ async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _
   if (_.isEmpty(payload)) {
     throw new Error('Payload is mandatory to send tokens with payload');
   }
+
+  const abiValue = await fetchAbi(contract);
 
   const submitTransactionParams = {
     dest: to,

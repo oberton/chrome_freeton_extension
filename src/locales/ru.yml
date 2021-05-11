@@ -180,16 +180,22 @@ sticker:
   add_new_placeholder: 'Новый стикер...'
 
 send_tokens:
-  payload:
-    title: 'Доп. параметры'
+  abi_json: 'ABI JSON'
+  function_name: 'Имя Функции'
+  function_params: 'Параметры функции (JSON)'
+  payload: 'Полезная нагрузка'
+  send_options:
+    title: 'Доп. Возможности'
     comment: 'Комментарий'
+    function: 'Функция'
     payload: 'Полезная нагрузка'
 
 error:
   send_tokens:
-    invalid_function_name: 'Некорректное имя функции'
-    invalid_function_params: 'Некорректные параметры функции'
-    invalid_payload: 'Некорректный ввод'
+    invalid_function_name: 'Имя функции обязательно'
+    invalid_function_params: 'Параметры функции обязательны'
+    invalid_abi_json: 'Некорректный ABI JSON'
+    invalid_payload: 'Некорретные данные для полезной нагрузки'
 
 logout:
   title: 'Выйти'

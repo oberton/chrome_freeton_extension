@@ -21,15 +21,6 @@
       </form>
     </ModalDialog>
   {/if}
-
-  {#if $flag.contractPrefsDialog}
-    <ContractPrefsDialog
-      label={t('actions.wallet.import_keys')}
-      payload={newWalletPayload}
-      on:set={setContractPrefs}
-      on:close={() => toggleFlag.contractPrefsDialog(false)}>
-    </ContractPrefsDialog>
-  {/if}
 </div>
 
 <script>
@@ -83,18 +74,6 @@
 
     newWalletPayload = { keys, contract };
 
-    if (newWalletPayload.contract && newWalletPayload.contract !== conf.contracts[0].file) {
-      toggleFlag.contractPrefsDialog();
-      return;
-    }
-
     dispatch('add-keys', newWalletPayload);
   }
-
-  function setContractPrefs(e) {
-    toggleFlag.contractPrefsDialog(false);
-    newWalletPayload[newWalletPayload.contract] = e.detail;
-    dispatch('add-keys', newWalletPayload);
-  }
-
 </script>

@@ -105,6 +105,10 @@
 
   async function refreshData() {
     stickers = await utils.storage.getArrayValue('myStickers', conf.myPin);
+    if (!stickers) {
+      stickers = conf.initialStickers;
+      await utils.storage.setEncrypted('myStickers', stickers, conf.myPin);
+    }
     parentStickers = _.filter(stickers, s => _.includes(s.items, parent.tmpId));
     if (!stickers) {
       stickers = [];

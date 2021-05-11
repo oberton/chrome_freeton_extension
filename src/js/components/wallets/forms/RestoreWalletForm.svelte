@@ -1,4 +1,3 @@
-
 <div>
   <PhraseArea bind:phrase={phrase} placeholder={$$props.phrasePlaceholder}/>
 
@@ -9,15 +8,6 @@
   <button class="btn-blue font-bold full-width text-md" on:click={restoreWallet}>
     {$$props.submitLabel || t('actions.wallet.restore')}
   </button>
-
-  {#if $flag.contractPrefsDialog}
-    <ContractPrefsDialog
-      payload={newWalletPayload}
-      label={$$props.submitLabel || t('actions.wallet.restore')}
-      on:set={setContractPrefs}
-      on:close={() => toggleFlag.contractPrefsDialog(false)}>
-    </ContractPrefsDialog>
-  {/if}
 </div>
 
 <script>
@@ -63,16 +53,6 @@
       newWalletPayload.contract = phraseContract;
     }
 
-    if (newWalletPayload.contract && newWalletPayload.contract !== conf.contracts[0].file) {
-      toggleFlag.contractPrefsDialog();
-      return;
-    }
-
-    dispatch('restore', newWalletPayload);
-  }
-
-  function setContractPrefs(e) {
-    newWalletPayload[newWalletPayload.contract] = e.detail;
     dispatch('restore', newWalletPayload);
   }
 

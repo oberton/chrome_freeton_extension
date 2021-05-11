@@ -23,15 +23,21 @@
         label={t('labels.amount')} />
 
       <div class='text-sm gtr-t row-b color-label'>
-        <div class='smile pointer pos-rel' style='z-index: 1' use:tooltipMenu use:tooltip data-tooltip='Transaction Payload'>
-          {t('send_tokens.payload.' + payloadType)}
+        <div
+          class='smile pointer pos-rel'
+          style='z-index: 1'
+          use:tooltipMenu
+          use:tooltip
+          data-tooltip={t('send_tokens.send_options.title')}>
+
+          {t('send_tokens.send_options.' + payloadType)}
           <span class='icon-angle-down'></span>
         </div>
         <div class='tooltip-menu'>
           {#each payloadTypes as type}
             {#if type !== payloadType}
               <div class='tooltip-menu-item' close-tooltip on:click={() => setPayloadType(type)}>
-                {t('send_tokens.payload.' + type)}
+                {t('send_tokens.send_options.' + type)}
               </div>
             {/if}
           {/each}
@@ -43,28 +49,31 @@
           type='text'
           bind:value={formData.comment}
           label={t('labels.optional')} />
+
       {:else if payloadType === 'function'}
-
-        <FormTextArea
-          type='text'
-          bind:value={formData.abiJSON}
-          label='ABI JSON' />
-
         <FormControl
           required={true}
           bind:value={formData.functionName}
-          label={t('labels.function_name')} />
+          label={t('send_tokens.function_name')} />
 
         <FormTextArea
           type='text'
+          required={true}
+          bind:value={formData.abiJSON}
+          label={t('send_tokens.abi_json')} />
+
+        <FormTextArea
+          type='text'
+          required={true}
           bind:value={formData.functionParams}
-          label='Function Params (JSON)' />
+          label={t('send_tokens.function_params')} />
 
       {:else if payloadType === 'payload'}
         <FormControl
           type='text'
+          required={true}
           bind:value={formData.payload}
-          label='Payload' />
+          label={t('send_tokens.payload')} />
       {/if}
 
     </div>
@@ -111,26 +120,34 @@
     const sendTo = formData.to;
     const { keys, contract } = $$props;
 
+    const exit = (key) => {
+      utils.toast.error(t(`error.send_tokens.${key}`));
+      utils.page.hideLoader();
+      return;
+    };
+
     if (payloadType === 'function') {
+      if (!formData.functionName) {
+        exit('invalid_function_name');
+        return;
+      }
 
       if (_.isEmpty(utils.safeJSONParse(formData.abiJSON))) {
-        utils.toast.error("Invalid ABI JSON");
-        utils.page.hideLoader();
+        exit('invalid_abi_json');
         return;
       }
 
       if (_.isEmpty(utils.safeJSONParse(formData.functionParams))) {
-        utils.toast.error("Invalid ABI PARAMS");
-        utils.page.hideLoader();
+        exit('invalid_function_params');
         return;
       }
 
       [err, result] = await to(tonMethods.sendTokensWithPayload(from, sendTo, amount, keys, true, contract, JSON.parse(formData.abiJSON), formData.functionName, JSON.parse(formData.functionParams)));
 
     } else if (payloadType === 'payload') {
+
       if (_.isEmpty(formData.payload)) {
-        utils.toast.error(t('error.send_tokens.invalid_base64'));
-        utils.page.hideLoader();
+        exit('invalid_payload');
         return;
       }
 

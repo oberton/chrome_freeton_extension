@@ -23,4 +23,18 @@ conf.devAutopin = '222222';
 
 conf.ignoreExceptions = false; // ignore http errors, just in case
 
+conf.initialStickers = [{
+  id: '1',
+  text: 'Surf',
+  color: '#2196f3',
+}, {
+  id: '2',
+  text: 'Multisig',
+  color: '#b344fd',
+}, {
+  id: '3',
+  text: 'Default',
+  color: '#3c8c24',
+}];
+
 export default conf;

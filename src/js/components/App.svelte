@@ -203,6 +203,8 @@
   }
 
   svelte.onMount(async () => {
+    await utils.storage.set({locale: currentLocale});
+
     const result = await utils.storage.get(['myPhrases']);
     name = result;
     initTime = +new Date();

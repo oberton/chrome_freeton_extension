@@ -183,15 +183,21 @@ sticker:
   add_new_placeholder: 'Add a new sticker...'
 
 send_tokens:
-  payload:
-    title: 'Payload params'
+  function_name: 'Fuction Name'
+  abi_json: 'ABI JSON'
+  function_params: 'Function Params (JSON)'
+  payload: 'Payload'
+  send_options:
+    title: 'Additional Options'
     comment: 'Comment'
-    payload: 'Raw Payload'
+    function: 'Function'
+    payload: 'Payload'
 
 error:
   send_tokens:
     function_name: 'Invalid function name'
     function_params: 'Invalid function params'
+    abi_json: 'Invalid ABI JSON'
     payload: 'Invalid payload'
 
 logout:
