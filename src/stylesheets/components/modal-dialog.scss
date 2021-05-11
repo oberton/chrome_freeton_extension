@@ -8,6 +8,7 @@
   background: rgba(96,125,139, 0.8);
   opacity: 0;
   padding: 1em;
+  overflow: auto;
   &:not(.shown) {
     display: none;
   }

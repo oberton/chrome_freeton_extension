@@ -1,3 +1,20 @@
+import fetchAbi from './fetchAbi';
+
+const transferAbi = {
+  "ABI version": 2,
+  functions: [{
+    id: "0x00000000",
+    name: "transfer",
+    inputs: [{
+      name:"comment",
+      type:"bytes",
+    }],
+    outputs: [],
+  }],
+  events: [],
+  data: [],
+};
+
 /**
   * @param {String} wallet from address
   * @param {String} wallet to address
@@ -9,13 +26,14 @@
   * @param {Object} ?
   */
 
-// abiJSON (Object)
 // functionName  (String)
 // parametersJSON (Object)
 async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _contract = null, abiJSON, functionName, parametersJSON) {
-  let payload = '';
+  let payload = null;
 
   const contract = _contract || conf.contracts[0].file;
+
+  const abiValue = await fetchAbi(contract);
 
   if (functionName !== undefined && functionName != null && parametersJSON !== undefined && parametersJSON != null) {
     const signer = {
@@ -25,18 +43,20 @@ async function sendTokensWithPayload(from, to, amount, keys, sendForce = true, _
     payload = (await conf.tonClient.abi.encode_message_body({
       abi: {
         type: 'Serialized',
-        value: abiJSON,
+        value: parametersJSON,
       },
       call_set: {
         function_name: functionName,
-        input: parametersJSON,
+        input: abiJSON,
       },
       is_internal: true,
       signer: signer,
     })).body;
   }
 
-  const abiValue = await fetchAbi(contract);
+  if (_.isEmpty(payload)) {
+    throw new Error('Payload is mandatory to send tokens with payload');
+  }
 
   const submitTransactionParams = {
     dest: to,

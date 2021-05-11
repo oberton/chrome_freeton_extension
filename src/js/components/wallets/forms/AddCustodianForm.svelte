@@ -58,13 +58,6 @@
           bind:value={formData.keys[type]}
           label={t('labels.keys.' + type)} />
       {/each}
-
-      <div class="gtr-t-sm row-l-sm text-right">
-        <label class="btn-blue-light btn-round" use:tooltip data-tooltip={t('actions.wallet.upload_keys')}>
-          <input on:change={fileAttached} id='{uploadFileInputId}' type='file' style='position: absolute; left: -999em' />
-          <span class="icon-upload text-lg"></span>
-        </label>
-      </div>
     </div>
   {/if}
 
@@ -136,48 +129,21 @@
     dispatch('add', payload);
   }
 
-  function fileAttached() {
-    const fileInput = document.getElementById(uploadFileInputId);
-    const file = fileInput.files[0];
-    if (file.size > 1024) {
-      utils.toast.error(t('info.file.too_big'));
-      return;
-    }
-
-    const fr = new window.FileReader();
-
-    fr.onload = () => {
-      const keysData = fr.result.split("\n").filter(tonMethods.isValidKey);
-
-      if (keysData.length !== 2) {
-        utils.toast.error(t('info.upload.invalid_keys'));
-        return;
-      }
-
-      formData.keys = {
-        public: keysData[0],
-        secret: keysData[1],
-      };
-    };
-
-    fr.readAsText(file);
-  }
-
   function setTab(tab) {
     formData = {
+      tab,
       publicKey: '',
       phrase: '',
       keys: {
         public: '',
         secret: '',
       },
-      tab,
     };
   }
 
   const tabs = [{
     key: 'publicKey',
-    tooltip: t('labels.custodians.set.public_key'),
+    tooltip: t('labels.custodians.set.public'),
     icon: 'icon-car-key text-sm',
   }, {
     key: 'phrase',

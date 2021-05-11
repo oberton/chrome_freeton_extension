@@ -37,6 +37,9 @@ body {
   overflow: auto;
   max-height: 362px;
   margin: 0 -5px;
+}
+.main-scrollable,
+.modal-dialog {
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -48,5 +51,4 @@ body {
   &::-webkit-scrollbar-thumb {
     background: lighten($color-label, 10%);
   }
-
 }

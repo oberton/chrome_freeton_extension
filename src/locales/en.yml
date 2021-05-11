@@ -53,6 +53,8 @@ info:
   custodians:
     already_exists: 'Custodian already exists'
 
+  saved: 'Saved!'
+
 confirm:
   selected: 'Confirm Selected'
   transactions: 'Confirm Transactions'
@@ -63,7 +65,17 @@ actions:
   select_all: 'Select All'
   deselect_all: 'Deselect All'
   backup_wallets: 'Create wallets backup'
-  import_wallets: 'Import wallets backup'
+  save: 'Save'
+
+  import_wallet:
+    wallets: 'Import wallets backup'
+    merge_wallets: 'Merge with my wallets'
+    paste: 'Paste backup content'
+    submit: 'Import'
+
+  custodians:
+    manage: 'Manage Custodians'
+
 
   change_language: 'Change Language'
   logout: "Logout"
@@ -123,7 +135,7 @@ labels:
   from: 'From'
   to: 'To'
   amount: 'Amount'
-  comment: 'Comment (optional)'
+  optional: 'Optional'
   choose_one: 'Choose an option'
   ton:
     server: "Network"
@@ -138,11 +150,12 @@ labels:
     public: 'Public Key'
     secret: 'Secret Key'
     pair: 'Keys Pair'
+
   custodians:
     plural: 'Custodians'
     add: 'Add Custodian'
     set:
-      public_key: 'Public Key only'
+      public: 'Public Key only'
       keys: 'Add Key Pair to be able to confirm transactions by the added custodian.'
       phrase: 'Add Master Password to be able to confirm transactions by the added custodian.'
 
@@ -168,3 +181,21 @@ sticker:
   to_save: 'to save'
   to_edit: 'to edit'
   add_new_placeholder: 'Add a new sticker...'
+
+send_tokens:
+  payload:
+    title: 'Payload params'
+    comment: 'Comment'
+    payload: 'Raw Payload'
+
+error:
+  send_tokens:
+    function_name: 'Invalid function name'
+    function_params: 'Invalid function params'
+    payload: 'Invalid payload'
+
+logout:
+  title: 'Logout'
+  info: 'If you log out, all added wallets are going to be removed'
+  backup_info: 'Create wallets backup before logout'
+  backup_create: 'Create Wallets Backup'

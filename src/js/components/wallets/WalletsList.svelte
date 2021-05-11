@@ -141,6 +141,10 @@
 
     if (detail.contract && detail.contract !== conf.contracts[0].file) {
       payload.contract = detail.contract;
+
+      if (detail[payload.contract]) {
+        payload[payload.contract] = detail[payload.contract];
+      }
     }
 
     await utils.storage.push('myPhrases', payload);

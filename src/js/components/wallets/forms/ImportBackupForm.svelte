@@ -1,5 +1,5 @@
 <div>
-  <ModalDialog headline={step === 'pin' ? 'Enter Pin' : t('actions.import_wallets')}>
+  <ModalDialog headline={step === 'pin' ? 'Enter Pin' : t('actions.import_wallet.wallets')}>
     <div>
       {#if step === 'pin'}
         <PinForm
@@ -13,7 +13,7 @@
           <div>
             <FormTextArea
               bind:value={formData.content}
-              label='Paste wallets backup text content'
+              label={t('actions.import_wallet.paste')}
               id='new-wallet-payload' />
           </div>
           {#if loggedIn}
@@ -24,14 +24,14 @@
                   <span></span>
                 </div>
                 <div class='gtr-l-sm color-label smile alg-m pos-rel'>
-                  Merge with my wallets
+                  {t('actions.import_wallet.merge_wallets')}
                 </div>
               </label>
             </div>
           {/if}
-          <div class='gtr-t'>
+          <div class='gtr-t-2x'>
             <button on:click={importBackup} class='btn-blue font-bold full-width' type='button'>
-              Import Backup
+              {t('actions.import_wallet.submit')}
             </button>
           </div>
         </div>

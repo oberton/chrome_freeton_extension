@@ -14,6 +14,7 @@
     <ContractPrefsDialog
       payload={newWalletPayload}
       label={$$props.submitLabel || t('actions.wallet.restore')}
+      on:set={setContractPrefs}
       on:close={() => toggleFlag.contractPrefsDialog(false)}>
     </ContractPrefsDialog>
   {/if}
@@ -70,17 +71,9 @@
     dispatch('restore', newWalletPayload);
   }
 
-  function saveContractPrefs(params) {
-    debugger
+  function setContractPrefs(e) {
+    newWalletPayload[newWalletPayload.contract] = e.detail;
+    dispatch('restore', newWalletPayload);
   }
-
-
-  svelte.onMount(() => {
-    utils.eventBus.on('set-contract-details', saveContractPrefs);
-  });
-
-  svelte.onDestroy(() => {
-    utils.eventBus.off('set-contract-details', saveContractPrefs);
-  });
 
 </script>

@@ -51,23 +51,28 @@
                 </button>
 
                 <div class='tooltip-menu'>
-                  <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
-                    {t('actions.common.delete_item')}
-                  </div>
+                  {#if accountType === "Active"}
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
+                      {t('actions.tokens.send')}
+                    </div>
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
+                      {t('actions.phrase.backup_keys')}
+                    </div>
+                  {/if}
+                  {#if multisigContracts.indexOf($$props.wallet.contract) > -1}
+                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.manageCustodiansDialog}>
+                      {t('actions.custodians.manage')}
+                    </div>
+                  {/if}
                   {#if walletData.phrase }
                     <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
                       {t('actions.phrase.backup')}
                     </div>
                   {/if}
-                  {#if accountType === "Active"}
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
-                      {t('actions.phrase.backup_keys')}
-                    </div>
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
-                      {t('actions.tokens.send')}
-                    </div>
-                  {/if}
-              </div>
+                  <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
+                    {t('actions.common.delete_item')}
+                  </div>
+                </div>
 
               </div>
             </div>
@@ -87,6 +92,15 @@
           </div>
         </div>
       </ModalDialog>
+    {/if}
+
+    {#if $flag.manageCustodiansDialog}
+      <ContractPrefsDialog
+        payload={$$props.wallet}
+        label={t('actions.save')}
+        on:set={setContractPrefs}
+        on:close={() => toggleFlag.manageCustodiansDialog(false)}>
+      </ContractPrefsDialog>
     {/if}
 
     {#if $flag.pinFormDialog }
@@ -162,11 +176,14 @@
 
   // FIXME </debug vars>
 
+  const multisigContracts = [conf.contracts[1].file];
+
   const { flag, toggleFlag } = utils.initFlags([
     'phraseDialog',
     'pinFormDialog',
     'sendCrystalFormDialog',
     'backupKeysDialog',
+    'manageCustodiansDialog',
   ]);
 
   const dispatch = svelte.createEventDispatcher();
@@ -298,7 +315,14 @@
     setBalance(parseInt(_.get(data, 'result.balance')));
   }
 
-	svelte.onMount(async () => {
+  async function setContractPrefs(e) {
+    $$props.wallet[$$props.wallet.contract] = e.detail;
+    await utils.storage.assign('myPhrases', $$props.wallet.tmpId, _.pick($$props.wallet, $$props.wallet.contract), conf.myPin);
+    toggleFlag.manageCustodiansDialog(false);
+  }
+
+  svelte.onMount(async () => {
+    console.log($$props.wallet);
     if ($$props.wallet.phrase) {
       walletData = await tonMethods.getWalletData($$props.wallet.phrase, false, {}, $$props.wallet.contract);
     } else if ($$props.wallet.secret && $$props.wallet.public) {

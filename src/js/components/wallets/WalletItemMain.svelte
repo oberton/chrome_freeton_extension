@@ -107,7 +107,7 @@
   let subscribeHandle;
 
   async function loadPendingTransactions() {
-    pendingTransactions = [1, 2,3];//await tonMethods.getPendingTransactionIds(address, contract);
+    pendingTransactions = await tonMethods.getPendingTransactionIds(address, contract);
   }
 
   function onTransactionConfirmed() {

@@ -18,13 +18,13 @@
               {t('actions.change_language')}
             </div>
             <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showImportWalletsDialog}>
-              {t('actions.import_wallets')}
+              {t('actions.import_wallet.wallets')}
             </div>
             {#if loggedIn }
               <div class='tooltip-menu-item' close-tooltip on:click={backupWallets}>
                 {t('actions.backup_wallets')}
               </div>
-              <div class='tooltip-menu-item' close-tooltip on:click={logout}>
+              <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showLogoutDialog}>
                 {t('actions.logout')}
               </div>
             {/if}
@@ -76,6 +76,22 @@
             </div>
           </ModalDialog>
         {/if}
+        {#if $flag.showLogoutDialog}
+          <ModalDialog on:close={() => toggleFlag.showLogoutDialog(false)} headline={t('logout.title')}>
+            <div class='text-line color-red text-sm'>
+              {t('logout.info')}
+            </div>
+            <div class='text-line color-label'>
+              {t('logout.backup_info')}
+            </div>
+            <div class='text-line'>
+              <button class='btn-blue-light cell-12' on:click={backupWallets}>{t('logout.backup_create')}</button>
+            </div>
+            <div class='text-line'>
+              <button on:click={logout} class='btn-red cell-12 font-semi'>{t('actions.logout')}</button>
+            </div>
+          </ModalDialog>
+        {/if}
       {/key}
     </div>
   {/key}
@@ -88,6 +104,7 @@
   const { flag, toggleFlag } = utils.initFlags([
     'languageDialog',
     'showImportWalletsDialog',
+    'showLogoutDialog',
   ]);
 
   const supportedLocales = _.toPairs(conf.supportedLocales);
@@ -173,6 +190,7 @@
   }
 
   async function logout() {
+    toggleFlag.showLogoutDialog(false);
     await utils.storage.remove('myPhrases');
     loggedIn = false;
     step = 'login';

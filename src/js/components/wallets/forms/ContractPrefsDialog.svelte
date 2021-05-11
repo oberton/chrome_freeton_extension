@@ -82,9 +82,11 @@
 
   svelte.onMount(async () => {
     headline = _.find(conf.contracts, c => c.file === payload.contract).name;
+    const custodians = payload && payload.contract && payload[payload.contract] && _.isArray(payload[payload.contract].custodians) ?  payload[payload.contract].custodians : [];
+    const minConfirms = payload && payload.contract && payload[payload.contract] && _.isNumber(payload[payload.contract].minConfirms) ?  payload[payload.contract].minConfirms : 1;
     formData = {
-      minConfirms: 1,
-      custodians: [],
+      minConfirms,
+      custodians,
     };
   });
 

@@ -1,3 +1,5 @@
+import fetchAbi from './fetchAbi';
+
 /**
   * @param {String} wallet from address
   * @param {String} wallet to address
@@ -11,7 +13,6 @@
 
 // payload  (String)
 async function sendTokensWithBase64Payload(from, to, amount, keys, sendForce = true, _contract = null, payload) {
-  let payload = '';
 
   const contract = _contract || conf.contracts[0].file;
 
@@ -22,7 +23,7 @@ async function sendTokensWithBase64Payload(from, to, amount, keys, sendForce = t
     value: amount * 1000000000,
     bounce: !sendForce,
     allBalance: false,
-    payload: payload,
+    payload: 'te6ccgEBAgEAEwABCAAAAAABABRTdXBlciBUZXh0',
   };
 
   const params = {
