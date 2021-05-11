@@ -47,3 +47,10 @@
 .pointer {
   cursor: pointer;
 }
+
+.ghost {
+  background-color: #F5F6FA;
+  > * {
+    opacity: 0;
+  }
+}

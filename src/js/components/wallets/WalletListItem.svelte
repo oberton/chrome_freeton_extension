@@ -322,7 +322,6 @@
   }
 
   svelte.onMount(async () => {
-    console.log($$props.wallet);
     if ($$props.wallet.phrase) {
       walletData = await tonMethods.getWalletData($$props.wallet.phrase, false, {}, $$props.wallet.contract);
     } else if ($$props.wallet.secret && $$props.wallet.public) {

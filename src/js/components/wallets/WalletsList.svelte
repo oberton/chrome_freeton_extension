@@ -1,8 +1,8 @@
 <div class=''>
   {#if wallets.length }
-    <div class='main-scrollable'>
+    <div class='main-scrollable c-draggable-root' on:sort={onItemsSorted}>
       {#each wallets as wallet (wallet.tmpId)}
-        <div class='hoverable gtr-ver-xxs gtr-hor-sm'>
+        <div class='hoverable gtr-ver-xxs gtr-hor-sm' use:sortable data-id={wallet.tmpId}>
           <div class='gtr-l'>
             <WalletListItem
               wallet={wallet}
@@ -124,7 +124,7 @@
       wallets = [];
     }
     allWallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
-    wallets = allWallets.filter(w => w.network === currentNetwork);
+    wallets = _(allWallets).filter(w => w.network === currentNetwork).sortBy('sortPos').value();
     /* showWallet(wallets[1]); */
   }
 
@@ -173,6 +173,19 @@
     setTimeout(refreshWallets);
     toggleFlag.restoreWalletDialog(false);
     utils.toast.info('info.wallet.restored');
+  }
+
+  async function onItemsSorted(e) {
+    const ids = e.detail;
+
+    _.each(ids, (id, index) => {
+      const walletItem = _.find(allWallets, w => w.tmpId === id);
+      if (walletItem) {
+        walletItem.sortPos = index;
+      }
+    });
+
+    await utils.storage.setEncrypted('myPhrases', allWallets, conf.myPin);
   }
 
 	svelte.onMount(async () => {
