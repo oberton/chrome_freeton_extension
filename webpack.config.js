@@ -23,7 +23,6 @@ module.exports = {
 
   entry: {
     popup: './js/popup',
-    en: './locales/en.yml',
   },
 
   output: {
