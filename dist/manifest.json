@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Objerton Chrome Freeton Extension",
+  "version": "0.0.0.1",
+
+  "permissions": [
+    "storage"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "24": "images/icon24.png",
+      "32": "images/icon32.png",
+      "64": "images/icon64.png",
+      "128": "images/icon128.png"
+    },
+    "default_popup": "html/popup.html",
+    "default_title": "Objerton Chrome Freeton Extension"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
