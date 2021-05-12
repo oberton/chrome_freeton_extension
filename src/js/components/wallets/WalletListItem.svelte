@@ -22,7 +22,7 @@
               {(balance || 0).toFixed(3)}
             </div>
           </div>
-          <StickersForm parent={$$props.wallet}></StickersForm>
+          <StickersForm nonEmptyClassName='row-l-sm gtr-b-xs' parent={$$props.wallet}></StickersForm>
         </div>
 
         <div>

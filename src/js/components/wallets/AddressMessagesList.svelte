@@ -1,70 +1,67 @@
-<div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 287 : 374) + "px"}>
-    {#each messages as message (message.id)}
-      <div class='gtr-b-xxs gtr-hor-sm'>
-        <div class='tbl fixed hover-parent gtr-hor-sm'>
-          <div class='tbl-cell'>
-            <div>
-              <div class='smile alg-m'>
-                <AddressEllipsis label={t('labels.message.id')} take={5} address={message.id}></AddressEllipsis>
-              </div>
-              <div class='smile alg-m hover-parent-show'>
-                <CopyTextBtn
-                  label={t('actions.message.copy_id')}
-                  value={message.id}>
-                </CopyTextBtn>
-              </div>
+<div class='main-scrollable' use:scrollable on:bottom={loadMore} style='height: 100%; max-height: unset;'>
+  {#each messages as message (message.id)}
+    <div class='gtr-b-xxs gtr-hor-sm'>
+      <div class='tbl fixed hover-parent gtr-hor-sm'>
+        <div class='tbl-cell'>
+          <div>
+            <div class='smile alg-m'>
+              <AddressEllipsis label={t('labels.message.id')} take={5} address={message.id}></AddressEllipsis>
             </div>
-            <div class='color-light text-xs'>
-              {formatTime(message.createdAt)} - {formatDate(message.createdAt)}
+            <div class='smile alg-m hover-parent-show'>
+              <CopyTextBtn
+                label={t('actions.message.copy_id')}
+                value={message.id}>
+              </CopyTextBtn>
             </div>
           </div>
-          <div class='tbl-cell text-right alg-m'>
-            <div>
-              <div class='text-md' style='height: 39px; line-height: 39px;'>
-                <TonAmount gemPos='right' value={message.value}></TonAmount>
-              </div>
-              <div class='color-light text-xs'>
-                {#if message.dst === address}
-                  <span class='icon-arrow-left color-green'></span>
-                  {#if message.src}
-                    {message.src.substring(0, 5)}
-                  {:else}
-                    {message.msgType.substring(0, 3)}
-                  {/if}
+          <div class='color-light text-xs'>
+            {formatTime(message.createdAt)} - {formatDate(message.createdAt)}
+          </div>
+        </div>
+        <div class='tbl-cell text-right alg-m'>
+          <div>
+            <div class='text-md' style='height: 39px; line-height: 39px;'>
+              <TonAmount gemPos='right' value={message.value}></TonAmount>
+            </div>
+            <div class='color-light text-xs'>
+              {#if message.dst === address}
+                <span class='icon-arrow-left color-green'></span>
+                {#if message.src}
+                  {message.src.substring(0, 5)}
                 {:else}
-                  <span class='icon-arrow-right color-red'></span>
-                  {#if message.dst}
-                    {message.dst.substring(0, 5)}
-                  {:else}
-                    {message.msgType.substring(0, 3)}
-                  {/if}
+                  {message.msgType.substring(0, 3)}
                 {/if}
-              </div>
+              {:else}
+                <span class='icon-arrow-right color-red'></span>
+                {#if message.dst}
+                  {message.dst.substring(0, 5)}
+                {:else}
+                  {message.msgType.substring(0, 3)}
+                {/if}
+              {/if}
             </div>
           </div>
         </div>
       </div>
-    {/each}
+    </div>
+  {/each}
 
-    {#if loading}
-      <div class='gtr-hor'>
-        <ListLoader times={10}>
-          <div>
-            <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
-            <div style="height: 12px;width: 100%; background: white;"></div>
-            <div style="height: 11px;width: 30%; background: white; margin-left: 52%;"></div>
-          </div>
-        </ListLoader>
-      </div>
-    {/if}
+  {#if loading}
+    <div class='gtr-hor'>
+      <ListLoader times={10}>
+        <div>
+          <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
+          <div style="height: 12px;width: 100%; background: white;"></div>
+          <div style="height: 11px;width: 30%; background: white; margin-left: 52%;"></div>
+        </div>
+      </ListLoader>
+    </div>
+  {/if}
 
-  </div>
 </div>
 
 <script>
   export let address;
-  export let hasAlert;
 
   const formatTime = utils.formatTime;
   const formatDate = utils.formatDate;

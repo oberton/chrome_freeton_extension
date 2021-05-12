@@ -1,89 +1,89 @@
-<div>
+<div class='full-height' style='margin-bottom: -10px'>
+  <div class='tbl'>
+    <div class='tbl-row' style='height: auto'>
+      <div classs='gtr-hor-xs'>
+        <button
+          type="button"
+          class="btn-dim-light btn-round"
+          on:click={() => dispatch('close')}
+          use:tooltip
+          data-tooltip={t('actions.go_back')}>
+          <span class="text-md icon-arrow-left" style='color: #444;'></span>
+        </button>
 
-  <div classs='gtr-hor-xs'>
-    <button
-      type="button"
-      class="btn-dim-light btn-round"
-      on:click={() => dispatch('close')}
-      use:tooltip
-      data-tooltip={t('actions.go_back')}>
-      <span class="text-md icon-arrow-left" style='color: #444;'></span>
-    </button>
-
-    <div class='smile alg-m text-lg'>
-      {#key accountType}
-        <div class='smile pos-rel'>
-          <WalletGemIcon accountType={accountType} contract={wallet.contract}></WalletGemIcon>
-          {#if pendingTransactions && pendingTransactions.length}
-            <div
-              class='badge'
-              use:tooltip
-              data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
-              {pendingTransactions.length}
+        <div class='smile alg-m text-lg'>
+          {#key accountType}
+            <div class='smile pos-rel'>
+              <WalletGemIcon accountType={accountType} contract={wallet.contract}></WalletGemIcon>
+              {#if pendingTransactions && pendingTransactions.length}
+                <div
+                  class='badge'
+                  use:tooltip
+                  data-tooltip={t('info.transactions.has_pending', {count: pendingTransactions.length})}>
+                  {pendingTransactions.length}
+                </div>
+              {/if}
             </div>
-          {/if}
+          {/key}
         </div>
-      {/key}
+        <div class='text-md smile alg-m gtr-l-xs'>
+          {balance.toFixed(3)}
+        </div>
+        <StickersForm nonEmptyClassName='gtr-l-2x row-l-xs' parent={$$props.wallet}></StickersForm>
+      </div>
+
+      {#if pendingTransactions && pendingTransactions.length}
+        <div class='gtr-hor-sm gtr-ver-sm'>
+          <div class='alert alert-warning pointer' on:click={toggleFlag.confirmPendingsDialog}>
+            {#if pendingTransactions.length === 1}
+              {t('info.transaction.pending.one')}
+            {:else}
+              {t('info.transaction.pending.many', {count: pendingTransactions.length})}
+            {/if}
+          </div>
+        </div>
+      {/if}
+      {#if address && accountType}
+        <div class='gtr-b-sm'>
+          <div class='tabs'>
+            {#each ['messages', 'transactions'] as tab}
+              <div
+                class={"tabs-item cell-6" + (activeTab === tab ? " active" : "")}
+                on:click={() => activeTab = tab}>
+                {t('labels.wallet.' + tab)}
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
     </div>
-    <div class='text-md smile alg-m gtr-l-xs'>
-      {balance.toFixed(3)}
+
+    <div class='tbl-row'>
+      {#if address && accountType}
+        {#if activeTab === 'messages'}
+          <AddressMessagesList
+            address={address}>
+          </AddressMessagesList>
+        {:else if activeTab === 'transactions'}
+          <AddressTransactionsList
+            address={address}>
+          </AddressTransactionsList>
+        {/if}
+      {/if}
+
+      {#if $flag.confirmPendingsDialog}
+        <ModalDialog on:close={() => toggleFlag.confirmPendingsDialog(false)} headline={t('confirm.transactions')}>
+          <ConfirmTransactionsForm
+            on:confirmed={onTransactionConfirmed}
+            wallet={wallet}
+            walletData={walletData}
+            address={address}
+            pendingTransactions={pendingTransactions}>
+          </ConfirmTransactionsForm>
+        </ModalDialog>
+      {/if}
     </div>
   </div>
-
-  {#if pendingTransactions && pendingTransactions.length}
-    <div class='gtr-hor-sm gtr-ver-sm'>
-      <div class='alert alert-warning pointer' on:click={toggleFlag.confirmPendingsDialog}>
-        {#if pendingTransactions.length === 1}
-          {t('info.transaction.pending.one')}
-        {:else}
-          {t('info.transaction.pending.many', {count: pendingTransactions.length})}
-        {/if}
-      </div>
-    </div>
-  {/if}
-
-  {#if address && accountType}
-
-    <div class='gtr-b-sm'>
-      <div class='tabs'>
-        {#each ['messages', 'transactions'] as tab}
-          <div
-            class={"tabs-item cell-6" + (activeTab === tab ? " active" : "")}
-            on:click={() => activeTab = tab}>
-            {t('labels.wallet.' + tab)}
-          </div>
-        {/each}
-      </div>
-    </div>
-
-    {#if activeTab === 'messages'}
-      <div class='row-b-sm'>
-        <AddressMessagesList
-          hasAlert={pendingTransactions && pendingTransactions.length}
-          address={address}>
-        </AddressMessagesList>
-      </div>
-    {:else if activeTab === 'transactions'}
-      <div class='row-b-sm'>
-        <AddressTransactionsList
-          hasAlert={pendingTransactions && pendingTransactions.length}
-          address={address}>
-        </AddressTransactionsList>
-      </div>
-    {/if}
-  {/if}
-
-  {#if $flag.confirmPendingsDialog}
-    <ModalDialog on:close={() => toggleFlag.confirmPendingsDialog(false)} headline={t('confirm.transactions')}>
-      <ConfirmTransactionsForm
-        on:confirmed={onTransactionConfirmed}
-        wallet={wallet}
-        walletData={walletData}
-        address={address}
-        pendingTransactions={pendingTransactions}>
-      </ConfirmTransactionsForm>
-    </ModalDialog>
-  {/if}
 </div>
 
 <script>

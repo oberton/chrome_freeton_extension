@@ -1,4 +1,4 @@
-<div id={elId} class={parentStickers.length ? "row-t-xs gtr-b-xs row-l-sm gtr-t-sm" : "smile alg-m"}>
+<div id={elId} class={parentStickers.length ? (nonEmptyClassName || '') : "smile alg-m"}>
   {#each parentStickers as sticker (sticker.id)}
     <div style={'border-radius: 2em; font-size: 11px; color:' +sticker.color} class='tag smile alg-m text-xs'>{sticker.text}</div>
   {/each}
@@ -33,18 +33,20 @@
                 </div>
               </div>
             </div>
-            {#each stickers as sticker (sticker.id)}
-              <div class='gtr-b-xxs'>
-                <StickerItem
-                  on:submit={saveStickers}
-                  on:remove={() => removeSticker(sticker.id)}
-                  on:focus={onStickerFocus}
-                  on:blur={onStickerBlur}
-                  parent={parent}
-                  sticker={sticker}>
-                </StickerItem>
-              </div>
-            {/each}
+            <div class='c-draggable-root' on:sort={onItemsSorted}>
+              {#each stickers as sticker (sticker.id)}
+                <div class='gtr-b-xxs' use:sortable data-id={sticker.id}>
+                  <StickerItem
+                    on:submit={saveStickers}
+                    on:remove={() => removeSticker(sticker.id)}
+                    on:focus={onStickerFocus}
+                    on:blur={onStickerBlur}
+                    parent={parent}
+                    sticker={sticker}>
+                  </StickerItem>
+                </div>
+              {/each}
+            </div>
           </div>
         {/if}
       </div>
@@ -56,6 +58,7 @@
 <script>
 
   export let parent;
+  export let nonEmptyClassName;
 
   let stickers = [];
   let parentStickers = [];
@@ -93,6 +96,11 @@
     newSticker.color = e.target.value;
   }
 
+  function onItemsSorted(e) {
+    const ids = e.detail;
+    stickers = _.map(ids, id => _.find(stickers, s => s.id === id));
+    utils.storage.setEncrypted('myStickers', stickers, conf.myPin);
+  }
 
   function initNewSticker() {
     const prevColor = _.get(stickers, '0.color', '');

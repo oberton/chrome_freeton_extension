@@ -1,56 +1,52 @@
-<div>
-  <div class='main-scrollable' use:scrollable on:bottom={loadMore} style={"max-height:" + (hasAlert ? 287 : 374) + "px"}>
-    {#each transactions as transaction (transaction.id)}
-      <div class='gtr-b-xxs fadeIn gtr-hor-sm'>
-        <div class='gtr-hor-sm'>
-          <div class='tbl fixed hover-parent'>
-            <div class='tbl-cell'>
-              <div>
-                <div class='smile alg-m'>
-                  <AddressEllipsis label={t('labels.transaction.id')} take={4} address={transaction.id}></AddressEllipsis>
-                </div>
-                <div class='smile alg-m hover-parent-show'>
-                  <CopyTextBtn
-                    label={t('actions.transaction.copy_id')}
-                    value={transaction.id}>
-                  </CopyTextBtn>
-                </div>
+<div class='main-scrollable' use:scrollable on:bottom={loadMore} style='height: 100%; max-height: unset;'>
+  {#each transactions as transaction (transaction.id)}
+    <div class='gtr-b-xxs fadeIn gtr-hor-sm'>
+      <div class='gtr-hor-sm'>
+        <div class='tbl fixed hover-parent'>
+          <div class='tbl-cell'>
+            <div>
+              <div class='smile alg-m'>
+                <AddressEllipsis label={t('labels.transaction.id')} take={4} address={transaction.id}></AddressEllipsis>
               </div>
-              <div class='color-light text-xs'>
-                {formatTime(transaction.createdAt)} - {formatDate(transaction.createdAt)}
+              <div class='smile alg-m hover-parent-show'>
+                <CopyTextBtn
+                  label={t('actions.transaction.copy_id')}
+                  value={transaction.id}>
+                </CopyTextBtn>
               </div>
             </div>
-            <div class='tbl-cell text-right alg-m'>
-              <div>
-                <div class='text-md' style='height: 39px; line-height: 39px;'>
-                  <TonAmount gemPos='right' value={transaction.value}></TonAmount>
-                </div>
+            <div class='color-light text-xs'>
+              {formatTime(transaction.createdAt)} - {formatDate(transaction.createdAt)}
+            </div>
+          </div>
+          <div class='tbl-cell text-right alg-m'>
+            <div>
+              <div class='text-md' style='height: 39px; line-height: 39px;'>
+                <TonAmount gemPos='right' value={transaction.value}></TonAmount>
               </div>
             </div>
           </div>
         </div>
       </div>
-    {/each}
+    </div>
+  {/each}
 
-    {#if loading}
-      <div class='gtr-hor'>
-        <ListLoader times={10}>
-          <div>
-            <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
-            <div style="height: 12px;width: 100%; background: white;"></div>
-            <div style="height: 11px;width: 48%; background: white; margin-left: 52%;"></div>
-          </div>
-        </ListLoader>
-      </div>
-    {/if}
-  </div>
-
+  {#if loading}
+    <div class='gtr-hor'>
+      <ListLoader times={10}>
+        <div>
+          <div style="height: 23px;width: 39%;background: white;margin-left: 38%;"></div>
+          <div style="height: 12px;width: 100%; background: white;"></div>
+          <div style="height: 11px;width: 48%; background: white; margin-left: 52%;"></div>
+        </div>
+      </ListLoader>
+    </div>
+  {/if}
 </div>
 
 
 <script>
   export let address;
-  export let hasAlert;
 
   let transactions = [];
   let transactionsCount;
