@@ -1,8 +1,6 @@
 main:
   tabs:
     wallets: "Кошельки"
-    depools: "Де-Пулы"
-    stakes: "Мои Стейки"
 
 info:
   account_type:
@@ -15,16 +13,10 @@ info:
   transactions:
     has_pending: '<%= count %> транзакций ожидающих подтверждения.'
 
-  upload:
-    invalid_keys: 'Неправильный файл'
-
   keys:
     invalid:
       public: 'Публичный ключ некорректный'
       secret: 'Секретный ключ некорректный'
-
-  file:
-    too_big: 'Файл чересчур большой, максибальный размер 1кб'
 
   no_data: 'Нет данных'
 
@@ -101,7 +93,6 @@ actions:
     restore: "Восстановить кошелек"
     receive: "Отправить кристаллы"
     download_keys: 'Скачать пару ключей'
-    upload_keys: 'Загрузить пару ключей'
     refresh: 'Обновить список кошельков'
 
   phrase:

@@ -1,8 +1,6 @@
 main:
   tabs:
     wallets: "Wallets"
-    depools: "DePools"
-    stakes: "MyStakes"
 
 info:
   account_type:
@@ -15,16 +13,10 @@ info:
   transactions:
     has_pending: '<%= count %> pending transactions.'
 
-  upload:
-    invalid_keys: 'Invalid File Input'
-
   keys:
     invalid:
       public: 'Invalid Public Key'
       secret: 'Invalid Secret Key'
-
-  file:
-    too_big: 'File is too big, max upload size is 1kb'
 
   no_data: 'Nothing to show'
 
@@ -101,7 +93,6 @@ actions:
     restore: "Restore Wallet"
     receive: "Send Crystals"
     download_keys: 'Download Key Pair'
-    upload_keys: 'Upload Key Pair'
     refresh: 'Refresh Wallets'
 
   phrase:

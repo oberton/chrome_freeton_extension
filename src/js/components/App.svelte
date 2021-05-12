@@ -17,13 +17,17 @@
             <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.languageDialog}>
               {t('actions.change_language')}
             </div>
-            <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showImportWalletsDialog}>
-              {t('actions.import_wallet.wallets')}
-            </div>
-            {#if loggedIn }
-              <div class='tooltip-menu-item' close-tooltip on:click={backupWallets}>
-                {t('actions.backup_wallets')}
+            {#if !loggedIn || step === 'main' }
+              <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showImportWalletsDialog}>
+                {t('actions.import_wallet.wallets')}
               </div>
+            {/if}
+            {#if loggedIn }
+              {#if step === 'main'}
+                <div class='tooltip-menu-item' close-tooltip on:click={backupWallets}>
+                  {t('actions.backup_wallets')}
+                </div>
+              {/if}
               <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.showLogoutDialog}>
                 {t('actions.logout')}
               </div>
@@ -81,12 +85,14 @@
             <div class='text-line color-red text-sm'>
               {t('logout.info')}
             </div>
-            <div class='text-line color-label'>
-              {t('logout.backup_info')}
-            </div>
-            <div class='text-line'>
-              <button class='btn-blue-light cell-12' on:click={backupWallets}>{t('logout.backup_create')}</button>
-            </div>
+            {#if step === 'main'}
+              <div class='text-line color-label'>
+                {t('logout.backup_info')}
+              </div>
+              <div class='text-line'>
+                <button class='btn-blue-light cell-12' on:click={backupWallets}>{t('logout.backup_create')}</button>
+              </div>
+            {/if}
             <div class='text-line'>
               <button on:click={logout} class='btn-red cell-12 font-semi'>{t('actions.logout')}</button>
             </div>

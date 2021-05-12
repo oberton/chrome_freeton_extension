@@ -1,0 +1,198 @@
+main:
+  tabs:
+    wallets: "Monederos"
+
+info:
+  account_type:
+    active: 'Activa'
+    inactive: 'Inactiva'
+
+  copied: "Copiado"
+  telegram_chat_link: 'Oberton Telegram Chat'
+
+  transactions:
+    has_pending: '<%= count %> transacciones pendientes.'
+
+  keys:
+    invalid:
+      public: 'Clave pública no válida'
+      secret: 'Clave secreta no válida'
+
+  no_data: 'Nada que mostrar'
+
+  pin:
+    device_info: "Solo funcionará en este dispositivo"
+    confirm_info: "Repita el PIN del paso anterior"
+
+  wallet:
+    create_first: "Cree su primero monedero haciendo clic en el botón más"
+    created: 'Monedero creado'
+    restored: "Monedero restaurado"
+    removed: "Monedero eliminado"
+    exists: "Monedero ya se agregó"
+
+  phrase:
+    invalid: "Frase maestra no válida"
+    no_photo: "No tomes ni fotos ni capturas de pantalla. Otras aplicaciones pueden acceder los. Escribe todo en papel y guárdalo en un lugar seguro"
+
+  transaction:
+    error: "Transacción fallada"
+    sent: "Transacción enviada"
+    pending:
+      one: 'Hay 1 transacción esperando confirmación.'
+      many: 'Hay <%= count %> transacciones pendientes de confirmación.'
+
+  custodians:
+    already_exists: 'El custodio ya existe'
+
+  saved: 'Guardado'
+
+confirm:
+  selected: 'Confirmar seleccion'
+  transactions: 'Confirmar transacción'
+  download_transaction_info: 'Descargar JSON de transacción'
+
+actions:
+  go_back: 'Regresar'
+  select_all: 'Seleccionar todo'
+  deselect_all: 'Deseleccionar todo'
+  backup_wallets: 'Crear un backup de monederos'
+  save: 'Guardar'
+
+  import_wallet:
+    wallets: 'Importar un backup de monederos'
+    merge_wallets: 'Merge with my wallets'
+    paste: 'Pegar el contenido de backup'
+    submit: 'Importar'
+
+  custodians:
+    manage: 'Administrar los custodios'
+
+
+  change_language: 'Cambiar idioma'
+  logout: "Cerrar sesión"
+
+  tokens:
+    send: "Enviar tokens"
+    confirm_send: "Confirmar y enviar"
+
+  pin:
+    enter: "Ingrese Pin"
+    create: "Crear Pin"
+    confirm: "Confirmar Pin"
+
+  address:
+    copy: "Copiar el dirección"
+
+  wallet:
+    add: 'Agregar billetera'
+    import_keys: 'Importar par de claves'
+    paste_keys: 'Claves públicas'
+    paste_keys_order: 'Clave pública y secreta cada una en una nueva línea'
+    create: "Crear un monedero"
+    restore: "Restaurar en monedero"
+    receive: "Recibir cristales"
+    download_keys: 'Descargar par de claves'
+    refresh: 'Actualizar monederos'
+
+  phrase:
+    generate: 'Generar nueva frase secreta'
+    backup: "Guardar frase secreta"
+    backup_keys: 'Guardar par de claves'
+
+  sign_in:
+    title: "Entrar"
+    with_phrase: "Entrar con la frase secreta"
+
+  common:
+    delete_item: "Eliminar"
+
+  copy_key:
+    public: 'Copiar clave publica'
+    secret: 'Copiar clave secreta'
+
+  paste_key:
+    public: 'Pegar clave publica'
+    secret: 'Paegar clave secreta'
+
+  transaction:
+    copy_id: 'Copiar ID de transacción'
+
+  message:
+    copy_id: 'Copiar ID de mensaje'
+
+labels:
+  advanced: 'Avanzado'
+  from: 'Desde'
+  to: 'Para'
+  amount: 'Cantidad'
+  optional: 'Opcional'
+  choose_one: 'Elige una opción'
+  ton:
+    server: "Red"
+  master_password: 'Frase secreta'
+  wallet:
+    contract: 'Contrato para desplegar'
+    word_count: 'Las palabras cuentan'
+    messages: 'Mensajes'
+    transactions: 'Transacciones'
+
+  keys:
+    public: 'Clave publica'
+    secret: 'Clave secreta'
+    pair: 'Par de claves'
+
+  custodians:
+    plural: 'Custodios'
+    add: 'Agregar un custodio'
+    set:
+      public: 'Solo la clave publica'
+      keys: 'Agregar par de claves para poder confirmar las transacciones pordel custodio agregado'
+      phrase: 'Agregar la frase secreta para poder confirmar las transacciones pordel custodio agregado'
+
+  multisig:
+    min_confirms: 'Min. confirmaciones para la transacción'
+
+  transaction:
+    id: 'ID de transacción'
+
+  message:
+    id: 'ID de mensaje'
+
+common:
+  or: "o"
+
+keys:
+  public: "Publica"
+  secret: "Secreta"
+
+sticker:
+  add: 'Agregar un sticker'
+  remove: 'Elliminar sticker'
+  to_save: 'para guardar'
+  to_edit: 'para editar'
+  add_new_placeholder: 'Agregar un sticker nuevo...'
+
+send_tokens:
+  function_name: 'Nombre de función'
+  abi_json: 'ABI JSON'
+  function_params: 'Función Params (JSON)'
+  payload: 'Carga útil'
+  send_options:
+    title: 'Additional Options'
+    comment: 'Opciones adicionales'
+    function: 'Comentario'
+    payload: 'Carga útil'
+
+error:
+  send_tokens:
+    function_name: 'Nombre de función no válido'
+    function_params: 'Parámetros de función no válidos'
+    abi_json: 'ABI JSON no válido'
+    payload: 'Carga útil no válida'
+
+logout:
+  title: 'Cerrar sesión'
+  info: 'Si cierra la sesión, se eliminarán todas los monederos agregados'
+  backup_info: 'Crear un backup de monederos antes de cerrar sesión'
+  backup_create: 'Crear un backup de monederos'
