@@ -5,7 +5,7 @@
         <div
           id="logout-button"
           class="text-right cell-12"
-          style='height: 45px; margin-bottom: -45px; display: block;'>
+          style='height: 45px; margin-bottom: -45px; display: block; position: relative; z-index: 2;'>
           <button
             type="button"
             class="btn-dim-light btn-round"
