@@ -20,6 +20,7 @@ npm run serve
 npm run build
 ```
 
+or just load `/dist` folder as unpacked extension to the `chrome://extensions`
 
 
 ## Features
