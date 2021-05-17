@@ -3,6 +3,8 @@
 
 Oberton Chrome FreeTon Extension is in-browser blockchain crypto wallet of FreeTon blockchain network.
 
+Install from [Google Webstore](https://chrome.google.com/webstore/detail/oberton-chrome-freeton-ex/emdkjliaadghhnaanlbpdgmddbjlmhpi)
+
 ## Get started
 to install project dependencies
 
