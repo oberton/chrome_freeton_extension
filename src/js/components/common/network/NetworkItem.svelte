@@ -35,6 +35,7 @@
       <button
         use:tooltip
         data-tooltip={t('labels.delete')}
+        tooltip-close
         on:click={((e) => {
           dispatch('delete', true);
           e.preventDefault();
