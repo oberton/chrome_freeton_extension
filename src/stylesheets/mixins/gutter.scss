@@ -10,7 +10,7 @@
     $props: nth($sides-prop, $i);
     $side: nth($sides, $i);
     .#{$classname}-#{$side}{
-      @include prop($property, $value / 2, $props);
+      @include prop($property, math.div($value, 2), $props);
       @each $step in $gutter-steps{
         &-#{nth($step, 1)}{
           @include prop($property, $value * nth($step, 2), $props);

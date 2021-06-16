@@ -202,8 +202,8 @@
     step = 'login';
   }
 
-  function backupWallets() {
-    const payload = _.pick(localStorage, ['myPhrases', 'myStickers']);
+  async function backupWallets() {
+    const payload = await utils.storage.get(['myPhrases', 'myStickers']);
     const filename = `wallets_${(new Date()).toISOString().split('.')[0].split('T').join('_')}.json`;
     utils.saveToFile(JSON.stringify(payload), filename);
   }

@@ -23,6 +23,7 @@ module.exports = {
 
   entry: {
     popup: './js/popup',
+    background: './js/background',
   },
 
   output: {
@@ -64,6 +65,7 @@ module.exports = {
       }, {
         loader: 'sass-loader',
         options: {
+          implementation: require("sass"),
           sourceMap: !isProd,
           sassOptions : {
             sourceComments : true,

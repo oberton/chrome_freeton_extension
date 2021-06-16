@@ -1,0 +1,2 @@
+/*! For license information please see background.js.LICENSE.txt */
+window.setInterval((function(){console.log("Hello, world!")}),18e4),chrome.alarms.create("refresh",{periodInMinutes:3}),chrome.runtime.onInstalled.addListener((()=>{console.log("onInstalled....")}));
