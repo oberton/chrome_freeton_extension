@@ -36,12 +36,10 @@
 
   function downloadKeys() {
     const content = [
-      '----BEGIN OF PUBLIC KEY----',
-      walletData.keys.public,
-      '----END OF PUBLIC KEY----',
-      '----BEGIN OF SECRET KEY----',
-      walletData.keys.secret,
-      '----END OF SECRET KEY----',
+      '{',
+      `  "public": "${walletData.keys.public}",`,
+      `  "secret": "${walletData.keys.secret}",`,
+      '}',
     ].join("\n");
     utils.saveToFile(content, `${walletData.wallet.address}.keys`);
   }
