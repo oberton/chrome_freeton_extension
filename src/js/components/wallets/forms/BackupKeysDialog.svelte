@@ -38,7 +38,7 @@
     const content = [
       '{',
       `  "public": "${walletData.keys.public}",`,
-      `  "secret": "${walletData.keys.secret}",`,
+      `  "secret": "${walletData.keys.secret}"`,
       '}',
     ].join("\n");
     utils.saveToFile(content, `${walletData.wallet.address}.keys`);
