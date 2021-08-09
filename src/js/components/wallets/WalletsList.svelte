@@ -7,6 +7,7 @@
             <WalletListItem
               wallet={wallet}
               on:open={() => showWallet(wallet)}
+              on:sendCrystals={onSendCrystals}
               on:removeWallet={() => removeWallet(wallet)}>
             </WalletListItem>
           </div>
@@ -117,6 +118,10 @@
 
   function showWallet(wallet) {
     dispatch('open-wallet-details', wallet); 
+  }
+
+  function onSendCrystals(e) {
+    dispatch('sendCrystals', e.detail);
   }
 
   async function refreshWallets(force = false) {

@@ -18,7 +18,7 @@
         required={true}
         bind:value={formData.amount}
         min={0.001}
-        max={$$props.balance}
+        max={balance}
         step={0.001}
         label={t('labels.amount')} />
 
@@ -89,6 +89,7 @@
   const dispatch = svelte.createEventDispatcher();
 
   let payloadType = 'comment';
+  let balance;
 
   const payloadTypes = [
     'comment',
@@ -96,16 +97,7 @@
     'payload',
   ];
 
-  const formData = {
-    from: $$props.wallet.address,
-    to: '',
-    amount: '',
-    comment: '',
-    abiJSON: '',
-    functionParams: '',
-    functionName: '',
-    payload: '',
-  };
+  let formData = {};
 
   function setPayloadType(type) {
     payloadType = type;
@@ -117,8 +109,10 @@
     let err, result;
 
     const { from, amount } = formData;
+
     const sendTo = formData.to;
-    const { keys, contract } = $$props;
+
+    const { keys, contract } = _.find(allWallets, w => w.address === formData.from) || {};
 
     const exit = (key) => {
       utils.toast.error(t(`error.send_tokens.${key}`));
@@ -167,5 +161,22 @@
     dispatch('transactionSent', result);
 
   }
+
+  let allWallets;
+
+  svelte.onMount(async () => {
+    allWallets = await tonMethods.getAllWallets();
+
+    formData = {
+      from: $$props.from || allWallets[0].address,
+      to: $$props.to || '',
+      amount: $$props.amount || '',
+      comment: '',
+      abiJSON: '',
+      functionParams: '',
+      functionName: '',
+      payload: '',
+    };
+  });
 
 </script>

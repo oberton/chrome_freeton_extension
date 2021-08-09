@@ -12,6 +12,7 @@
     {#if activeTab === t('main.tabs.wallets') }
       <WalletsList
         on:open-wallet-details={openWalletDetails}
+        on:sendCrystals={onSendCrystals}
         currentNetwork={currentNetwork}>
       </WalletsList>
     {:else if activeTab === 'walletDetails'}
@@ -24,9 +25,25 @@
     {/if}
   {/key}
 
+  {#if $flag.sendCrystalFormDialog }
+    <ModalDialog on:close={() => toggleFlag.sendCrystalFormDialog(false)} headline={t('actions.tokens.send')}>
+      <SendTokensForm
+        from={sendTokens.from}
+        amount={sendTokens.amount}
+        to={sendTokens.to}
+        on:transactionSent={onTransactionSent} />
+    </ModalDialog>
+  {/if}
+
 </div>
 
 <script>
+  export let apiParams;
+
+  const { flag, toggleFlag } = utils.initFlags([
+    'sendCrystalFormDialog',
+  ]);
+
   const tabs = [
     t('main.tabs.wallets'),
     t('main.tabs.stakes'),
@@ -38,13 +55,36 @@
 
   let currentNetwork = conf.currentTonServer || conf.tonServers[0];
 
+  let sendTokens = {};
+
+  function onSendCrystals(e) {
+    sendTokens = { from: e.detail };
+    toggleFlag.sendCrystalFormDialog(true);
+  }
+
   function openWalletDetails(e) {
     activeWallet = e.detail;
     activeTab = 'walletDetails';
   }
 
+  function onTransactionSent() {
+    toggleFlag.sendCrystalFormDialog(false);
+    utils.toast.info(t('info.transaction.sent'));
+  }
+
   function updateNetwork() {
     currentNetwork = conf.currentTonServer || conf.tonServers[0];
   }
+
+  svelte.onMount(() => {
+    console.log({apiParams});
+    if (apiParams && apiParams.fn) {
+      if (apiParams.fn === 'sendTokens') {
+        sendTokens = apiParams.params;
+        toggleFlag.sendCrystalFormDialog(true);
+      }
+      console.log(apiParams);
+    }
+  });
 
 </script>

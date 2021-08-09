@@ -64,7 +64,9 @@
         {/if}
 
         {#if step === 'main'}
-          <Main />
+          {#key apiParams}
+            <Main apiParams={apiParams} />
+          {/key}
         {/if}
 
         {#if $flag.showImportWalletsDialog}
@@ -145,7 +147,7 @@
     toggleFlag.showImportWalletsDialog(false);
   }
 
-  async function checkPin(e) {
+  async function checkPin(e, silent = false) {
     const pin = e.detail;
 
     try {
@@ -159,6 +161,10 @@
       conf.myPin = pin;
       step = 'main';
       loggedIn = true;
+
+      if (!silent) {
+        utils.eventBus.trigger('pin-success', conf.myPin);
+      }
     } catch (e) {
       showPinError();
     }
@@ -178,6 +184,7 @@
       }
 
       conf.myPin = pin;
+      debugger
 
       const result = await tonMethods.getWalletData(newWallet.phrase);
 
@@ -187,7 +194,16 @@
       conf.myPin = pin;
       step = 'main';
       loggedIn = true;
+
+      utils.eventBus.trigger('pin-success', conf.myPin);
     });
+  }
+
+  let apiParams = null;
+
+  function onApiCall(params) {
+    apiParams = params;
+    console.log('apiParams!!!', apiParams);
   }
 
   function signIn(e) {
@@ -208,7 +224,22 @@
     utils.saveToFile(JSON.stringify(payload), filename);
   }
 
+  const setPinFromBg = (pin) => {
+    checkPin({detail: pin}, true);
+  };
+
   svelte.onMount(async () => {
+    utils.eventBus
+      .on('close-popup', window.close)
+      .on('oberton-api-call', onApiCall)
+      .on('set-pin-from-bg', setPinFromBg);
+
+    setTimeout(() => {
+      utils.eventBus
+        .trigger('popup-ready', true)
+        .trigger('ask-for-pin', true);
+    });
+
     await utils.storage.set({locale: currentLocale});
 
     const result = await utils.storage.get(['myPhrases']);
@@ -229,5 +260,12 @@
         step = 'main';
       }
     }
+  });
+
+  svelte.onDestroy(() => {
+    utils.eventBus
+      .off('close-popup', window.close)
+      .off('oberton-api-call', onApiCall)
+      .off('set-pin-from-bg', setPinFromBg);
   });
 </script>

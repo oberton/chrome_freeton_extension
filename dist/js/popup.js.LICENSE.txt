@@ -15000,7 +15000,11 @@ reference element's position.
 
 // CONCATENATED MODULE: ../node_modules/svelte/store/index.mjs
 
+// CONCATENATED MODULE: ./js/popup.js
+
 // CONCATENATED MODULE: ./js/ton/methods/getClient.js
+
+// CONCATENATED MODULE: ./js/utils/port.js
 
 // CONCATENATED MODULE: ./js/utils/utils/initFlags.js
 
@@ -15373,6 +15377,10 @@ reference element's position.
 // EXTERNAL MODULE: ../node_modules/@tonclient/core/dist/index.js
 
 // EXTERNAL MODULE: ../node_modules/svelte/internal/index.mjs
+
+// EXTERNAL MODULE: ./js/components/App.svelte
+
+// EXTERNAL MODULE: ./js/components/index.js
 
 // Edge case - component was destroyed immediately,
 
@@ -17309,6 +17317,8 @@ reference element's position.
 // computation
 
 // conditions prevent the data from being read:
+
+// conf.devAutopin = '222222';
 
 // conf.showDevTool = false;
 

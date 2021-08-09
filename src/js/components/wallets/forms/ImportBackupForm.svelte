@@ -111,6 +111,7 @@
 
     } else if (!conf.myPin) {
       conf.myPin = pin;
+      utils.eventBus.trigger('pin-success', conf.myPin);
       utils.storage.setEncrypted('myPhrases', dataToRestore.myPhrases, conf.myPin);
       if (!_.isEmpty(dataToRestore.myStickers)) {
         utils.storage.setEncrypted('myStickers', dataToRestore.myStickers, conf.myPin);

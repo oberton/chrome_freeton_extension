@@ -52,7 +52,7 @@
 
                 <div class='tooltip-menu'>
                   {#if accountType === "Active"}
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.sendCrystalFormDialog}>
+                    <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
                       {t('actions.tokens.send')}
                     </div>
                     <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
@@ -106,17 +106,6 @@
     {#if $flag.pinFormDialog }
       <ModalDialog on:close={() => toggleFlag.pinFormDialog(false)} headline={t('actions.pin.enter')}>
         <PinForm pinError={pinError} on:submit={checkPin} />
-      </ModalDialog>
-    {/if}
-
-    {#if $flag.sendCrystalFormDialog }
-      <ModalDialog on:close={() => toggleFlag.sendCrystalFormDialog(false)} headline={t('actions.tokens.send')}>
-        <SendTokensForm
-          on:transactionSent={onTransactionSent}
-          wallet={walletData.wallet}
-          contract={$$props.wallet.contract}
-          keys={walletData.keys}
-          balance={balance} />
       </ModalDialog>
     {/if}
 
@@ -181,10 +170,13 @@
   const { flag, toggleFlag } = utils.initFlags([
     'phraseDialog',
     'pinFormDialog',
-    'sendCrystalFormDialog',
     'backupKeysDialog',
     'manageCustodiansDialog',
   ]);
+
+  function sendCrystals() {
+    dispatch('sendCrystals', address);
+  }
 
   const dispatch = svelte.createEventDispatcher();
 
@@ -209,11 +201,6 @@
     }
     toggleFlag.pinFormDialog(false);
     toggleFlag.phraseDialog(true);
-  }
-
-  function onTransactionSent() {
-    toggleFlag.sendCrystalFormDialog(false);
-    utils.toast.info(t('info.transaction.sent'));
   }
 
   async function extractWalletOwners(wallet, keys) {

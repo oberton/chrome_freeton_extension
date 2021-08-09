@@ -3,11 +3,11 @@
   "name": "Oberton Chrome Freeton Extension",
   "version": "0.0.0.1",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+    "page": "html/background.html"
   },
   "browser_action": {
     "default_icon": {
@@ -20,5 +20,19 @@
     "default_popup": "html/popup.html",
     "default_title": "Oberton Chrome Freeton Extension"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "js/content-script.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

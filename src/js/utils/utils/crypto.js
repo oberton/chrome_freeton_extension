@@ -10,8 +10,12 @@ function hashString(string, steps = 9) {
 
 function decrypt(string, password) {
   const passwordHash = hashString(password);
-  const decrypted = CryptoJS.AES.decrypt(string, passwordHash, 256);
-  return decrypted.toString(CryptoJS.enc.Utf8);
+  try {
+    const decrypted = CryptoJS.AES.decrypt(string, passwordHash, 256);
+    return decrypted.toString(CryptoJS.enc.Utf8);
+  } catch(e) {
+    return '';
+  }
 }
 
 function encrypt(string, password) {

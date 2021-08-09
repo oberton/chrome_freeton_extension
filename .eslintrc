@@ -51,5 +51,6 @@
     "t": "readonly",
     "svelte": "readonly",
     "to": "readonly",
+    "CustomEvent": "readonly"
   }
 }

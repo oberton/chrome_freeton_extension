@@ -25,6 +25,7 @@
   &.shown {
     opacity: 0;
     &:last-child {
+      z-index: 10;
       opacity: 1;
     }
   }
