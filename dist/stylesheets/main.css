@@ -341,7 +341,7 @@
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
-.gtr-ver-xxs {
+.gtr-ver-xxs, .stickers-sm {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 }
@@ -1135,6 +1135,7 @@ a, a:hover {
   border-radius: 3px;
   min-width: 150px;
   font-size: 14px;
+  z-index: 50;
 }
 .tooltip-menu-item {
   display: block;
@@ -1463,6 +1464,34 @@ a, a:hover {
   color: currentColor;
   font-weight: 400;
   font-style: italic;
+}
+
+.stickers-sm {
+  display: inline-block;
+  max-width: 50%;
+  overflow: hidden;
+  vertical-align: middle;
+  max-width: 147px;
+  height: 2.3rem;
+}
+.stickers-sm .tag {
+  margin-bottom: 0.3rem;
+}
+
+.wallets-picker-control {
+  padding-top: 1.8em;
+  line-height: 1.6;
+  padding-bottom: 0;
+  min-height: 78px;
+}
+.wallets-picker-menu {
+  width: 260px;
+  max-height: 290px;
+  overflow: auto;
+}
+.wallets-picker-menu .tooltip-menu-item {
+  padding: 5px 15px 10px 15px;
+  min-height: 55px;
 }
 
 /*# sourceMappingURL=main.css.map*/

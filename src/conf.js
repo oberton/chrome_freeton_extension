@@ -20,7 +20,7 @@ conf.telegramLink = 'https://t.me/freeoberton';
 conf.fallbackLocale = 'en';
 // conf.showDevTool = false;
 conf.showDevTool = false;
-// conf.devAutopin = '222222';
+conf.devAutopin = '222222';
 
 conf.ignoreExceptions = false; // ignore http errors, just in case
 

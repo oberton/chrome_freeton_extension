@@ -203,7 +203,8 @@
 
   function onApiCall(params) {
     apiParams = params;
-    console.log('apiParams!!!', apiParams);
+    conf.apiId = apiParams.apiId;
+    conf.apiTabId = apiParams.tabId;
   }
 
   function signIn(e) {
@@ -229,6 +230,8 @@
   };
 
   svelte.onMount(async () => {
+    conf.apiId = null;
+    conf.apiTabId = null;
     utils.eventBus
       .on('close-popup', window.close)
       .on('oberton-api-call', onApiCall)

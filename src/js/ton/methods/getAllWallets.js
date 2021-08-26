@@ -26,7 +26,7 @@ async function getWallet(wallet) {
 
   const address = _.get(walletData, 'wallet.address');
 
-  return {...walletData, contract, address };
+  return {...wallet, ...walletData, contract, address };
 }
 
 async function getAllWallets() {
@@ -34,9 +34,7 @@ async function getAllWallets() {
   const wallets = _(allWallets).filter(w => w.network === conf.currentTonServer).value();
 
   const walletsData = await Promise.all(_.map(wallets, getWallet));
-
-  return walletsData;
-
+  return _.sortBy(walletsData, 'sortPos')
 }
 
 export default getAllWallets;

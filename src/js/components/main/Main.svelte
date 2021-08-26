@@ -28,9 +28,7 @@
   {#if $flag.sendCrystalFormDialog }
     <ModalDialog on:close={() => toggleFlag.sendCrystalFormDialog(false)} headline={t('actions.tokens.send')}>
       <SendTokensForm
-        from={sendTokens.from}
-        amount={sendTokens.amount}
-        to={sendTokens.to}
+        {...sendTokens}
         on:transactionSent={onTransactionSent} />
     </ModalDialog>
   {/if}
@@ -83,7 +81,6 @@
         sendTokens = apiParams.params;
         toggleFlag.sendCrystalFormDialog(true);
       }
-      console.log(apiParams);
     }
   });
 

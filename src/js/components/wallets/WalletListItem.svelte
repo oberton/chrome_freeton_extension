@@ -22,60 +22,62 @@
               {(balance || 0).toFixed(3)}
             </div>
           </div>
-          <StickersForm nonEmptyClassName='row-l-sm gtr-b-xs' parent={$$props.wallet}></StickersForm>
+          <StickersForm mode={mode} nonEmptyClassName={mode === 'sm' ? 'stickers-sm' : 'row-l-sm gtr-b-xs'} parent={$$props.wallet}></StickersForm>
         </div>
 
         <div>
           <div class='tbl' style='table-layout: fixed;'>
-              <div class={'tbl-cell text-xs alg-m' + (accountType === 'Active' ? ' pointer' : '')} on:click={openWallet}>
+              <div class={'tbl-cell alg-m' + (accountType === 'Active' ? ' pointer ' : ' ') + (mode === 'sm' ? 'gtr-t-xxs' : 'text-xs')} on:click={openWallet}>
               {#if address}
                 <AddressEllipsis address={address}></AddressEllipsis>
               {/if}
             </div>
-            <div class='tbl-cell alg-m' style='width: 3.5rem;'>
-              <div class='smile row-t'>
-                <CopyTextBtn
-                  label={t('actions.address.copy')}
-                  value={address}>
-                </CopyTextBtn>
-              </div>
-            </div>
-            <div class='tbl-cell alg-m' style='width: 4.5rem'>
-              <div class='smile row-t'>
-
-                <button
-                  type="button"
-                  use:tooltipMenu
-                  class="btn-dim-light btn-round">
-                  <span class="icon-ellipsis-v smile" style="padding-top: 2px;"></span>
-                </button>
-
-                <div class='tooltip-menu'>
-                  {#if accountType === "Active"}
-                    <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
-                      {t('actions.tokens.send')}
-                    </div>
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
-                      {t('actions.phrase.backup_keys')}
-                    </div>
-                  {/if}
-                  {#if multisigContracts.indexOf($$props.wallet.contract) > -1}
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.manageCustodiansDialog}>
-                      {t('actions.custodians.manage')}
-                    </div>
-                  {/if}
-                  {#if walletData.phrase }
-                    <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
-                      {t('actions.phrase.backup')}
-                    </div>
-                  {/if}
-                  <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
-                    {t('actions.common.delete_item')}
-                  </div>
+            {#if mode !== "sm"}
+              <div class='tbl-cell alg-m' style='width: 3.5rem;'>
+                <div class='smile row-t'>
+                  <CopyTextBtn
+                    label={t('actions.address.copy')}
+                    value={address}>
+                  </CopyTextBtn>
                 </div>
-
               </div>
-            </div>
+              <div class='tbl-cell alg-m' style='width: 4.5rem'>
+                <div class='smile row-t'>
+
+                  <button
+                    type="button"
+                    use:tooltipMenu
+                    class="btn-dim-light btn-round">
+                    <span class="icon-ellipsis-v smile" style="padding-top: 2px;"></span>
+                  </button>
+
+                  <div class='tooltip-menu'>
+                    {#if accountType === "Active"}
+                      <div class='tooltip-menu-item' close-tooltip on:click={sendCrystals}>
+                        {t('actions.tokens.send')}
+                      </div>
+                      <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.backupKeysDialog}>
+                        {t('actions.phrase.backup_keys')}
+                      </div>
+                    {/if}
+                    {#if multisigContracts.indexOf($$props.wallet.contract) > -1}
+                      <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.manageCustodiansDialog}>
+                        {t('actions.custodians.manage')}
+                      </div>
+                    {/if}
+                    {#if walletData.phrase }
+                      <div class='tooltip-menu-item' close-tooltip on:click={toggleFlag.pinFormDialog}>
+                        {t('actions.phrase.backup')}
+                      </div>
+                    {/if}
+                    <div class='tooltip-menu-item' close-tooltip on:click={() => dispatch('removeWallet', true)}>
+                      {t('actions.common.delete_item')}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            {/if}
           </div>
         </div>
       </div>
@@ -142,6 +144,8 @@
 <script>
 
   // FIXME <debug vars>
+
+  export let mode;
 
   let stakeForm = {
     address: '',

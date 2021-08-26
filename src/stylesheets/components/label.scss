@@ -67,3 +67,16 @@
     }
   }
 }
+
+.stickers-sm {
+  display: inline-block;
+  max-width: 50%;
+  overflow: hidden;
+  @extend .gtr-ver-xxs;
+  vertical-align: middle;
+  max-width: 147px;
+  height: 2.3rem;
+  .tag {
+    margin-bottom: 0.3rem;
+  }
+}

@@ -2,6 +2,30 @@
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _defineProperty)
+/* harmony export */ });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+/***/ }),
+/* 2 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9,7 +33,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* provided dependency */ var _ = __webpack_require__(2);
+/* provided dependency */ var _ = __webpack_require__(3);
 const events = {};
 let port;
 const eventBus = {};
@@ -91,7 +115,7 @@ eventBus.setPort = setPort;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (eventBus);
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* module decorator */ module = __webpack_require__.nmd(module);
@@ -17299,12 +17323,12 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 let myPin;
 
@@ -17408,42 +17432,74 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _pinKeeper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _pinKeeper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* provided dependency */ var _ = __webpack_require__(3);
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 // FIXME make this script very thin, avoid webpack define things
 
 
 let popupParams;
+let lastTabId;
 
 function onPopupReady() {
   if (popupParams) {
-    js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.trigger('oberton-api-call', popupParams);
+    js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.trigger('oberton-api-call', _objectSpread(_objectSpread({}, popupParams), {}, {
+      tabId: lastTabId
+    }));
     popupParams = null;
   }
 }
 
+function onExtensionResponse(params) {
+  chrome.runtime.sendMessage(params);
+  chrome.tabs.query({
+    active: true
+  }, tabs => {
+    _.each(tabs, t => {
+      if (t.id === lastTabId) {
+        chrome.tabs.sendMessage(t.id, params);
+      }
+    });
+  });
+}
+
 function onReady(port) {
-  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.trigger('popup-connected', true, port);
-  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.on('popup-ready', onPopupReady);
+  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.trigger('popup-connected', true, port);
+  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.__events["oberton-extension-response"] = [];
+  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.__events["popup-ready"] = [];
+  js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.on('oberton-extension-response', onExtensionResponse).on('popup-ready', onPopupReady);
   port.onMessage.addListener(msg => {
     if (msg.type === 'eventBus') {
-      js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.notify(msg.eventName, msg.value);
+      js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.notify(msg.eventName, msg.value);
     }
   });
 }
 
 if (true) {
-  window.eventBus = js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default;
+  window.eventBus = js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default;
 }
 
 function openPopup(params) {
   chrome.windows.getLastFocused(windowObject => {
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, tabs => {
+      lastTabId = _.get(tabs, '0.id');
+    });
     const position = {
       x: Math.max(windowObject.top + (windowObject.width - 360), 0),
       y: Math.max(windowObject.top, 80)
     };
     popupParams = params;
-    js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.trigger('close-popup', true);
+    js_utils_utils_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.trigger('close-popup', true);
     chrome.windows.create({
       url: 'html/popup.html',
       type: 'popup',

@@ -1,0 +1,17 @@
+.wallets-picker {
+  &-control {
+    padding-top: 1.8em;
+    line-height: 1.6;
+    padding-bottom: 0;
+    min-height: 78px;
+  }
+  &-menu {
+    width: 260px;
+    max-height: 290px;
+    overflow: auto;
+    .tooltip-menu-item {
+      padding: 5px 15px 10px 15px;
+      min-height: 55px;
+    }
+  }
+}
