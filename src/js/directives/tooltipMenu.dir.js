@@ -48,6 +48,8 @@ function tooltipMenu(node) {
     }
   };
 
+  node.__showTooltip = show;
+
   const onClick = () => {
     if (shown) {
       hide();

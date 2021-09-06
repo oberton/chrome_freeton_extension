@@ -1,5 +1,7 @@
+import getCurrentNetwork from './getCurrentNetwork';
+
 export default async function addNewWallet(_payload) {
-  const network = conf.tonClient.config.network.server_address;
+  const network = await getCurrentNetwork();
 
   const payload = {
     network,

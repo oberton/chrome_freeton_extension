@@ -19,6 +19,30 @@
   font-family: "Icomoon";
 }
 
+.icon-globe:before {
+  content: "";
+}
+
+.icon-loop:before {
+  content: "";
+}
+
+.icon-angle-down:before {
+  content: "";
+}
+
+.icon-angle-up:before {
+  content: "";
+}
+
+.icon-ellipsis-v:before {
+  content: "";
+}
+
+.icon-caret-down:before {
+  content: "";
+}
+
 .icon-colorize:before {
   content: "";
 }
@@ -83,6 +107,14 @@
   content: "";
 }
 
+.icon-gems:before {
+  content: "";
+}
+
+.icon-gem:before {
+  content: "";
+}
+
 .icon-keys-pair:before {
   content: "";
 }
@@ -93,34 +125,6 @@
 
 .icon-car-key:before {
   content: "";
-}
-
-.icon-gems:before {
-  content: "";
-}
-
-.icon-gem:before {
-  content: "";
-}
-
-.icon-loop:before {
-  content: "";
-}
-
-.icon-angle-down:before {
-  content: "";
-}
-
-.icon-angle-up:before {
-  content: "";
-}
-
-.icon-ellipsis-v:before {
-  content: "";
-}
-
-.icon-caret-down:before {
-  content: "";
 }
 
 .icon-wallet:before {
@@ -1492,6 +1496,31 @@ a, a:hover {
 .wallets-picker-menu .tooltip-menu-item {
   padding: 5px 15px 10px 15px;
   min-height: 55px;
+}
+
+.network-picker {
+  font-family: monospace;
+  position: relative;
+  padding: 5px 7px 5px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  user-select: none;
+}
+.network-picker:before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 4px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: currentColor;
+  opacity: 0.1;
+  transition-duration: 200ms ease-in;
+}
+.network-picker:hover:before {
+  opacity: 0.15;
 }
 
 /*# sourceMappingURL=main.css.map*/

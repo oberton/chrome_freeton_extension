@@ -47,6 +47,13 @@ info:
 
   saved: 'Guardado'
 
+  url:
+    invalid: 'URL no válido'
+
+  network:
+    invalid: 'Título y URL no pueden estar vacíos'
+    remove_has_wallets: 'El red con los monederos no se puede elliminar'
+
 confirm:
   selected: 'Confirmar seleccion'
   transactions: 'Confirmar transacción'
@@ -128,14 +135,27 @@ labels:
   amount: 'Cantidad'
   optional: 'Opcional'
   choose_one: 'Elige una opción'
+  edit: 'Editar'
+  delete: 'Eliminar'
+  create: 'Crear'
+  update: 'Listo'
+
   ton:
     server: "Red"
+
+  name: 'Título'
+
   master_password: 'Frase secreta'
+
   wallet:
     contract: 'Contrato para desplegar'
     word_count: 'Las palabras cuentan'
     messages: 'Mensajes'
     transactions: 'Transacciones'
+
+  network:
+    add: 'Agregar nueva red'
+    edit: 'Editar red'
 
   keys:
     public: 'Clave publica'

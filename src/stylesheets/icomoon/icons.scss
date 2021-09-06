@@ -1,3 +1,13 @@
+.#{$icomoon-prefix}-pen { 
+  &:before {
+    content: $icon-pen;
+  }
+}
+.#{$icomoon-prefix}-search { 
+  &:before {
+    content: $icon-search;
+  }
+}
 .#{$icomoon-prefix}-colorize { 
   &:before {
     content: $icon-colorize;
@@ -63,6 +73,36 @@
     content: $icon-delete;
   }
 }
+.#{$icomoon-prefix}-globe { 
+  &:before {
+    content: $icon-globe;
+  }
+}
+.#{$icomoon-prefix}-loop { 
+  &:before {
+    content: $icon-loop;
+  }
+}
+.#{$icomoon-prefix}-angle-down { 
+  &:before {
+    content: $icon-angle-down;
+  }
+}
+.#{$icomoon-prefix}-angle-up { 
+  &:before {
+    content: $icon-angle-up;
+  }
+}
+.#{$icomoon-prefix}-ellipsis-v { 
+  &:before {
+    content: $icon-ellipsis-v;
+  }
+}
+.#{$icomoon-prefix}-caret-down { 
+  &:before {
+    content: $icon-caret-down;
+  }
+}
 .#{$icomoon-prefix}-magic-wand { 
   &:before {
     content: $icon-magic-wand;
@@ -101,31 +141,6 @@
 .#{$icomoon-prefix}-gem { 
   &:before {
     content: $icon-gem;
-  }
-}
-.#{$icomoon-prefix}-loop { 
-  &:before {
-    content: $icon-loop;
-  }
-}
-.#{$icomoon-prefix}-angle-down { 
-  &:before {
-    content: $icon-angle-down;
-  }
-}
-.#{$icomoon-prefix}-angle-up { 
-  &:before {
-    content: $icon-angle-up;
-  }
-}
-.#{$icomoon-prefix}-ellipsis-v { 
-  &:before {
-    content: $icon-ellipsis-v;
-  }
-}
-.#{$icomoon-prefix}-caret-down { 
-  &:before {
-    content: $icon-caret-down;
   }
 }
 .#{$icomoon-prefix}-wallet { 

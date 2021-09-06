@@ -47,6 +47,13 @@ info:
 
   saved: 'Saved!'
 
+  url:
+    invalid: 'Invalid URL'
+
+  network:
+    invalid: 'Name and URL cannot be empty'
+    remove_has_wallets: 'Network that has added wallets cannot be removed'
+
 confirm:
   selected: 'Confirm Selected'
   transactions: 'Confirm Transactions'
@@ -128,14 +135,25 @@ labels:
   amount: 'Amount'
   optional: 'Optional'
   choose_one: 'Choose an option'
+  name: 'Name'
+  edit: 'Edit'
+  delete: 'Delte'
+  create: 'Create'
+  update: 'Update'
+
   ton:
     server: "Network"
   master_password: 'Master Password'
+
   wallet:
     contract: 'Contract to deploy'
     word_count: 'Words Count'
     messages: 'Messages'
     transactions: 'Transactions'
+
+  network:
+    add: 'Add New Network'
+    edit: 'Edit Network'
 
   keys:
     public: 'Public Key'

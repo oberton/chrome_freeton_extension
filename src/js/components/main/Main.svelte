@@ -51,7 +51,7 @@
   let activeTab = tabs[0];
   let activeWallet;
 
-  let currentNetwork = conf.currentTonServer || conf.tonServers[0];
+  let currentNetwork = conf.currentTonServer || conf.tonServerKeys[0];
 
   let sendTokens = {};
 
@@ -71,11 +71,10 @@
   }
 
   function updateNetwork() {
-    currentNetwork = conf.currentTonServer || conf.tonServers[0];
+    currentNetwork = conf.currentTonServer || conf.tonServerKeys[0];
   }
 
   svelte.onMount(() => {
-    console.log({apiParams});
     if (apiParams && apiParams.fn) {
       if (apiParams.fn === 'sendTokens') {
         sendTokens = apiParams.params;

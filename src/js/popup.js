@@ -7,16 +7,12 @@ import port from 'js/utils/port';
 async function runApp() {
   const target = document.getElementById('app');
 
-  let { currentServer } = await utils.storage.get('currentServer');
+  // do not put after call getCurrentNetwork
+  conf.customTonServers = await utils.storage.getArrayValue('customTonServers', null) || [];
 
-  if (!currentServer) {
-    currentServer = conf.tonServers[0];
-  }
+  conf.currentTonServer = await tonMethods.getCurrentNetwork();
 
-  if (currentServer && _.includes(conf.tonServers, currentServer)) {
-    conf.currentTonServer = currentServer;
-    conf.tonClient = tonMethods.getClient();
-  }
+  conf.tonClient = tonMethods.getClient();
 
   const app = new App({
     target,
@@ -47,7 +43,7 @@ async function detectLocale() {
 
 utils.eventBus.setPort(port);
 
-port.onMessage.addListener((msg) => {
+port && port.onMessage && port.onMessage.addListener((msg) => {
   if (msg.type === 'eventBus') {
     utils.eventBus.notify(msg.eventName, msg.value, port);
   }

@@ -1,3 +1,7 @@
+input {
+  @include placeholderColor($color-label);
+}
+
 .form {
   display: block;
   position: relative;
@@ -18,7 +22,7 @@
     }
     &:not(:empty), &:not(.empty) {
       + .form-label {
-        transform: scale(0.7) translateY(-2em);
+        transform: scale(0.7) translateY(-2.2em);
       }
     }
   }
@@ -47,9 +51,10 @@
     }
   }
   &-label {
+    font-size: 1.4rem;
     color: $color-label;
     position: absolute;
-    top: 1.2em;
+    top: 1.45em;
     bottom: auto;
     line-height: 45px;
     font-weight: 400;

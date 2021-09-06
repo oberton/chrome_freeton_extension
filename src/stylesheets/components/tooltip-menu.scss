@@ -11,11 +11,11 @@
   box-shadow: rgba(20, 28, 98, 0.1) 0px 5px 20px;
   border-radius: 3px;
   min-width: 150px;
-  font-size: 14px;
   z-index: 50;
   &-item {
     display: block;
     padding: 15px 20px;
+    font-size: 14px;
     cursor: pointer;
     &:hover {
       background-color: #F5F6FA;

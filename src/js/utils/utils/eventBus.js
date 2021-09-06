@@ -20,6 +20,22 @@ function notify(eventName, value) {
   });
 }
 
+const fakePort = {
+  postMessage: () => null,
+};
+
+function connectToPort() {
+  if (!chrome || !chrome.extension) {
+    return fakePort;
+  }
+
+  const portConn = chrome.extension.connect({
+    name: "eventBus",
+  });
+
+  return portConn;
+}
+
 function trigger(eventName, value, _port) {
 
   if (_port) {
@@ -27,9 +43,7 @@ function trigger(eventName, value, _port) {
   }
 
   if (!port) {
-    port = chrome.extension.connect({
-      name: "eventBus",
-    });
+    port = connectToPort();
   }
 
   try {
@@ -39,9 +53,7 @@ function trigger(eventName, value, _port) {
       value,
     });
   } catch(e) {
-    port = chrome.extension.connect({
-      name: "eventBus",
-    });
+    port = connectToPort();
 
     port.postMessage({
       type: 'eventBus',

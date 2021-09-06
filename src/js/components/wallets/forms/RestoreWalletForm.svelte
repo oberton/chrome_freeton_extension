@@ -39,7 +39,7 @@
       return;
     }
 
-    const network = conf.currentTonServer || conf.tonServers[0];
+    const network = conf.currentTonServer || conf.tonServerKeys[0];
     const wallets = await utils.storage.getArrayValue('myPhrases', conf.myPin);
 
     if (_.find(wallets, w => w.phrase === phrase && w.network === network)) {

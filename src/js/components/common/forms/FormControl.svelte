@@ -7,12 +7,24 @@
     max={$$props.max || undefined}
     step={$$props.step || undefined}
     readonly={$$props.readonly || undefined}
-    on:input={e => value = e.target.value}
+    on:input={onInput}
+    autofocus={$$props.autofocus || undefined}
     required={$$props.required || false} />
 
-  <label class='form-label'>{$$props.label}</label>
+    <label class='form-label'>
+      <slot name='labelPrefix'></slot>
+      {$$props.label}
+    </label>
 </div>
 
 <script>
   export let value;
+
+  const dispatch = svelte.createEventDispatcher();
+
+  function onInput(e) {
+    value = e.target.value;
+    dispatch('change', value);
+  }
+
 </script>

@@ -10119,6 +10119,8 @@
 
 // Based on John Resig's `tmpl` implementation
 
+// CONCATENATED MODULE: ../node_modules/@babel/runtime/helpers/esm/defineProperty.js
+
 // CONCATENATED MODULE: ./js/background/index.js
 
 // CONCATENATED MODULE: ./js/background/pinKeeper.js
@@ -10294,8 +10296,6 @@
 // code to add the data object to the top of the scope chain.
 
 // debounced at least once.
-
-// do your things
 
 // for more details.
 

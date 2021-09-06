@@ -8,6 +8,7 @@ info:
     inactive: 'Неактивен'
 
   copied: "Скопированно"
+
   telegram_chat_link: 'Чат Oberton в Telegram'
 
   transactions:
@@ -47,6 +48,13 @@ info:
     already_exists: 'Кастодиан уже существует'
 
   saved: 'Сохранено'
+
+  url:
+    invalid: 'Невалидный URL'
+
+  network:
+    invalid: 'Имя и URL не могут быть пустыми'
+    remove_has_wallets: 'Нельзя удалить сеть в которую добавлены кошельки'
 
 confirm:
   selected: 'Подтвердить выбранные'
@@ -127,14 +135,27 @@ labels:
   amount: 'Сумма'
   optional: 'По желанию'
   choose_one: 'Выберите один из способов'
+  edit: 'Редактировать'
+  delete: 'Удалить'
+  create: 'Добавить'
+  update: 'Обновить'
+
+  name: 'Имя'
+
   ton:
     server: "Сеть"
+
   master_password: 'Мастер пароль'
+
   wallet:
     contract: 'Применить контракт'
     word_count: 'Количество слов'
     messages: 'Сообщения'
     transactions: 'Транзакции'
+
+  network:
+    add: 'Добавить Сеть'
+    edit: 'Редактировать Сеть'
 
   keys:
     public: 'Публичный Ключ'

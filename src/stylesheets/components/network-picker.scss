@@ -1,0 +1,27 @@
+.network-picker {
+  font-family: monospace;
+  position: relative;
+  padding: 5px 7px 5px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  user-select: none;
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 4px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: currentColor;
+    opacity: 0.1;
+    transition-duration: 200ms ease-in;
+  }
+
+  &:hover {
+    &:before {
+      opacity: 0.15;
+    }
+  }
+}

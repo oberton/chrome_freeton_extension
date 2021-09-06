@@ -184,11 +184,11 @@
       }
 
       conf.myPin = pin;
-      debugger
 
       const result = await tonMethods.getWalletData(newWallet.phrase);
 
-      const network = newWallet.network || conf.currentTonServer || conf.tonServers[0];
+      let network = newWallet.network || conf.currentTonServer || conf.tonServerKeys[0];
+
       const phrases = await utils.storage.push('myPhrases', {...newWallet, phrase: result.phrase, network}, pin);
 
       conf.myPin = pin;

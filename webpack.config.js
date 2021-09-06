@@ -76,20 +76,6 @@ const packConf = {
     extensions: ['*', '.js'],
   },
 
-  devServer: {
-    historyApiFallback: {
-      disableDotRule: true,
-      rewrites: [{
-        from: /^\/$/,
-        to: '/html/popup.html',
-      }],
-    },
-    disableHostCheck: true,
-    contentBase: path.join(__dirname, '/dist'),
-    hot: false,
-    inline: false,
-  },
-
   plugins: [
 
     new webpack.DefinePlugin({
@@ -129,6 +115,21 @@ const popupConf = {
   entry: {
     popup: './js/popup',
   },
+
+  devServer: {
+    historyApiFallback: {
+      disableDotRule: true,
+      rewrites: [{
+        from: /^\/$/,
+        to: '/html/popup.html',
+      }],
+    },
+    disableHostCheck: true,
+    contentBase: path.join(__dirname, '/dist'),
+    hot: false,
+    inline: false,
+  },
+
 };
 
 const backgroundConf = {
